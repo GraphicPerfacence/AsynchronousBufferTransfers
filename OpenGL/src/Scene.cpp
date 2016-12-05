@@ -18,6 +18,7 @@
 #include "../include/geometry.h"
 #include "../include/texture.h"
 #include "SOIL2/SOIL2.h"
+#include "../include/Timer.h"
 
 #include  <glm/gtc/type_ptr.hpp>
 
@@ -30,19 +31,22 @@ const unsigned int NR_LIGHTS = 32;
 
 ///////////////////// Just For This Test//////////////////////////////
 
-GLuint pixBufferIds[1];
+GLuint pixBufferIds[2];
 GLuint textureId;
 
 GLuint width = 1024;
 GLuint height = 896;
 
 GLuint objId;
-GLuint textureID;
 GLuint pboMode;
 
 GLvoid*imageData;
 
 const int DATA_SIZE = width * height * 4;
+const GLenum PIXEL_FORMAT    = GL_BGRA;
+
+float copyTime, updateTime;
+Timer timer, t1, t2;
 ///////////////////////////////////////////////////////////////////
 
 
@@ -96,28 +100,7 @@ void Scene::initOpengl(void)
 void Scene::initTexture(void)
 {
 	 
-	//woodTexture.init(3,GL_RGB,GL_RGB,"D:/CODES/LearnOpenGL-master/resources/textures/wood.png");
-	
-	
-	glGenTextures(1, &textureID);
-	int width, height;
-	unsigned char* image = SOIL_load_image("D:/CODES/LearnOpenGL-master/resources/textures/wood.png", 
-		&width, &height, 0, SOIL_LOAD_RGB);
-	// Assign texture to ID
-	glBindTexture(GL_TEXTURE_2D, textureID);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_SRGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
-	glGenerateMipmap(GL_TEXTURE_2D);
-
-	// Parameters
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glBindTexture(GL_TEXTURE_2D, 0);
-	SOIL_free_image_data(image);
-
-	//woodTextureID =  textureID;
-
+	 
 }
 
 void Scene::initBOs(GLuint size)
@@ -169,9 +152,6 @@ void Scene::initSceneObjs(void)
 }
 
 
-
-
-
 void Scene::Render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -179,30 +159,88 @@ void Scene::Render()
 	Shader * currentShader = shaders[0];
 	currentShader->TurnOn();
 
+	static int index = 0;
+	int nextIndex = 0;   
 
+	if(pboMode == 0)
+	{
+		// cpu -> gpu noraml
+		
+		t1.start();
+		glBindTexture(GL_TEXTURE_2D,textureId);
+		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, PIXEL_FORMAT, GL_UNSIGNED_BYTE, (GLvoid*)imageData);
+		t1.stop();
+		copyTime = t1.getElapsedTimeInMilliSec();
+
+		std::cout << "GPU Milliseconds: " << copyTime << std::endl;
+
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D,textureId);
+		drawScreenQuad(objId);
+		glBindTexture(GL_TEXTURE_2D,0);
+		currentShader->TurnOff();
+
+		//update image Data
+		GLfloat timercpu = _query.getCurrentTime();
+		updatePixels((GLubyte*)imageData, DATA_SIZE);
+		GLfloat timercpu2 = _query.getCurrentTime();
+
+		std::cout << "cpu Milliseconds : "  <<  timercpu2 - timercpu << std::endl;
+	}
+
+	//one pbo
+	else if(pboMode == 1 ||  pboMode == 2)
+	{
+		if(pboMode == 1)
+			index = nextIndex = 0; //single PBO
+		else 
+		{
+			index = (index + 1) % 2; //double PBO
+			nextIndex = (index + 1) % 2;
+		}
+
+		//update texture 
+		t1.start();
+		glBindTexture(GL_TEXTURE_2D,textureId);
+		glBindBuffer(GL_PIXEL_UNPACK_BUFFER,pixBufferIds[index]);
+		glTexSubImage2D(GL_TEXTURE_2D,0,0,0,width,height,PIXEL_FORMAT,GL_UNSIGNED_BYTE,NULL);
+		glBindBuffer(GL_PIXEL_UNPACK_BUFFER,0);
+		t1.stop();
+		copyTime = t1.getElapsedTimeInMilliSec();
+		std::cout << "GPU Milliseconds: " << copyTime << std::endl;
+
+		GLuint64 cpuTimer = _query.getCurrentTime();
+		glBindBuffer(GL_PIXEL_UNPACK_BUFFER,pixBufferIds[nextIndex]);
+		// map the buffer object into client's memory
+		// Note that glMapBufferARB() causes sync issue.
+		// If GPU is working with this buffer, glMapBufferARB() will wait(stall)
+		// for GPU to finish its job. To avoid waiting (stall), you can call
+		// first glBufferDataARB() with NULL pointer before glMapBufferARB().
+		// If you do that, the previous data in PBO will be discarded and
+		// glMapBufferARB() returns a new allocated pointer immediately
+		// even if GPU is still working with the previous data.
+		glBufferData(GL_PIXEL_UNPACK_BUFFER,DATA_SIZE,NULL,GL_STREAM_DRAW);
+		GLubyte * prt =  (GLubyte*)glMapBuffer(GL_PIXEL_UNPACK_BUFFER,GL_WRITE_ONLY);
+
+		if(prt)
+		{
+			updatePixels(prt,DATA_SIZE);
+			glUnmapBuffer(GL_PIXEL_UNPACK_BUFFER);
+		}
+		glBindBuffer(GL_PIXEL_UNPACK_BUFFER,0);
+		GLuint64 cpuTimer2 = _query.getCurrentTime();
+
+		std::cout << "update imageData: "  << cpuTimer2 - cpuTimer << std::endl;
+
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D,textureId);
+		drawScreenQuad(objId);
+		glBindTexture(GL_TEXTURE_2D,0);
+		currentShader->TurnOff();
+	}
+	 
 	
-	_query.begin();
-	glBindTexture(GL_TEXTURE_2D,textureID);
-	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_BGRA, GL_UNSIGNED_BYTE, (GLvoid*)imageData);
-	_query.end();
-	GLuint64 timer = _query.time();
-	//_query.swapQueryBuffers();
-
-	std::cout << "GPU Milliseconds: " << timer << std::endl;
-
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D,textureID);
-	drawScreenQuad(objId);
-	glBindTexture(GL_TEXTURE_2D,0);
-	currentShader->TurnOff();
-
-	GLfloat timercpu = _query.getCurrentTime();
-
-	updatePixels((GLubyte*)imageData, DATA_SIZE);
-
-	GLfloat timercpu2 = _query.getCurrentTime();
-
-	std::cout << "cpu: "  <<  timercpu2 - timercpu << std::endl;
+	
 }
 
 // This handles all the cleanup for our model, like the VBO/VAO buffers and shaders.
@@ -238,22 +276,26 @@ void Scene::initThisDemo(void)
 	glGenTextures(1,&textureId);
 	glBindTexture(GL_TEXTURE_2D,textureId);
 
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 1.0f);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 
-	glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,width,height,0,GL_RGBA,GL_UNSIGNED_BYTE ,NULL);
+	glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA8,width,height,0,PIXEL_FORMAT,GL_UNSIGNED_BYTE ,NULL);
+	glBindTexture(GL_TEXTURE_2D,0);
 
 	//PBO
-	glGenBuffers(1,&pixBufferIds[0]);
+	glGenBuffers(2,&pixBufferIds[0]);
 	//GL_STREAM_DRAW  for texture upload
 	glBindBuffer(GL_PIXEL_UNPACK_BUFFER,pixBufferIds[0]);
  	glBufferData(GL_PIXEL_UNPACK_BUFFER, width * height * 4,NULL,GL_STREAM_DRAW);
 	glBindBuffer(GL_PIXEL_UNPACK_BUFFER,0);
 
-	//imageData
+	glBindBuffer(GL_PIXEL_UNPACK_BUFFER,pixBufferIds[1]);
+	glBufferData(GL_PIXEL_UNPACK_BUFFER, width * height * 4,NULL,GL_STREAM_DRAW);
+	glBindBuffer(GL_PIXEL_UNPACK_BUFFER,0);
+
+	//imageData for texture
 	imageData = new GLubyte[DATA_SIZE];
 	memset(imageData, 0, DATA_SIZE);
 
@@ -261,6 +303,7 @@ void Scene::initThisDemo(void)
 	
 	_query.genQueries();
 
+	pboMode= 2;
 }
 
 void Scene::setScreenWH(unsigned int w,unsigned int h)
