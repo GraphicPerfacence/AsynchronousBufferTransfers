@@ -1,0 +1,144 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{B71FCD0E-DEA5-4F86-8B90-360C415767FF}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>testOpenGl</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>D:\dllOrDep\SpartanJ-soil2\src;D:\dllOrDep;D:\dllOrDep\glfw\include;D:\dllOrDep\glew-1.11.0\include;D:\dllOrDep\assimp--3.0.1270-sdk\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>D:\dllOrDep\SpartanJ-soil2\lib\windows;D:\dllOrDep\opengl;D:\dllOrDep\glfw\lib;D:\dllOrDep\glew-1.11.0\lib\Release\Win32;D:\dllOrDep\assimp--3.0.1270-sdk\lib\assimp_release-dll_win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>soil2.lib;glew32.lib;glfw3.lib;OPENGL32.lib;assimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\OpenGL\include\BaseRender.h" />
+    <ClInclude Include="..\OpenGL\include\Batch.h" />
+    <ClInclude Include="..\OpenGL\include\BatchBase.h" />
+    <ClInclude Include="..\OpenGL\include\camera.h" />
+    <ClInclude Include="..\OpenGL\include\comm.h" />
+    <ClInclude Include="..\OpenGL\include\geometry.h" />
+    <ClInclude Include="..\OpenGL\include\GLApplication.h" />
+    <ClInclude Include="..\OpenGL\include\GLFWManager.h" />
+    <ClInclude Include="..\OpenGL\include\glfwSet.h" />
+    <ClInclude Include="..\OpenGL\include\Inputmanager.h" />
+    <ClInclude Include="..\OpenGL\include\Light.h" />
+    <ClInclude Include="..\OpenGL\include\log.h" />
+    <ClInclude Include="..\OpenGL\include\math3d.h" />
+    <ClInclude Include="..\OpenGL\include\mesh.h" />
+    <ClInclude Include="..\OpenGL\include\PBO.h" />
+    <ClInclude Include="..\OpenGL\include\GLQuery.h" />
+    <ClInclude Include="..\OpenGL\include\ReadFile.h" />
+    <ClInclude Include="..\OpenGL\include\resource.h" />
+    <ClInclude Include="..\OpenGL\include\rgbTexture.h" />
+    <ClInclude Include="..\OpenGL\include\Scene.h" />
+    <ClInclude Include="..\OpenGL\include\shader.hpp" />
+    <ClInclude Include="..\OpenGL\include\surface.h" />
+    <ClInclude Include="..\OpenGL\include\sys.h" />
+    <ClInclude Include="..\OpenGL\include\texture.h" />
+    <ClInclude Include="..\OpenGL\include\TimerManager.h" />
+    <ClInclude Include="..\OpenGL\include\TriangleBatch.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\OpenGL\src\BaseRender.cpp" />
+    <ClCompile Include="..\OpenGL\src\Batch.cpp" />
+    <ClCompile Include="..\OpenGL\src\camera.cpp" />
+    <ClCompile Include="..\OpenGL\src\comm.cpp" />
+    <ClCompile Include="..\OpenGL\src\geometry.cpp" />
+    <ClCompile Include="..\OpenGL\src\GLApplication.cpp" />
+    <ClCompile Include="..\OpenGL\src\GLFWManager.cpp" />
+    <ClCompile Include="..\OpenGL\src\glfwSet.cpp" />
+    <ClCompile Include="..\OpenGL\src\Inputmanager.cpp" />
+    <ClCompile Include="..\OpenGL\src\Light.cpp" />
+    <ClCompile Include="..\OpenGL\src\log.cpp" />
+    <ClCompile Include="..\OpenGL\src\main.cpp" />
+    <ClCompile Include="..\OpenGL\src\math3d.cpp" />
+    <ClCompile Include="..\OpenGL\src\mesh.cpp" />
+    <ClCompile Include="..\OpenGL\src\PBO.cpp" />
+    <ClCompile Include="..\OpenGL\src\GLQuery.cpp" />
+    <ClCompile Include="..\OpenGL\src\ReadFile.cpp" />
+    <ClCompile Include="..\OpenGL\src\rgbTexture.cpp" />
+    <ClCompile Include="..\OpenGL\src\Scene.cpp" />
+    <ClCompile Include="..\OpenGL\src\shader.cpp" />
+    <ClCompile Include="..\OpenGL\src\surface.cpp" />
+    <ClCompile Include="..\OpenGL\src\texture.cpp" />
+    <ClCompile Include="..\OpenGL\src\TimerManager.cpp" />
+    <ClCompile Include="..\OpenGL\src\TriangleBatch.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\OpenGL\shader\hdr.frag" />
+    <None Include="..\OpenGL\shader\hdr.vert" />
+    <None Include="..\OpenGL\shader\lighting.frag" />
+    <None Include="..\OpenGL\shader\lighting.vert" />
+    <None Include="..\OpenGL\shader\test.frag" />
+    <None Include="..\OpenGL\shader\test.vert" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -1,0 +1,78 @@
+
+
+#include "../include/mesh.h"
+#include "../include/ReadFile.h"
+
+#include <gl/glew.h>
+
+Mesh::Mesh(std::vector<VertexFormat>&vertexs,std::vector<unsigned int >&ic,std::vector<TextureR>&ts)
+{
+	setupMesh(vertexs,ic,ts);
+}
+
+Mesh::~Mesh()
+{
+	destory();
+}
+
+void Mesh::destory(void)
+{
+	if (_VBOID)
+	{
+		glDeleteBuffers(1, &_VBOID);
+		_VBOID = 0;
+	}
+	if (_IBOID)
+	{
+		glDeleteBuffers(1, &_IBOID);
+		_IBOID = 0;
+	}
+	if (_VAOID)
+	{
+		glBindVertexArray(0);
+		glDeleteVertexArrays(1, &_VAOID);
+		_VAOID = 0;
+	}
+}
+
+<<<<<<< HEAD
+
+
+=======
+/*
+>>>>>>> 4e4ae7d24c1803a9d11c7f685de0451ff4b15962
+bool Mesh::initMesh(const char* fileName)
+{
+	return loadOBJ(fileName, _VAOID, _VBOID, _IBOID, _indicesCount);
+}
+*/
+void Mesh::draw()const
+{
+	
+	glBindVertexArray(_VAOID);
+	
+	//legatura intre atributele vertecsilor si pipeline, datele noastre sunt INTERLEAVED.
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(VertexFormat), (void*)0);						//vertex 0
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(VertexFormat), (void*)(sizeof(float) * 3));		//normale   1
+	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(VertexFormat), (void*)(2 * sizeof(float) * 3));	//texcoords   2
+	
+	glDrawElements(GL_TRIANGLES, _indicesCount, GL_UNSIGNED_INT, 0);
+	
+	glDisableVertexAttribArray(0);
+	glDisableVertexAttribArray(1);
+	glDisableVertexAttribArray(2);
+	
+	glBindVertexArray(0);
+}
+
+void Mesh::setupMesh(std::vector<VertexFormat>&vs,std::vector<unsigned int >&ic,std::vector<TextureR>&ts)
+{
+	
+}
+INode::INode(const char*fileName)
+{
+	loadObjByAssimp(fileName,_meshs);
+}
