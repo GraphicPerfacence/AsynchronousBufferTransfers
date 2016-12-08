@@ -9,6 +9,7 @@
 #include "../include/BaseRender.h"
 #include "../include/shader.hpp"
 #include "../include/camera.h"
+#include "../include/contextMap.h"
 
 #include <gl/glew.h>
 
@@ -24,10 +25,10 @@ void BaseRender::initUniformVal(Shader*shader)
 {
 	GLint location = shader->GetVariable("projection");
 	if(location != -1)
-		shader->SetMatrix4(location,1,GL_FALSE,glm::value_ptr(camera->GetProjectionMatrix()));
+		shader->SetMatrix4(location,1,GL_FALSE,glm::value_ptr(_camera->GetProjectionMatrix()));
 	location = shader->GetVariable("view");
 	if(location != -1)
-		shader->SetMatrix4(location,1,GL_FALSE,glm::value_ptr(camera->GetViewMatrix()));
+		shader->SetMatrix4(location,1,GL_FALSE,glm::value_ptr(_camera->GetViewMatrix()));
    
 	//location = shader->GetVariable("model");
 	//if(location != -1)
@@ -53,13 +54,34 @@ void BaseRender::addLight(Light&light)
 
 void BaseRender::preRenderShaderData()
 {
-	glm::mat4 projectionMatrix = camera->GetProjectionMatrix();
+	glm::mat4 projectionMatrix = _camera->GetProjectionMatrix();
 
-	glm::mat4 viewMatrix = camera->GetViewMatrix();
+	glm::mat4 viewMatrix = _camera->GetViewMatrix();
 
 	glBindBuffer(GL_UNIFORM_BUFFER, uboBlock);
 
 	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), &projectionMatrix[0][0]);
 	glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), &viewMatrix[0][0]);
 	//glBindBuffer(GL_UNIFORM_BUFFER,0);
+}
+
+void BaseRender::createContextMapPool(unsigned int cout,ContextMapMode model)
+{
+	for(int i = 0; i < cout; ++i) 
+	{
+		ContextMap *ctx = new ContextMap();
+		ctx->create_buffers(model);
+		 
+		_contextMapPool.push_back(ctx);
+	}
+}
+
+BaseRender::~BaseRender()
+{
+	for (unsigned int i = 0; i < _contextMapPool.size();i++)
+	{
+		ContextMap * tm = _contextMapPool[i];
+		delete tm;
+		tm = NULL;
+	}
 }

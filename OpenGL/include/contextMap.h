@@ -35,7 +35,7 @@ struct batch
 
 typedef std::vector<batch> batches_t;
 
-enum Mode 
+enum ContextMapMode 
 {
 	ModeInvalidateBuffer,
 	ModeFlushExplicit,
@@ -43,35 +43,50 @@ enum Mode
 	ModeBufferData,
 	ModeBufferSubData,
 	ModeWrite,
+	ModePersistent
+};
+
+struct PersistentBufferRange
+{
+	PersistentBufferRange()
+	{
+		_begin = 0;
+		_sync = 0;
+	}
+	size_t _begin;
+	GLsync _sync;
 };
 
 struct ContextMap
 {
-	static const int POOL_SIZE;
 
 	ContextMap();
 
-	Mode _mode;
+	~ContextMap();
+
+	ContextMapMode _mode;
 
 	unsigned _scene_vbo;
 	unsigned _scene_tb;
 
 	glm::mat4* _scene_data_ptr;
+	glm::mat4 * _persistentRangeMapStartPtr;
+
 	unsigned _scene_data_ptr_size;
 
 	int _num_visible_blocks[4];
 
-	void map_scene();
+	void getMapPtr();
 
 	void flush_scene_data();
 
-	void create_buffers();
+	void create_buffers(ContextMapMode flag);
 
-	void put_fence();
-	bool check_fence();
+	void WaitBuffer(void);
+	void LockBuffer(void);
+	void LockBuffer(GLsync& syncObj);
+	void WaitBuffer(GLsync& syncObj);
 
-	GLsync _fence;
-	bool first;
-
-	bool _persistent;
+	PersistentBufferRange gSyncRanges[3]; //now persisten use 3 section
+	GLuint gPersistentRangeIndex;
 };

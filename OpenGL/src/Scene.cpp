@@ -55,8 +55,11 @@ unsigned testFun = 1;
 GLint Scene::_prg_max_sides = -1;
 GLint Scene::_prg_tb_blocks = -1;
 GLint Scene::_prg_block_type = -1;
-GLint Scene::_prg_start_index = -1;
+GLint Scene::_prg_start_index = -1
+	;
 GLint Scene::_prg_mvp = -1;
+
+GLuint sceneVBO = 0;
 
 ///////////////////////////////////////////////////////////////////
  
@@ -100,8 +103,7 @@ void Scene::Initialize()
 	initShader();
 	initTexture();
 	initFBO();
-	//initThisDemo();
-	
+	initThisDemo();
 }
 
 void Scene::initOpengl(void)
@@ -136,8 +138,8 @@ void Scene::initLight(void)
 void Scene::initShader(void)
 {
 	std::string  shaderBasePath;
-#if defined X_OS_WIN32 || defined X_OS_WIN64
-	shaderBasePath = "D:/projects/opengl/HDR/OpenGL/shader/";
+#if defined X_OS_WIN32 || defined X_OS_WIN64 
+	shaderBasePath = "D:/projects/opengl/Perfance/Asy/OpenGL/shader/";
 #elif  __APPLE__
 	shaderBasePath = "/Users/glp/Documents/projects/OpenGL/OpenGL/shader/";
 #endif
@@ -147,27 +149,27 @@ void Scene::initShader(void)
 		std::string vs = shaderBasePath + "hdr.vert";
 		std::string fs = shaderBasePath + "hdr.frag";
 
-		shaders.push_back(new Shader());
-		shaders[0]->LoadShaders(vs.c_str(),fs.c_str());
+		_shaders.push_back(new Shader());
+		_shaders[0]->LoadShaders(vs.c_str(),fs.c_str());
 
-		shaders[0]->TurnOn();
-		GLint textureI = shaders[0]->GetVariable("hdrBuffer");
-		shaders[0]->SetInt(textureI,0);
-		shaders[0]->TurnOff();
+		_shaders[0]->TurnOn();
+		GLint textureI = _shaders[0]->GetVariable("hdrBuffer");
+		_shaders[0]->SetInt(textureI,0);
+		_shaders[0]->TurnOff();
 	}
 	else if(testFun == 1)
 	{
 		std::string vs = shaderBasePath + "block_v.glsl";
 		std::string fs = shaderBasePath + "block_f.glsl";
 
-		shaders.push_back(new Shader());
-		shaders[0]->LoadShaders(vs.c_str(),fs.c_str());
+		_shaders.push_back(new Shader());
+		_shaders[0]->LoadShaders(vs.c_str(),fs.c_str());
 
-		_prg_max_sides = shaders[0]->GetVariable("max_sides");
-		_prg_tb_blocks = shaders[0]->GetVariable("tb_blocks");
-		_prg_block_type =shaders[0]->GetVariable("block_type");
-		_prg_start_index = shaders[0]->GetVariable("start_index");
-		_prg_mvp = shaders[0]->GetVariable("mvp");
+		_prg_max_sides = _shaders[0]->GetVariable("max_sides");
+		_prg_tb_blocks = _shaders[0]->GetVariable("tb_blocks");
+		_prg_block_type =_shaders[0]->GetVariable("block_type");
+		_prg_start_index = _shaders[0]->GetVariable("start_index");
+		_prg_mvp = _shaders[0]->GetVariable("mvp");
 
 	}
 }
@@ -193,7 +195,7 @@ void Scene::Render()
 
 	if(testFun == 0)
 	{
-		Shader * currentShader = shaders[0];
+		Shader * currentShader = _shaders[0];
 		currentShader->TurnOn();
 
 		static int index = 0;
@@ -276,14 +278,30 @@ void Scene::Render()
 		}
 	}
 	
+	else if(testFun == 1)
+	{
+		ContextMap * ct = _contextMapPool[0];
+
+		frustum_check(ct);
+
+		ct->getMapPtr();
+
+		upload_blocks_to_gpu(ct);
+
+		ct->flush_scene_data();
+
+		render_blocks(ct);
+
+		ct->LockBuffer();
+	}
 }
 
 // This handles all the cleanup for our model, like the VBO/VAO buffers and shaders.
 void Scene::Destroy()
 {
-	for (int i = shaders.size() - 1; i >= 0; i--)
+	for (int i = _shaders.size() - 1; i >= 0; i--)
 	{
-		Shader * s = shaders[i];
+		Shader * s = _shaders[i];
 		s->Destroy();
 		s = NULL;
 	}
@@ -341,7 +359,18 @@ void Scene::initThisDemo(void)
 
 		pboMode= 2;
 	}
+	else if(testFun == 1)
+	{
+		glGenBuffers(1,&sceneVBO);
+		glBindBuffer(GL_ARRAY_BUFFER,sceneVBO);
+		glBufferData(GL_ARRAY_BUFFER,16384*4,0,GL_STATIC_DRAW);
+		glBindBuffer(GL_ARRAY_BUFFER,0);
+		//prepare contextMap
+		createContextMapPool(1,ModePersistent);
 
+		createSceneData();
+
+	}
 }
 
 void Scene::setScreenWH(unsigned int w,unsigned int h)
@@ -492,14 +521,15 @@ void Scene::upload_blocks_to_gpu(ContextMap *ctx)
 		ctx->_scene_data_ptr_size += ctx->_num_visible_blocks[i];
 	ctx->_scene_data_ptr_size *= sizeof(mat4);
 
-	if(ctx->_scene_data_ptr_size > 0) {
+	if(ctx->_scene_data_ptr_size > 0)
+	{
 		mat4 *ptr[4];
 
 		ptr[0] = ctx->_scene_data_ptr;
 
 		if(ptr[0] == 0)
 		{
-
+			return;
 		}
 
 		for(int i = 1; i < 4; ++i)
@@ -518,7 +548,52 @@ void Scene::upload_blocks_to_gpu(ContextMap *ctx)
 
 void Scene::render_blocks(const ContextMap *ctx)
 {
+	Shader * currentShader = _shaders[0];
+	currentShader->TurnOn();
 
+	glBindBuffer(GL_ARRAY_BUFFER,sceneVBO);
+	glVertexAttribPointer(0,4,GL_BYTE,GL_FALSE,0,0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);	
+	glEnableVertexAttribArray(0);
+
+	glUniform1f(_prg_max_sides, float(64));
+	glUniform1i(_prg_block_type, 0);
+	glUniform1i(_prg_start_index, 0);
+	glUniformMatrix4fv(_prg_mvp, 1, GL_FALSE, glm::value_ptr(GetCamera()->GetProjectionMatrix() * GetCamera()->GetViewMatrix() ));
+
+	glUniform1i(_prg_tb_blocks, 0);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_BUFFER, ctx->_scene_tb);
+
+	const int batch_size = 100;
+
+	if(ctx->_num_visible_blocks[0]>0) 
+	{
+		int pos = 0;
+		glUniform1i(_prg_start_index, pos);
+		glDrawArraysInstanced( GL_TRIANGLE_STRIP, 0, (64 << 1) + 2, ctx->_num_visible_blocks[0]);
+	}
+
+	if(ctx->_num_visible_blocks[1])
+	{
+		glUniform1i(_prg_block_type, 1);
+		int pos = 0 + ctx->_num_visible_blocks[0];
+		glUniform1i(_prg_start_index, pos);
+		glDrawArraysInstanced( GL_TRIANGLE_STRIP, 0, 8, ctx->_num_visible_blocks[1] << 1);
+	}
+
+	if(ctx->_num_visible_blocks[2])
+	{
+		glUniform1i(_prg_block_type, 2);
+		glUniform1i( _prg_start_index, 0  + ctx->_num_visible_blocks[0] 
+		+ ctx->_num_visible_blocks[1]);
+
+		glDrawArraysInstanced( GL_TRIANGLE_STRIP, 0, 20 * 4, ctx->_num_visible_blocks[2] << 1);
+	}   
+
+	glDisableVertexAttribArray(0);
+
+	currentShader->TurnOff();
 }
 
 void modelInput(InputCodes code)

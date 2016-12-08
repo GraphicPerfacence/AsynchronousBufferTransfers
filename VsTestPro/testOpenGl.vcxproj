@@ -82,6 +82,7 @@
     <ClInclude Include="..\OpenGL\include\BatchBase.h" />
     <ClInclude Include="..\OpenGL\include\camera.h" />
     <ClInclude Include="..\OpenGL\include\comm.h" />
+    <ClInclude Include="..\OpenGL\include\contextMap.h" />
     <ClInclude Include="..\OpenGL\include\geometry.h" />
     <ClInclude Include="..\OpenGL\include\GLApplication.h" />
     <ClInclude Include="..\OpenGL\include\GLFWManager.h" />
@@ -98,9 +99,11 @@
     <ClInclude Include="..\OpenGL\include\rgbTexture.h" />
     <ClInclude Include="..\OpenGL\include\Scene.h" />
     <ClInclude Include="..\OpenGL\include\shader.hpp" />
+    <ClInclude Include="..\OpenGL\include\ShowInfo.h" />
     <ClInclude Include="..\OpenGL\include\surface.h" />
     <ClInclude Include="..\OpenGL\include\sys.h" />
     <ClInclude Include="..\OpenGL\include\texture.h" />
+    <ClInclude Include="..\OpenGL\include\Timer.h" />
     <ClInclude Include="..\OpenGL\include\TimerManager.h" />
     <ClInclude Include="..\OpenGL\include\TriangleBatch.h" />
   </ItemGroup>
@@ -109,6 +112,7 @@
     <ClCompile Include="..\OpenGL\src\Batch.cpp" />
     <ClCompile Include="..\OpenGL\src\camera.cpp" />
     <ClCompile Include="..\OpenGL\src\comm.cpp" />
+    <ClCompile Include="..\OpenGL\src\contextMap.cpp" />
     <ClCompile Include="..\OpenGL\src\geometry.cpp" />
     <ClCompile Include="..\OpenGL\src\GLApplication.cpp" />
     <ClCompile Include="..\OpenGL\src\GLFWManager.cpp" />
@@ -125,12 +129,16 @@
     <ClCompile Include="..\OpenGL\src\rgbTexture.cpp" />
     <ClCompile Include="..\OpenGL\src\Scene.cpp" />
     <ClCompile Include="..\OpenGL\src\shader.cpp" />
+    <ClCompile Include="..\OpenGL\src\ShowInfo.cpp" />
     <ClCompile Include="..\OpenGL\src\surface.cpp" />
     <ClCompile Include="..\OpenGL\src\texture.cpp" />
+    <ClCompile Include="..\OpenGL\src\Timer.cpp" />
     <ClCompile Include="..\OpenGL\src\TimerManager.cpp" />
     <ClCompile Include="..\OpenGL\src\TriangleBatch.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\OpenGL\shader\block_f.glsl" />
+    <None Include="..\OpenGL\shader\block_v.glsl" />
     <None Include="..\OpenGL\shader\hdr.frag" />
     <None Include="..\OpenGL\shader\hdr.vert" />
     <None Include="..\OpenGL\shader\lighting.frag" />

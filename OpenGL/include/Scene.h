@@ -62,7 +62,7 @@ public:
 	int frustum_check(ContextMap *fc,const bool dont_check=true);
 	void create_frustum_planes(glm::vec4 *planes, const glm::mat4 &mvp);
 	void upload_blocks_to_gpu(ContextMap *ctx);
-	static void render_blocks(const ContextMap *ctx);
+	void render_blocks(const ContextMap *ctx);
 
 
 	// This draws the Model to the backbuffer
@@ -114,6 +114,7 @@ protected:
 	static GLint _prg_block_type;
 	static GLint _prg_start_index;
 	static GLint _prg_mvp;
+
 
 };
 

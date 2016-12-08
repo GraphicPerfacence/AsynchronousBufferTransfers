@@ -35,7 +35,9 @@ void GLApplication::Initialize()
 	}
 
 	glViewport(0, 0, _width, _hight);
-	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+	
+	glClearColor(0.3f, 0.2f, 0.4f, 1.0f);
+
 	openglInit();
 	// Initialize the triangle with the vertex array and give the length of 3.  This will create our
 	// Vertex Buffer Object and Vertex Array Object.
@@ -92,7 +94,6 @@ void GLApplication::initScene()
 	glFrontFace(GL_CCW);
 	glCullFace(GL_BACK);
 	glEnable(GL_CULL_FACE);
-	glClearColor(1.0, 0.0, 0.0, 0.0);
 	glClearDepth(1.0);
 	glClearStencil(0);
 	glDisable(GL_BLEND);
