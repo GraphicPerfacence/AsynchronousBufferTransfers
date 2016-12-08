@@ -50,13 +50,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>D:\dllOrDep\SpartanJ-soil2\src;D:\dllOrDep;D:\dllOrDep\glfw\include;D:\dllOrDep\glew-1.11.0\include;D:\dllOrDep\assimp--3.0.1270-sdk\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\dllOrDep\freetype-2.3.5-1-bin\include;D:\dllOrDep\SpartanJ-soil2\src;D:\dllOrDep;D:\dllOrDep\glfw\include;D:\dllOrDep\glew-1.11.0\include;D:\dllOrDep\assimp--3.0.1270-sdk\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>D:\dllOrDep\SpartanJ-soil2\lib\windows;D:\dllOrDep\opengl;D:\dllOrDep\glfw\lib;D:\dllOrDep\glew-1.11.0\lib\Release\Win32;D:\dllOrDep\assimp--3.0.1270-sdk\lib\assimp_release-dll_win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>soil2.lib;glew32.lib;glfw3.lib;OPENGL32.lib;assimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:\dllOrDep\freetype-2.3.5-1-bin\lib;D:\dllOrDep\SpartanJ-soil2\lib\windows;D:\dllOrDep\opengl;D:\dllOrDep\glfw\lib;D:\dllOrDep\glew-1.11.0\lib\Release\Win32;D:\dllOrDep\assimp--3.0.1270-sdk\lib\assimp_release-dll_win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>soil2.lib;glew32.lib;glfw3.lib;OPENGL32.lib;assimp.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -87,6 +87,7 @@
     <ClInclude Include="..\OpenGL\include\GLApplication.h" />
     <ClInclude Include="..\OpenGL\include\GLFWManager.h" />
     <ClInclude Include="..\OpenGL\include\glfwSet.h" />
+    <ClInclude Include="..\OpenGL\include\GlText.h" />
     <ClInclude Include="..\OpenGL\include\Inputmanager.h" />
     <ClInclude Include="..\OpenGL\include\Light.h" />
     <ClInclude Include="..\OpenGL\include\log.h" />
@@ -117,6 +118,7 @@
     <ClCompile Include="..\OpenGL\src\GLApplication.cpp" />
     <ClCompile Include="..\OpenGL\src\GLFWManager.cpp" />
     <ClCompile Include="..\OpenGL\src\glfwSet.cpp" />
+    <ClCompile Include="..\OpenGL\src\GlText.cpp" />
     <ClCompile Include="..\OpenGL\src\Inputmanager.cpp" />
     <ClCompile Include="..\OpenGL\src\Light.cpp" />
     <ClCompile Include="..\OpenGL\src\log.cpp" />

@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "testOpenGl", "testOpenGl.vcxproj", "{B71FCD0E-DEA5-4F86-8B90-360C415767FF}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "reel", "..\..\..\..\..\CODES\reel\src\reel.vcxproj", "{00D5D02E-DD35-4ED7-9D29-5E7A24FA3745}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -13,6 +15,10 @@ Global
 		{B71FCD0E-DEA5-4F86-8B90-360C415767FF}.Debug|Win32.Build.0 = Debug|Win32
 		{B71FCD0E-DEA5-4F86-8B90-360C415767FF}.Release|Win32.ActiveCfg = Release|Win32
 		{B71FCD0E-DEA5-4F86-8B90-360C415767FF}.Release|Win32.Build.0 = Release|Win32
+		{00D5D02E-DD35-4ED7-9D29-5E7A24FA3745}.Debug|Win32.ActiveCfg = Debug|Win32
+		{00D5D02E-DD35-4ED7-9D29-5E7A24FA3745}.Debug|Win32.Build.0 = Debug|Win32
+		{00D5D02E-DD35-4ED7-9D29-5E7A24FA3745}.Release|Win32.ActiveCfg = Release|Win32
+		{00D5D02E-DD35-4ED7-9D29-5E7A24FA3745}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
