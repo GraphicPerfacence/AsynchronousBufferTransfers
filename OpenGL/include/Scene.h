@@ -30,10 +30,7 @@ public:
 		unsigned int *_flags;
 		glm::vec3 *_hw;
 
-		block(
-			glm::mat4 *tm,
-			unsigned int *flags,
-			glm::vec3 *hw)
+		block(glm::mat4 *tm, unsigned int *flags, glm::vec3 *hw)
 			: _tm(tm)
 			, _flags(flags)
 			, _hw(hw)

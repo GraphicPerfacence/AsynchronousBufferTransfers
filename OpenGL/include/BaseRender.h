@@ -14,11 +14,10 @@
 #include "Light.h"
 #include "texture.h"
 
+
 class Shader;
 class Camera;
 class ContextMap;
-
-extern enum ContextMapMode;
 
 class BaseRender
 {
@@ -39,7 +38,7 @@ public:
 protected:
 	void initUniformVal(Shader*shader);
 	void preRenderShaderData();
-	void createContextMapPool(unsigned int cout,ContextMapMode model);
+	void createContextMapPool(unsigned int cout, unsigned int flag);
 
 protected:
 

@@ -65,7 +65,7 @@ void BaseRender::preRenderShaderData()
 	//glBindBuffer(GL_UNIFORM_BUFFER,0);
 }
 
-void BaseRender::createContextMapPool(unsigned int cout,ContextMapMode model)
+void BaseRender::createContextMapPool(unsigned int cout,unsigned int model)
 {
 	for(int i = 0; i < cout; ++i) 
 	{
