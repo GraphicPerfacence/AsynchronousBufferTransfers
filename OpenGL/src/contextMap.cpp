@@ -3,6 +3,29 @@
 #include "../include/Scene.h"
 #include "../include/log.h"
 
+struct batch
+{
+    glm::vec2 pos;
+    glm::vec2 size;
+    int index;
+    int count;
+    unsigned tex;
+
+    batch(
+          const glm::vec2 &pos,
+          const glm::vec2 &size,
+          const int index,
+          const int count,
+          const int tex)
+    : pos(pos)
+    , size(size)
+    , index(index)
+    , count(count)
+    , tex(tex)
+    {}
+};
+
+
 void ContextMap::getMapPtr()
 {
 	if(ModePersistent == _mode)
@@ -20,12 +43,12 @@ void ContextMap::getMapPtr()
 /* flag 0: Persistent                                            */
 /************************************************************************/
 
-void ContextMap::create_buffers(ContextMapMode model)
+void ContextMap::create_buffers(unsigned int model)
 {
 	glGenBuffers(1,&_scene_vbo); //texture buffer object
 	glBindBuffer(GL_TEXTURE_BUFFER,_scene_vbo);
 
-	_mode = model;
+	_mode = (ContextMapMode)model;
 
 	if(model == ModePersistent)
 	{

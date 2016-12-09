@@ -17,11 +17,11 @@
 #include "../include/camera.h"
 #include "../include/geometry.h"
 #include "../include/texture.h"
-#include "SOIL2/SOIL2.h"
 #include "../include/Timer.h"
 #include "../include/contextMap.h"
 
 #include  <glm/gtc/type_ptr.hpp>
+#include "SOIL2/SOIL2.h"
 
 #include <string>
 #include <vector>
@@ -65,7 +65,8 @@ GLuint sceneVBO = 0;
  
 
 glm::vec4 normalize_plane(const glm::vec4 &p) {
-	return p*(1.0f/length(p.swizzle(glm::comp::X,glm::comp::Y,glm::comp::Z)));
+	//return p*(1.0f/length(p.swizzle(glm::comp::X,glm::comp::Y,glm::comp::Z)));
+    return glm::vec4();
 }
 
 void updatePixels(GLubyte* dst, int size)
@@ -366,7 +367,7 @@ void Scene::initThisDemo(void)
 		glBufferData(GL_ARRAY_BUFFER,16384*4,0,GL_STATIC_DRAW);
 		glBindBuffer(GL_ARRAY_BUFFER,0);
 		//prepare contextMap
-		createContextMapPool(1,ModePersistent);
+		createContextMapPool(1,6);
 
 		createSceneData();
 
@@ -419,11 +420,11 @@ Scene::block* Scene::add_block(const int type, const glm::vec3 &pos, const glm::
 
 	_blocks.push_back(
 		block(
-		(_tms.end()-1)._Ptr,
-		(_flags.end()-1)._Ptr,
-		(_hws.end()-1)._Ptr));
+		&*(_tms.end()-1),
+		&*(_flags.end()-1),
+		&*(_hws.end()-1)));
 
-	return (_blocks.end()-1)._Ptr;
+	return &*(_blocks.end()-1);
 }
 
 int Scene::frustum_check(ContextMap *ctx,const bool dont_check/*=true*/)

@@ -11,54 +11,31 @@
 #include "GL/glew.h"
 #include <vector>
 
-struct batch
-{
-	glm::vec2 pos;
-	glm::vec2 size;
-	int index;
-	int count;
-	unsigned tex;
-
-	batch(
-		const glm::vec2 &pos,
-		const glm::vec2 &size,
-		const int index,
-		const int count,
-		const int tex)
-		: pos(pos)
-		, size(size)
-		, index(index)
-		, count(count)
-		, tex(tex)
-	{}
-};
-
-typedef std::vector<batch> batches_t;
-
-enum ContextMapMode 
-{
-	ModeInvalidateBuffer,
-	ModeFlushExplicit,
-	ModeUnsynchronized, 
-	ModeBufferData,
-	ModeBufferSubData,
-	ModeWrite,
-	ModePersistent
-};
-
-struct PersistentBufferRange
-{
-	PersistentBufferRange()
-	{
-		_begin = 0;
-		_sync = 0;
-	}
-	size_t _begin;
-	GLsync _sync;
-};
 
 struct ContextMap
 {
+
+    enum ContextMapMode
+    {
+        ModeInvalidateBuffer = 0,
+        ModeFlushExplicit,
+        ModeUnsynchronized,
+        ModeBufferData,
+        ModeBufferSubData,
+        ModeWrite,
+        ModePersistent
+    };
+
+    struct PersistentBufferRange
+    {
+    PersistentBufferRange()
+        {
+            _begin = 0; _sync = 0;
+        }
+        size_t _begin;
+        GLsync _sync;
+    };
+
 
 	ContextMap();
 
@@ -80,7 +57,7 @@ struct ContextMap
 
 	void flush_scene_data();
 
-	void create_buffers(ContextMapMode flag);
+	void create_buffers(unsigned int flag);
 
 	void WaitBuffer(void);
 	void LockBuffer(void);
@@ -88,5 +65,6 @@ struct ContextMap
 	void WaitBuffer(GLsync& syncObj);
 
 	PersistentBufferRange gSyncRanges[3]; //now persisten use 3 section
+    
 	GLuint gPersistentRangeIndex;
 };
