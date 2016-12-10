@@ -6,9 +6,36 @@
     //  Copyright (c) 2016ƒÍ xt. All rights reserved.
     //
 
-class XText
+
+#include <map>
+#include <glm/glm.hpp>
+
+struct Character;
+class Shader ;
+
+class rOGLText
 {
-    public :
-    XText();
-    ~XText();
+public:
+
+
+	bool init(void);
+
+	static bool initTextLib(void);
+
+	rOGLText();
+	~rOGLText();
+
+	void drawText(const std::string& text, float x, float y, float scale, glm::vec3 color);
+private:
+
+	void initShader(void);
+
+	static std::map<unsigned char, Character*> _characters;
+
+	Shader * _shader;
+
+	unsigned int _vao;
+
+	unsigned int _vbo;
+
 };
