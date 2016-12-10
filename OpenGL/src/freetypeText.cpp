@@ -6,6 +6,7 @@
 #include <gl/glew.h>
 
 #include "../include/shader.hpp"
+#include "../include/sys.h"
 
 #include <string>
 
@@ -50,8 +51,16 @@ bool rOGLText::initTextLib(void)
 	{
 		return false;
 	}
+
+	const char * fontPath;
+#if defined X_OS_WIN32 || defined X_OS_WIN64 
+	fontPath = "c:/windows/fonts/arial.tff";
+#elif  __APPLE__
+	fontPath = "/usr/share/fonts/truetype/Arial.ttf";
+#endif
+
 	FT_Face       face;
-	if(FT_New_Face(library,"fonts/arial.tff",0,&face))
+	if(FT_New_Face(library,fontPath,0,&face))
 	{
 		return false;
 	}
