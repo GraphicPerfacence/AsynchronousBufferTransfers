@@ -390,9 +390,12 @@ void Scene::initThisDemo(void)
 		glBufferData(GL_ARRAY_BUFFER,16384*4,0,GL_STATIC_DRAW);
 		glBindBuffer(GL_ARRAY_BUFFER,0);
 		//prepare contextMap
-		//createContextMapPool(1,6);
-		createContextMapPool(1,7);
 
+		createContextMapPool(1, 1); //ModeUnsynchronized
+		//createContextMapPool(1,5); //  ModePersistentCoheren,
+		//createContextMapPool(1,6); //ModePersistentFlush
+		//createContextMapPool(1,7);//MemoryBarrier
+		
 		createSceneData();
 
 	}

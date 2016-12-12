@@ -53,8 +53,8 @@ void testOpenGl()
 	glGetIntegerv(GL_MAJOR_VERSION, &manVersion);
 	glGetIntegerv(GL_MINOR_VERSION, &minVersion);
 
-	printf("openGL manjorVersion :%s \n" , manVersion);
-	printf("openGL minjorVersion :%s \n" , minVersion );
+	printf("openGL manjorVersion :%d \n" , manVersion);
+	printf("openGL minjorVersion :%d \n" , minVersion );
 	printf("Vendor: %s \n", glGetString(GL_VENDOR));
 	printf("Render Name (GPU Name): %s \n", glGetString(GL_RENDERER));
 

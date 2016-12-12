@@ -37,6 +37,20 @@ void ContextMap::getMapPtr()
 		_scene_data_ptr = _persistentRangeMapStartPtr + startID;
 	}
 	
+	else if (ModeUnsynchronized == _mode)
+	{
+		_scene_data_ptr = reinterpret_cast<glm::mat4*>(glMapBufferRange(GL_TEXTURE_BUFFER,0,
+			Scene::MAX_BLOCK_COUNT * sizeof(glm::mat4), GL_MAP_UNSYNCHRONIZED_BIT | GL_MAP_WRITE_BIT));
+	}
+
+	else if (ModeInvalidateBuffer == _mode)
+	{
+		_scene_data_ptr = reinterpret_cast<glm::mat4*>(
+			glMapBufferRange(
+				GL_TEXTURE_BUFFER,0,
+				Scene::MAX_BLOCK_COUNT * sizeof(glm::mat4),
+				GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT));
+	}
 }
 
 /************************************************************************/
@@ -79,7 +93,15 @@ void ContextMap::create_buffers(unsigned int model)
 
 		_persistentRangeMapStartPtr = _scene_data_ptr;
 	}
+	else if (ModeUnsynchronized == _mode)
+	{
 
+	}
+
+	else if (ModeInvalidateBuffer == _mode)
+	{
+
+	}
 	else
 	{
 		glBufferData(GL_TEXTURE_BUFFER, Scene::MAX_BLOCK_COUNT * sizeof(glm::mat4), 0, GL_STREAM_DRAW);
