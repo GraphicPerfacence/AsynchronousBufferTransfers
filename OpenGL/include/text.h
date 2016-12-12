@@ -18,12 +18,13 @@ class rOGLText
 public:
 
 
+	rOGLText();
+	~rOGLText();
+
+
 	bool init(void);
 
 	static bool initTextLib(void);
-
-	rOGLText();
-	~rOGLText();
 
 	void drawText(const std::string& text, float x, float y, float scale, glm::vec3 color);
 private:

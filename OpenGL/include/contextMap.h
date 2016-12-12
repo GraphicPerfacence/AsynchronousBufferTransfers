@@ -23,7 +23,8 @@ struct ContextMap
         ModeBufferData,
         ModeBufferSubData,
         ModeWrite,
-        ModePersistent
+        ModePersistentCoheren,
+		ModePersistentFlush
     };
 
     struct PersistentBufferRange

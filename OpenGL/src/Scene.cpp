@@ -105,6 +105,8 @@ void Scene::Initialize()
 	initTexture();
 	initFBO();
 	initThisDemo();
+
+	_text.init();
 }
 
 void Scene::initOpengl(void)
@@ -281,19 +283,38 @@ void Scene::Render()
 	
 	else if(testFun == 1)
 	{
+
 		ContextMap * ct = _contextMapPool[0];
 
 		frustum_check(ct);
 
 		ct->getMapPtr();
 
+		_query.begin();
+
+		GLfloat timercpu = _query.getCurrentTime();
+
 		upload_blocks_to_gpu(ct);
 
 		ct->flush_scene_data();
-
+		
 		render_blocks(ct);
 
 		ct->LockBuffer();
+
+		_query.end();
+
+		GLfloat timercpu2 = _query.getCurrentTime();
+
+		std::string timeS = "CPU: " +  std::to_string( (long double )(timercpu2 - timercpu) );
+		
+		_text.drawText(timeS,20,500,0.5,glm::vec3(1.0,0.5,0.5));
+
+		std::string GPUtime = "GPU: ";
+
+		GPUtime += std::to_string((long double)_query.time());
+
+		_text.drawText(GPUtime, 20, 520, 0.5, glm::vec3(0.8, 0.5, 0.3));
 	}
 }
 
@@ -362,12 +383,15 @@ void Scene::initThisDemo(void)
 	}
 	else if(testFun == 1)
 	{
+		_query.genQueries();
+
 		glGenBuffers(1,&sceneVBO);
 		glBindBuffer(GL_ARRAY_BUFFER,sceneVBO);
 		glBufferData(GL_ARRAY_BUFFER,16384*4,0,GL_STATIC_DRAW);
 		glBindBuffer(GL_ARRAY_BUFFER,0);
 		//prepare contextMap
-		createContextMapPool(1,6);
+		//createContextMapPool(1,6);
+		createContextMapPool(1,7);
 
 		createSceneData();
 

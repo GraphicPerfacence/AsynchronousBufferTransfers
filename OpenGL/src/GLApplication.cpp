@@ -11,7 +11,6 @@
 #include "../include/camera.h"
 #include "../include/Scene.h"
 #include "../include/log.h"
-#include "../include/text.h"
 										// Our class to handle initializing and drawing our triangle
 
 // This is our own main() function which abstracts the required main() function to run this application.
@@ -56,7 +55,11 @@ void GLApplication::Initialize()
 	_scene->setScreenWH(_width,_hight);
 	_scene->SetCamera(Camera);
 
-    rOGLText::initTextLib();
+    if(!rOGLText::initTextLib())
+	{ 
+		return;
+	}
+
 	_scene->Initialize();
 
 

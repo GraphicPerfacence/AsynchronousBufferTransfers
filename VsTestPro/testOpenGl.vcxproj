@@ -50,13 +50,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>D:\dllOrDep\freetype-2.3.5-1-bin\include;D:\dllOrDep\SpartanJ-soil2\src;D:\dllOrDep;D:\dllOrDep\glfw\include;D:\dllOrDep\glew-1.11.0\include;D:\dllOrDep\assimp--3.0.1270-sdk\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\dllOrDep\freetype-2.7\include;D:\dllOrDep\SpartanJ-soil2\src;D:\dllOrDep;D:\dllOrDep\glfw\include;D:\dllOrDep\glew-1.11.0\include;D:\dllOrDep\assimp--3.0.1270-sdk\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>D:\dllOrDep\freetype-2.3.5-1-bin\lib;D:\dllOrDep\SpartanJ-soil2\lib\windows;D:\dllOrDep\opengl;D:\dllOrDep\glfw\lib;D:\dllOrDep\glew-1.11.0\lib\Release\Win32;D:\dllOrDep\assimp--3.0.1270-sdk\lib\assimp_release-dll_win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>soil2.lib;glew32.lib;glfw3.lib;OPENGL32.lib;assimp.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:\dllOrDep\freetype-2.7\objs\vc2010\Win32;D:\dllOrDep\SpartanJ-soil2\lib\windows;D:\dllOrDep\opengl;D:\dllOrDep\glfw\lib;D:\dllOrDep\glew-1.11.0\lib\Release\Win32;D:\dllOrDep\assimp--3.0.1270-sdk\lib\assimp_release-dll_win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>soil2.lib;glew32.lib;glfw3.lib;OPENGL32.lib;assimp.lib;freetype27.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -87,7 +87,6 @@
     <ClInclude Include="..\OpenGL\include\GLApplication.h" />
     <ClInclude Include="..\OpenGL\include\GLFWManager.h" />
     <ClInclude Include="..\OpenGL\include\glfwSet.h" />
-    <ClInclude Include="..\OpenGL\include\GlText.h" />
     <ClInclude Include="..\OpenGL\include\Inputmanager.h" />
     <ClInclude Include="..\OpenGL\include\Light.h" />
     <ClInclude Include="..\OpenGL\include\log.h" />
@@ -103,6 +102,7 @@
     <ClInclude Include="..\OpenGL\include\ShowInfo.h" />
     <ClInclude Include="..\OpenGL\include\surface.h" />
     <ClInclude Include="..\OpenGL\include\sys.h" />
+    <ClInclude Include="..\OpenGL\include\text.h" />
     <ClInclude Include="..\OpenGL\include\texture.h" />
     <ClInclude Include="..\OpenGL\include\Timer.h" />
     <ClInclude Include="..\OpenGL\include\TimerManager.h" />
@@ -114,11 +114,11 @@
     <ClCompile Include="..\OpenGL\src\camera.cpp" />
     <ClCompile Include="..\OpenGL\src\comm.cpp" />
     <ClCompile Include="..\OpenGL\src\contextMap.cpp" />
+    <ClCompile Include="..\OpenGL\src\freetypeText.cpp" />
     <ClCompile Include="..\OpenGL\src\geometry.cpp" />
     <ClCompile Include="..\OpenGL\src\GLApplication.cpp" />
     <ClCompile Include="..\OpenGL\src\GLFWManager.cpp" />
     <ClCompile Include="..\OpenGL\src\glfwSet.cpp" />
-    <ClCompile Include="..\OpenGL\src\GlText.cpp" />
     <ClCompile Include="..\OpenGL\src\Inputmanager.cpp" />
     <ClCompile Include="..\OpenGL\src\Light.cpp" />
     <ClCompile Include="..\OpenGL\src\log.cpp" />
@@ -133,6 +133,7 @@
     <ClCompile Include="..\OpenGL\src\shader.cpp" />
     <ClCompile Include="..\OpenGL\src\ShowInfo.cpp" />
     <ClCompile Include="..\OpenGL\src\surface.cpp" />
+    <ClCompile Include="..\OpenGL\src\text.cpp" />
     <ClCompile Include="..\OpenGL\src\texture.cpp" />
     <ClCompile Include="..\OpenGL\src\Timer.cpp" />
     <ClCompile Include="..\OpenGL\src\TimerManager.cpp" />
@@ -145,8 +146,8 @@
     <None Include="..\OpenGL\shader\hdr.vert" />
     <None Include="..\OpenGL\shader\lighting.frag" />
     <None Include="..\OpenGL\shader\lighting.vert" />
-    <None Include="..\OpenGL\shader\test.frag" />
-    <None Include="..\OpenGL\shader\test.vert" />
+    <None Include="..\OpenGL\shader\text.frag" />
+    <None Include="..\OpenGL\shader\text.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

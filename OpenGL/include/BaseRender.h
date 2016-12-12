@@ -14,7 +14,6 @@
 #include "Light.h"
 #include "texture.h"
 
-
 class Shader;
 class Camera;
 class ContextMap;

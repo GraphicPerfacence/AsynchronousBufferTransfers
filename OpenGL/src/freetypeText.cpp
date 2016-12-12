@@ -3,10 +3,14 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
 #include <gl/glew.h>
 
 #include "../include/shader.hpp"
 #include "../include/sys.h"
+#include "../include/log.h"
 
 #include <string>
 
@@ -19,59 +23,60 @@ struct Character
 };
 
 
-static std::string textVertexString = "\
-									  #version 330 core \
-									  layout (location = 0) in vec4 vertex; // <vec2 pos, vec2 tex> \
-									   out vec2 TexCoords; \
-									   uniform mat4 projection; \
-									   void main() \
-									   {			\
-											gl_Position = projection * vec4(vertex.xy, 0.0, 1.0); \
-											TexCoords = vertex.zw; \
-										}";
-
-static std::string textFragString = "\
-									#version 330 core \
-									in vec2 TexCoords; \
-									out vec4 color; \
-									uniform sampler2D text; \
-									uniform vec3 textColor;\
-									void main()\
-									{    \
-										vec4 sampled = vec4(1.0, 1.0, 1.0, texture(text, TexCoords).r);\
-										color = vec4(textColor, 1.0) * sampled;\
-									}";
-
 std::map<unsigned char, Character*> rOGLText::_characters;
 
-bool rOGLText::initTextLib(void)
+const char* getFreetypeErrorMessage(FT_Error err)
 {
+#undef __FTERRORS_H__
+#define FT_ERRORDEF( e, v, s )  case e: return s;
+#define FT_ERROR_START_LIST     switch (err) {
+#define FT_ERROR_END_LIST       }
+#include FT_ERRORS_H
+	return "(Unknown error)";
+}
+
+bool rOGLText::initTextLib(void)
+{	
+	FT_Error error;
+
 	FT_Library    library;
-	if(FT_Init_FreeType(&library))
+
+	error = FT_Init_FreeType(&library);
+	if (error != 0)
 	{
 		return false;
 	}
 
 	const char * fontPath;
 #if defined X_OS_WIN32 || defined X_OS_WIN64 
-	fontPath = "c:/windows/fonts/arial.tff";
+	fontPath = "e:/calibri.ttf";
 #elif  __APPLE__
 	fontPath = "/System/Library/Fonts/Keyboard.ttf";
 #endif
 
 	FT_Face       face;
-	if(FT_New_Face(library,fontPath,0,&face))
+	 
+	error = FT_New_Face(library, fontPath, 0, &face);
+	if(error == FT_Err_Unknown_File_Format)
 	{
+		Log::Instance()->printMessage("\
+				the font file could be opened and read, but it appears,\
+				that its font format is unsupported");
+		return false;
+	}
+	else if (error)
+	{
+		const char* message = getFreetypeErrorMessage(error);
+
+		Log::Instance()->printMessage(message);
 		return false;
 	}
 	//set font's width and height 
-	FT_Set_Pixel_Sizes(face,0,48);
-
-	//face hosts a collection of glyphs and set one of those glyphs as active glyph
-	/*if(FT_Load_Char(face,'X',FT_LOAD_RENDER))
+	error =  FT_Set_Pixel_Sizes(face,0,48);
+	if (error)
 	{
 		return false;
-	}*/
+	}
 
 	glPixelStorei(GL_UNPACK_ALIGNMENT,1);
 
@@ -123,7 +128,14 @@ void rOGLText::initShader(void)
 {
 	_shader = new Shader;
 
-	_shader->LoadShaderSouce(textVertexString.c_str(),textFragString.c_str(),NULL);
+	//_shader->LoadShaderSouce(textVertexString.c_str(),textFragString.c_str(),NULL);
+	_shader->LoadShaders("D:/projects/opengl/Perfance/Asy/OpenGL/shader/text.vert", "D:/projects/opengl/Perfance/Asy/OpenGL/shader/text.frag", NULL);
+
+	_shader->TurnOn();
+
+	GLuint loc =  _shader->GetVariable("textSample");
+	_shader->SetInt(loc, 0);
+	_shader->TurnOff();
 }
 
 
@@ -142,6 +154,12 @@ void rOGLText::drawText(const std::string& text, GLfloat x, GLfloat y, GLfloat s
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	GLuint projL =  glGetUniformLocation(_shader->getShaderId(), "projection");
+	
+	glm::mat4 projection = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f);
+
+	glUniformMatrix4fv(projL, 1, GL_FALSE, glm::value_ptr(projection));
 
 	glUniform3f(glGetUniformLocation(_shader->getShaderId(), "textColor"), color.x, color.y, color.z);
 	glActiveTexture(GL_TEXTURE0);

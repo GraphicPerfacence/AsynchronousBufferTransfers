@@ -12,6 +12,8 @@
 #include "BaseRender.h"
 #include "GLQuery.h"
 #include "math3d.h"
+#include "text.h"
+
 #include <stdio.h>
 
 class INode;
@@ -97,6 +99,7 @@ protected:
 	std::vector<unsigned int> _textures; //texture objects
 
 	GLQuery _query;
+	rOGLText _text;
 
 	//blower is juest for createSceneData
 	std::vector<glm::mat4> _tms;			//< transformation matrixes for blocks

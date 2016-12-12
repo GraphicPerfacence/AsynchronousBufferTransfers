@@ -112,7 +112,7 @@ GLuint Shader::LoadShaderSouce(const char* vertexSource, const char*fragmentSour
 	if (!GL_TRUE) return 0;
 
 	//COMPILE GEOMETRY SAHDER
-	if (!geometrySource)
+	if (!geometrySource && geometrySource)
 	{
 		char const * GeometrySourcePointer = geometrySource;
 		glShaderSource(GeometryShaderId, 1, &GeometrySourcePointer, NULL);

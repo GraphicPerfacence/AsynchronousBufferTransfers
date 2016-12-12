@@ -28,7 +28,7 @@ struct batch
 
 void ContextMap::getMapPtr()
 {
-	if(ModePersistent == _mode)
+	if(ModePersistentCoheren == _mode || ModePersistentFlush == _mode)
 	{
 		WaitBuffer(gSyncRanges[gPersistentRangeIndex]._sync);
 
@@ -50,7 +50,7 @@ void ContextMap::create_buffers(unsigned int model)
 
 	_mode = (ContextMapMode)model;
 
-	if(model == ModePersistent)
+	if(model == ModePersistentCoheren || model == ModePersistentFlush)
 	{
 		gPersistentRangeIndex = 0;
 		
@@ -58,15 +58,28 @@ void ContextMap::create_buffers(unsigned int model)
 		gSyncRanges[1]._begin = Scene::MAX_BLOCK_COUNT ;
 		gSyncRanges[2]._begin = Scene::MAX_BLOCK_COUNT  * 2;
 		
-		GLbitfield flags = GL_MAP_WRITE_BIT | GL_MAP_PERSISTENT_BIT | GL_MAP_COHERENT_BIT;
+		if (ModePersistentCoheren == model)
+		{
+			GLbitfield flags = GL_MAP_WRITE_BIT | GL_MAP_PERSISTENT_BIT | GL_MAP_COHERENT_BIT;
 
-		glBufferStorage(GL_TEXTURE_BUFFER,Scene::MAX_BLOCK_COUNT * sizeof(glm::mat4) * 3,0,flags);
+			glBufferStorage(GL_TEXTURE_BUFFER, Scene::MAX_BLOCK_COUNT * sizeof(glm::mat4) * 3, 0, flags);
 
-		_scene_data_ptr = reinterpret_cast<glm::mat4*>(glMapBufferRange(GL_TEXTURE_BUFFER,0,
-			Scene::MAX_BLOCK_COUNT * sizeof(glm::mat4) * 3,flags));
+			_scene_data_ptr = reinterpret_cast<glm::mat4*>(glMapBufferRange(GL_TEXTURE_BUFFER, 0,
+				Scene::MAX_BLOCK_COUNT * sizeof(glm::mat4) * 3, flags));
+		}
+		else
+		{
+			GLbitfield flags = GL_MAP_WRITE_BIT | GL_MAP_PERSISTENT_BIT;
+
+			glBufferStorage(GL_TEXTURE_BUFFER, Scene::MAX_BLOCK_COUNT * sizeof(glm::mat4) * 3, 0, flags);
+
+			_scene_data_ptr = reinterpret_cast<glm::mat4*>(glMapBufferRange(GL_TEXTURE_BUFFER, 0,
+				Scene::MAX_BLOCK_COUNT * sizeof(glm::mat4) * 3, flags | GL_MAP_FLUSH_EXPLICIT_BIT));
+		}
 
 		_persistentRangeMapStartPtr = _scene_data_ptr;
 	}
+
 	else
 	{
 		glBufferData(GL_TEXTURE_BUFFER, Scene::MAX_BLOCK_COUNT * sizeof(glm::mat4), 0, GL_STREAM_DRAW);
@@ -84,8 +97,13 @@ void ContextMap::create_buffers(unsigned int model)
 
 void ContextMap::flush_scene_data()
 {
-	if(ModePersistent == _mode)
+	if(ModePersistentCoheren == _mode || ModePersistentFlush == _mode)
 	{
+		if (ModePersistentFlush == _mode)
+		{
+			glFlushMappedBufferRange(GL_TEXTURE_BUFFER, gSyncRanges[gPersistentRangeIndex]._begin * sizeof(glm::mat4),
+				Scene::MAX_BLOCK_COUNT * sizeof(glm::mat4));
+		}
 		//next section index
 		glBindBuffer(GL_TEXTURE_BUFFER,_scene_tb);
 		glTexBufferRange(GL_TEXTURE_BUFFER,GL_RGBA32F,_scene_vbo,
@@ -114,7 +132,7 @@ ContextMap::ContextMap()
 ContextMap::~ContextMap()
 {
 
-	if(ModePersistent == _mode)
+	if(ModePersistentCoheren == _mode)
 	{
 		glUnmapBuffer(GL_TEXTURE_BUFFER);
 	}
