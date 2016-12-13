@@ -39,17 +39,46 @@ void ContextMap::getMapPtr()
 	
 	else if (ModeUnsynchronized == _mode)
 	{
+		glBindBuffer(GL_TEXTURE_BUFFER, _scene_vbo);
 		_scene_data_ptr = reinterpret_cast<glm::mat4*>(glMapBufferRange(GL_TEXTURE_BUFFER,0,
 			Scene::MAX_BLOCK_COUNT * sizeof(glm::mat4), GL_MAP_UNSYNCHRONIZED_BIT | GL_MAP_WRITE_BIT));
+		glBindBuffer(GL_TEXTURE_BUFFER, 0);
 	}
-
 	else if (ModeInvalidateBuffer == _mode)
 	{
+		glBindBuffer(GL_TEXTURE_BUFFER, _scene_vbo);
 		_scene_data_ptr = reinterpret_cast<glm::mat4*>(
 			glMapBufferRange(
 				GL_TEXTURE_BUFFER,0,
 				Scene::MAX_BLOCK_COUNT * sizeof(glm::mat4),
 				GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT));
+		glBindBuffer(GL_TEXTURE_BUFFER, 0);
+
+		_scene_data_ptr_size = 0;
+	}
+	else if (ModeUnsynchronized == _mode)
+	{
+		if (gSyncRanges[0]._sync != 0)
+		{
+			WaitBuffer(gSyncRanges[0]._sync);
+		}
+
+		glBindBuffer(GL_TEXTURE_BUFFER, _scene_vbo);
+		_scene_data_ptr = reinterpret_cast<glm::mat4*>(
+			glMapBufferRange(
+				GL_TEXTURE_BUFFER,
+				0,
+				Scene::MAX_BLOCK_COUNT * sizeof(glm::mat4),
+				GL_MAP_WRITE_BIT | GL_MAP_UNSYNCHRONIZED_BIT));
+
+		glBindBuffer(GL_TEXTURE_BUFFER, 0);
+	}
+
+	else if (ModeBufferSubData == _mode)
+	{
+		if (!_scene_data_ptr)
+			_scene_data_ptr = new glm::mat4[Scene::MAX_BLOCK_COUNT];
+		_scene_data_ptr_size = 0;
 	}
 }
 
@@ -60,6 +89,7 @@ void ContextMap::getMapPtr()
 void ContextMap::create_buffers(unsigned int model)
 {
 	glGenBuffers(1,&_scene_vbo); //texture buffer object
+
 	glBindBuffer(GL_TEXTURE_BUFFER,_scene_vbo);
 
 	_mode = (ContextMapMode)model;
@@ -93,28 +123,21 @@ void ContextMap::create_buffers(unsigned int model)
 
 		_persistentRangeMapStartPtr = _scene_data_ptr;
 	}
-	else if (ModeUnsynchronized == _mode)
+	else if(ModeUnsynchronized == _mode)
 	{
-
-	}
-
-	else if (ModeInvalidateBuffer == _mode)
-	{
-
+		gSyncRanges[0]._begin = 0;
+		glBufferData(GL_TEXTURE_BUFFER, Scene::MAX_BLOCK_COUNT * sizeof(glm::mat4), 0, GL_STREAM_DRAW);
 	}
 	else
 	{
 		glBufferData(GL_TEXTURE_BUFFER, Scene::MAX_BLOCK_COUNT * sizeof(glm::mat4), 0, GL_STREAM_DRAW);
 	}
 	
-	glBindBuffer(GL_TEXTURE_BUFFER,0);
-
-	glGenTextures(1,&_scene_tb);
-	glBindBuffer(GL_TEXTURE_BUFFER,_scene_tb);
+	glGenTextures(1, &_scene_tb);
+	glBindTexture(GL_TEXTURE_BUFFER,_scene_tb);
 	glTexBuffer(GL_TEXTURE_BUFFER,GL_RGBA32F,_scene_vbo);
 	glBindBuffer(GL_TEXTURE_BUFFER,0);
 
-	Log::Instance()->glError();
 }
 
 void ContextMap::flush_scene_data()
@@ -128,6 +151,7 @@ void ContextMap::flush_scene_data()
 		}
 		//next section index
 		glBindBuffer(GL_TEXTURE_BUFFER,_scene_tb);
+
 		glTexBufferRange(GL_TEXTURE_BUFFER,GL_RGBA32F,_scene_vbo,
 			gSyncRanges[gPersistentRangeIndex]._begin * sizeof(glm::mat4),
 			Scene::MAX_BLOCK_COUNT * sizeof(glm::mat4));
@@ -135,20 +159,25 @@ void ContextMap::flush_scene_data()
 		glBindBuffer(GL_TEXTURE_BUFFER,0);
 
 	}
+	else if(ModeBufferSubData == _mode)
+	{
+		glBindBuffer(GL_TEXTURE_BUFFER, _scene_vbo);
+		glBufferSubData(GL_TEXTURE_BUFFER, 0, _scene_data_ptr_size, _scene_data_ptr);
+		glBindBuffer(GL_TEXTURE_BUFFER, 0);
+	}
 	else 
 	{
 		glBindBuffer(GL_TEXTURE_BUFFER,_scene_vbo);
-
 		glUnmapBuffer(GL_TEXTURE_BUFFER);
-
 		glBindBuffer(GL_TEXTURE_BUFFER,0);
 	}
-}
 
+}
 
 ContextMap::ContextMap()
 {
-
+	_scene_data_ptr = NULL;
+	_persistentRangeMapStartPtr = NULL;
 }
 
 ContextMap::~ContextMap()
@@ -179,8 +208,15 @@ void ContextMap::LockBuffer(GLsync& syncObj)
 
 void ContextMap::LockBuffer(void)
 {
-	LockBuffer(gSyncRanges[gPersistentRangeIndex]._sync);
-	gPersistentRangeIndex = (gPersistentRangeIndex + 1) % 3;
+	if (ModePersistentCoheren == _mode || ModePersistentFlush == _mode)
+	{
+		LockBuffer(gSyncRanges[gPersistentRangeIndex]._sync);
+		gPersistentRangeIndex = (gPersistentRangeIndex + 1) % 3;
+	}
+	else if (ModeUnsynchronized == _mode)
+	{
+		LockBuffer(gSyncRanges[0]._sync);
+	}
 }
 
 void ContextMap::WaitBuffer(GLsync& syncObj)

@@ -194,6 +194,7 @@ void Scene::initSceneObjs(void)
 
 void Scene::Render()
  {
+	glEnable(GL_DEPTH_TEST);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	if(testFun == 0)
@@ -291,7 +292,6 @@ void Scene::Render()
 		ct->getMapPtr();
 
 		_query.begin();
-
 		GLfloat timercpu = _query.getCurrentTime();
 
 		upload_blocks_to_gpu(ct);
@@ -302,19 +302,15 @@ void Scene::Render()
 
 		ct->LockBuffer();
 
+#if 1
 		_query.end();
-
 		GLfloat timercpu2 = _query.getCurrentTime();
-
 		std::string timeS = "CPU: " +  std::to_string( (long double )(timercpu2 - timercpu) );
-		
 		_text.drawText(timeS,20,500,0.5,glm::vec3(1.0,0.5,0.5));
-
 		std::string GPUtime = "GPU: ";
-
 		GPUtime += std::to_string((long double)_query.time());
-
 		_text.drawText(GPUtime, 20, 520, 0.5, glm::vec3(0.8, 0.5, 0.3));
+#endif
 	}
 }
 
@@ -391,10 +387,11 @@ void Scene::initThisDemo(void)
 		glBindBuffer(GL_ARRAY_BUFFER,0);
 		//prepare contextMap
 
-		createContextMapPool(1, 1); //ModeUnsynchronized
-		//createContextMapPool(1,5); //  ModePersistentCoheren,
-		//createContextMapPool(1,6); //ModePersistentFlush
-		//createContextMapPool(1,7);//MemoryBarrier
+		//createContextMapPool(1, ContextMap::ModeInvalidateBuffer); //ModeUnsynchronized
+		//createContextMapPool(1, ContextMap::ModePersistentCoheren); //  ModePersistentCoheren,
+		//createContextMapPool(1,ContextMap::ModePersistentFlush); //ModePersistentFlush
+		//createContextMapPool(1, ContextMap::ModeUnsynchronized);
+		createContextMapPool(1, ContextMap::ModeBufferSubData);
 		
 		createSceneData();
 

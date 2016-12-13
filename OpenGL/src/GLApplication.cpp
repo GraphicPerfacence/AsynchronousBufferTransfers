@@ -55,8 +55,8 @@ void GLApplication::Initialize()
 	_scene->setScreenWH(_width,_hight);
 	_scene->SetCamera(Camera);
 
-    if(!rOGLText::initTextLib())
-	{ 
+	if (!rOGLText::initTextLib())
+	{
 		return;
 	}
 

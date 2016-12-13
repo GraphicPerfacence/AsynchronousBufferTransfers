@@ -17,11 +17,11 @@ struct ContextMap
 
     enum ContextMapMode
     {
-        ModeInvalidateBuffer = 0, //orphan
+		ModeWrite = 0,
+        ModeInvalidateBuffer, //orphan
         ModeUnsynchronized, //buffer update 
         ModeBufferData,
         ModeBufferSubData,
-        ModeWrite,
         ModePersistentCoheren,
 		ModePersistentFlush,
 		ModePersistenMemoryBarrier //now no implement
