@@ -69,7 +69,7 @@ glm::vec4 normalize_plane(const glm::vec4 &p) {
     return glm::vec4();
 }
 
-void updatePixels(GLubyte* dst, int size)
+void updatePixels(GLubyte* dst, int size) 
 {
 	static int color = 0;
 
@@ -289,9 +289,10 @@ void Scene::Render()
 
 		frustum_check(ct);
 
+		_query.begin();
 		ct->getMapPtr();
 
-		_query.begin();
+		
 		GLfloat timercpu = _query.getCurrentTime();
 
 		upload_blocks_to_gpu(ct);
@@ -389,9 +390,9 @@ void Scene::initThisDemo(void)
 
 		//createContextMapPool(1, ContextMap::ModeInvalidateBuffer); //ModeUnsynchronized
 		//createContextMapPool(1, ContextMap::ModePersistentCoheren); //  ModePersistentCoheren,
-		//createContextMapPool(1,ContextMap::ModePersistentFlush); //ModePersistentFlush
+		createContextMapPool(1,ContextMap::ModePersistentFlush); //ModePersistentFlush
 		//createContextMapPool(1, ContextMap::ModeUnsynchronized);
-		createContextMapPool(1, ContextMap::ModeBufferSubData);
+		//createContextMapPool(1, ContextMap::ModeBufferSubData);
 		
 		createSceneData();
 
