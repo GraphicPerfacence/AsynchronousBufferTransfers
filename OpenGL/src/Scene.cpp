@@ -69,7 +69,6 @@ glm::vec4 normalize_plane(const glm::vec4 &p) {
 }
 
 
-
 Scene::Scene()
 {
 }
@@ -80,7 +79,6 @@ void Scene::Initialize()
     initTexture();
     initSceneObjs();
     initShader();
-
 }
 
 void Scene::initOpengl(void)
@@ -191,6 +189,7 @@ void Scene::initSceneObjs(void)
 
 void Scene::Render()
  {
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
     Shader * currentShader = _shaders[0];
@@ -210,6 +209,7 @@ void Scene::Render()
     glm::mat4 projectMatrix = camera->GetProjectionMatrix();
     glm::mat4 viewProjectionMatrix = projectMatrix * viewMatrix;
 
+
     GLuint CameraRight_worldspace_ID  = currentShader->GetVariable("CameraRight_worldspace");
 	GLuint CameraUp_worldspace_ID  = currentShader->GetVariable( "CameraUp_worldspace");
 	GLuint ViewProjMatrixID = currentShader->GetVariable("VP");
@@ -217,36 +217,51 @@ void Scene::Render()
 	GLuint BillboardSizeID = currentShader->GetVariable( "BillboardSize");
 	GLuint LifeLevelID = currentShader->GetVariable( "LifeLevel");
 
-    currentShader->SetFloat3(CameraRight_worldspace_ID,viewMatrix[0][0], viewMatrix[1][0], viewMatrix[2][0]);
-    currentShader->SetFloat3(CameraUp_worldspace_ID,viewMatrix[0][1], viewMatrix[1][1], viewMatrix[2][1]);
+ currentShader->SetFloat3(CameraRight_worldspace_ID,viewMatrix[0][0], viewMatrix[1][0], viewMatrix[2][0]);
+ currentShader->SetFloat3(CameraUp_worldspace_ID,viewMatrix[0][1], viewMatrix[1][1], viewMatrix[2][1]);
 
-    currentShader->SetFloat3(BillboardPosID,0.0f, 0.5f, 0.0f);
-    currentShader->SetFloat2(BillboardSizeID,1.0f, 0.125f);
+ currentShader->SetFloat3(BillboardPosID,0.0f, 0.5f, 0.0f);
+ currentShader->SetFloat2(BillboardSizeID,1.0f, 0.125f);
 
-    double curTime = glfwGetTime();
-    float LifeLevel = sin(curTime)*0.1f + 0.7f;
-    currentShader->SetFloat(LifeLevelID, LifeLevel);
+ double curTime = glfwGetTime();
+ float LifeLevel = sin(curTime)*0.1f + 0.7f;
+ currentShader->SetFloat(LifeLevelID, LifeLevel);
 
-    currentShader->SetMatrix4(ViewProjMatrixID, 1, GL_FALSE,glm::value_ptr(viewProjectionMatrix));
+ currentShader->SetMatrix4(ViewProjMatrixID, 1, GL_FALSE,glm::value_ptr(viewProjectionMatrix));
 
-    glBindVertexArray(billboard_vertex_buffer);
-   
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+ glBindVertexArray(billboard_vertex_buffer);
 
-    glBindVertexArray(0);
+ glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
-    currentShader->TurnOff();
+ glBindVertexArray(0);
 
-    currentShader = _shaders[1];
-    currentShader->TurnOn();
-    initUniformVal(currentShader);
-    drawCub(cubInt);
-    currentShader->TurnOff();
- }
+ currentShader->TurnOff();
+
+ currentShader = _shaders[1];
+ currentShader->TurnOn();
+ initUniformVal(currentShader);
+ drawCub(cubInt);
+ currentShader->TurnOff();
+
+
+}
 
 // This handles all the cleanup for our model, like the VBO/VAO buffers and shaders.
 void Scene::Destroy()
-{}
+{
+	for (int i = _shaders.size() - 1; i >= 0; i--)
+	{
+		Shader * s = _shaders[i];
+		s->Destroy();
+		s = NULL;
+	}
+
+	for(unsigned int i = 0;i < _textures.size();i++)
+	{
+		glDeleteBuffers(1,&_textures[i]);
+	}
+
+ }
 
 void Scene::initThisDemo(void)
 {

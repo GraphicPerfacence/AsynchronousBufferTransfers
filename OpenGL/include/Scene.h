@@ -11,6 +11,7 @@
 #include "Xtype.h"
 #include "BaseRender.h"
 #include "XGLQuery.h"
+
 #include <stdio.h>
 
 class Scene :public BaseRender
@@ -70,6 +71,21 @@ protected:
 	std::vector<unsigned int> _textures; //texture objects
 
 	XGLQuery _query;
+
+
+	//blower is juest for createSceneData
+	std::vector<glm::mat4> _tms;			//< transformation matrixes for blocks
+	std::vector<glm::mat4> _bboxes;			//< inverse transposed TM matrices
+	std::vector<glm::vec3> _hws;			//< half width for every block
+	std::vector<unsigned int> _flags;		//<
+
+	static GLint _prg_max_sides;
+	static GLint _prg_tb_blocks;
+	static GLint _prg_block_type;
+	static GLint _prg_start_index;
+	static GLint _prg_mvp;
+
+
 
 };
 

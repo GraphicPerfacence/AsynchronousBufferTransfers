@@ -12,7 +12,6 @@
 #include "../include/Scene.h"
 #include "../include/log.h"
 #include "../include/XText.h"
-										
 
 int GLApplication::GLMain()
 {
@@ -55,6 +54,7 @@ void GLApplication::Initialize()
 	_scene->SetCamera(GetCamera());
 
     //XText::initTextLib();
+
 	_scene->Initialize();
 
 }

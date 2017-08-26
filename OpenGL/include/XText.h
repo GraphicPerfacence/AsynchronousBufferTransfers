@@ -16,13 +16,14 @@ class XText
 {
 public:
 
+
 	bool init(void);
 	static bool initTextLib(void);
 	XText();
 	~XText();
 
-	void drawText(const char* text, float x, float y, float scale, Vec3f color);
-    
+	void drawText(const std::string& text, float x, float y, float scale, Vec3f color);
+
 private:
 
 	void initShader(void);

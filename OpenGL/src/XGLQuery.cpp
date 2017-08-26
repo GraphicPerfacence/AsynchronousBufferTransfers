@@ -51,8 +51,18 @@ void XGLQuery::end()
 
 GLuint64 XGLQuery::time()
 {
+	GLint done = false;
+
+	while (!done) {
+		glGetQueryObjectiv(queryID[queryBackBuffer][0],
+			GL_QUERY_RESULT_AVAILABLE,
+			&done);
+	}
+
+	// get the query result
+	
 	GLuint64 timer;
-	glGetQueryObjectui64v(queryID[queryFrontBuffer][0],GL_QUERY_RESULT,&timer);
+	glGetQueryObjectui64v(queryID[queryBackBuffer][0],GL_QUERY_RESULT,&timer);
 
 	return timer / 1000000.0;
 }

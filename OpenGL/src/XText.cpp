@@ -31,6 +31,8 @@ bool XText::init(void)
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0); 
 
+	initShader();
+
 	return true;
 }
 

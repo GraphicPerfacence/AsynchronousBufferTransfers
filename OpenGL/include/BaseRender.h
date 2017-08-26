@@ -13,7 +13,6 @@
 #include <vector>
 #include "texture.h"
 
-
 class Shader;
 class Camera;
 
