@@ -1,16 +1,16 @@
 
-#include "../include/text.h"
+#include "../include/XText.h"
 #include "../include/shader.hpp"
 
 
 #include <gl/glew.h>
 
-rOGLText::rOGLText()
+XText::XText()
 {
 
 }
 
-rOGLText::~rOGLText()
+XText::~XText()
 {
 	if(_shader)
 	{
@@ -19,7 +19,7 @@ rOGLText::~rOGLText()
 	}
 }
 
-bool rOGLText::init(void)
+bool XText::init(void)
 {
 	glGenVertexArrays(1, &_vao);
 	glGenBuffers(1, &_vbo);

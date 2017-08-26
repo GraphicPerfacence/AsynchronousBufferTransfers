@@ -13,13 +13,22 @@ class Texture
 {
 public:
 
+    enum
+    {
+        TEXTURE_LOAD_AUTO = 0,
+        TEXTURE_LOAD_L = 1,
+        TEXTURE_LOAD_LA = 2,
+        TEXTURE_LOAD_RGB = 3,
+        TEXTURE_LOAD_RGBA = 4
+    };
+
 	Texture();
 
 	Texture(int num);
 
 	~Texture();
 
-	void init(unsigned int flag, unsigned int interalFormat, unsigned int format, const char *imageFile);
+	void init(unsigned int interalFormat, unsigned int format, const char *imageFile,unsigned int flag = TEXTURE_LOAD_AUTO);
 	void init(int n, unsigned int interalFormat, unsigned int format, unsigned int w, unsigned int h, const void* data);
 
 	void initRGBFile(const char* imgFile);

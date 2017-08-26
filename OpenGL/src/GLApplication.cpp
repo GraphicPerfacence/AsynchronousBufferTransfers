@@ -11,10 +11,9 @@
 #include "../include/camera.h"
 #include "../include/Scene.h"
 #include "../include/log.h"
-#include "../include/text.h"
-										// Our class to handle initializing and drawing our triangle
+#include "../include/XText.h"
+										
 
-// This is our own main() function which abstracts the required main() function to run this application.
 int GLApplication::GLMain()
 {
 	Initialize();
@@ -22,15 +21,24 @@ int GLApplication::GLMain()
 	return 0;
 }
 
-void GLApplication::openglInit(void)
+void GLApplication::OpenglInit(void)
 {
 
 }
-// This function initializes the window, the shaders and the triangle vertex data.
+
+GLFWManager *  GLApplication::GetWindowManager()const
+{
+    return  _windowManager;
+}
+void  GLApplication::SetWindowManager(GLFWManager *pWindowManager)
+{
+    _windowManager = pWindowManager;
+}
+
 void GLApplication::Initialize()
 {
 	// Make sure the window manager is initialized prior to calling this and creates the OpenGL context
-	if (!WindowManager || WindowManager->Initialize(&_width, &_hight, "GameTutorials - Camera", _isFullScreen) != 0)
+	if (!_windowManager || _windowManager->Initialize(&_width, &_hight, "GameTutorials - Camera", _isFullScreen) != 0)
 	{
 		exit(-1);
 	}
@@ -39,26 +47,15 @@ void GLApplication::Initialize()
 	
 	glClearColor(0.3f, 0.2f, 0.4f, 1.0f);
 
-	openglInit();
-	// Initialize the triangle with the vertex array and give the length of 3.  This will create our
-	// Vertex Buffer Object and Vertex Array Object.
-	Camera->SetPerspective(45.0f, _width / (float)_hight, 0.1f, 100.f);
-
-	// Below we call our init function for our camera to give it a position, a yaw and a pitch rotation.
-	// 0 for a yaw and pitch will put the camera looking directly down the negative z-axis.  We don't
-	// do any rotations yet so a different pitch or yaw won't do anything until our next tutorial.
-
-	//					  Position	  
-	Camera->PositionCamera(0, 0, 5, 0, 0, 0, 0, 1, 0);
-	Camera->SetSpeed(0.06);
+	OpenglInit();
+    GetCamera()->SetPerspective(45.0f, _width / (float)_hight, 0.1f, 100.f);
 
 	_scene = new Scene();
 	_scene->setScreenWH(_width,_hight);
-	_scene->SetCamera(Camera);
+	_scene->SetCamera(GetCamera());
 
-    rOGLText::initTextLib();
+    //XText::initTextLib();
 	_scene->Initialize();
-
 
 }
 
@@ -67,22 +64,22 @@ void GLApplication::Initialize()
 void GLApplication::GameLoop()
 {
 	// Loop until the user hits the Escape key or closes the window
-	while (WindowManager->ProcessInput(true))
+	while (_windowManager->ProcessInput(true))
 	{
 		// Use our Singleton to calculate our framerate every frame, passing true to set FPS in titlebar
 		TimeManager::Instance().CalculateFrameRate(false);
 
 		// This clears the screen every frame to black (color can be changed with glClearColor)
-		Camera->updateData();
+		//Camera->updateData();
 
 		_scene->SetPosition(vec3(0, 0, 0));
 		_scene->Render();
 
-		WindowManager->SwapTheBuffers();
+		_windowManager->SwapTheBuffers();
 	}
 }
 
-void GLApplication::initScene()
+void GLApplication::InitScene()
 {
 	glShadeModel(GL_SMOOTH);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -111,34 +108,37 @@ void GLApplication::initScene()
 void GLApplication::Destroy()
 {
 	// If we have a window manager still allocated then destroy and delete it
-	if (WindowManager)
+	if (_windowManager)
 	{
-		WindowManager->Destroy();
+		_windowManager->Destroy();
 
-		delete WindowManager;
-		WindowManager = nullptr;
-	}
-
-
-	// If we have the camera still, delete it
-	if (Camera)
-	{
-		delete Camera;
-		Camera = nullptr;
+		delete _windowManager;
+		_windowManager = nullptr;
 	}
 
 	delete _scene;
 	Log::Instance()->Destroy();
 }
 
-GLApplication::GLApplication(bool isFullScreen)
+Camera *  GLApplication::GetCamera()const
+{
+    if(_windowManager != NULL)
+    {
+        return _windowManager->GetCamera();
+    }
+
+    return  NULL;
+}
+
+GLApplication::GLApplication(bool isFullScreen):
+    _windowManager(NULL)
 {
 	 _isFullScreen = isFullScreen;
 	 _width = 1200;
 	 _hight = 900;
 }
 
-void GLApplication::setApplication(unsigned int w,unsigned int h)
+void GLApplication::SetApplication(unsigned int w,unsigned int h)
 {
 	_width = w;
 	_hight = h;

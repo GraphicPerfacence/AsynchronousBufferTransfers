@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////
-// Timer.h
+// XTimer.h
 // =======
-// High Resolution Timer.
+// High Resolution XTimer.
 // This timer is able to measure the elapsed time with 1 micro-second accuracy
 // in both Windows, Linux and Unix system 
 //
@@ -22,11 +22,11 @@
 #endif
 
 
-class Timer
+class XTimer
 {
 public:
-    Timer();                                    // default constructor
-    ~Timer();                                   // default destructor
+    XTimer();                                    // default constructor
+    ~XTimer();                                   // default destructor
 
     void   start();                             // start timer
     void   stop();                              // stop the timer

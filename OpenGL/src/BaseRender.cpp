@@ -9,19 +9,16 @@
 #include "../include/BaseRender.h"
 #include "../include/shader.hpp"
 #include "../include/camera.h"
-#include "../include/contextMap.h"
 
 #include <gl/glew.h>
-
-#include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
 BaseRender::BaseRender()
 {
-	uboBlock = 0;
+	_uboBlock = 0;
 }
 
-void BaseRender::initUniformVal(Shader*shader)
+void BaseRender::initUniformVal(Shader*shader ,bool modelNeed /* = true*/)
 {
 	GLint location = shader->GetVariable("projection");
 	if(location != -1)
@@ -29,15 +26,19 @@ void BaseRender::initUniformVal(Shader*shader)
 	location = shader->GetVariable("view");
 	if(location != -1)
 		shader->SetMatrix4(location,1,GL_FALSE,glm::value_ptr(_camera->GetViewMatrix()));
-   
-	//location = shader->GetVariable("model");
-	//if(location != -1)
-	//{
-	//	glm::mat4 model ;
-	//	//model = glm::rotate(model,45.0f,glm::vec3(0.0f,1.0f,0.0f));
-	//	shader->SetMatrix4(location,1,GL_FALSE,glm::value_ptr(model));
-	//}
- //  
+
+   if(modelNeed)
+   {
+    location = shader->GetVariable("model");
+    if(location != -1)
+       {
+        glm::mat4 model ;
+           //model = glm::rotate(model,45.0f,glm::vec3(0.0f,1.0f,0.0f));
+        shader->SetMatrix4(location,1,GL_FALSE,glm::value_ptr(model));
+       }
+   }
+
+ //
  //   location = shader->GetVariable("lightPos");
  //   if(location != -1 && !_lights.empty())
  //       shader->SetFloat3(location,_lights[0].getPosition().x,_lights[0].getPosition().y,_lights[0].getPosition().z);
@@ -47,9 +48,13 @@ void BaseRender::initUniformVal(Shader*shader)
  //       shader->SetFloat3(location,camera->GetPosition().x,camera->GetPosition().y,camera->GetPosition().z);
 }
 
-void BaseRender::addLight(Light&light)
+Camera * BaseRender::GetCamera()const
+
+{ return _camera; }
+
+void  BaseRender::SetCamera(Camera *pCamera)
 {
-	_lights.push_back(light);
+    _camera = pCamera;
 }
 
 void BaseRender::preRenderShaderData()
@@ -58,30 +63,13 @@ void BaseRender::preRenderShaderData()
 
 	glm::mat4 viewMatrix = _camera->GetViewMatrix();
 
-	glBindBuffer(GL_UNIFORM_BUFFER, uboBlock);
+	glBindBuffer(GL_UNIFORM_BUFFER, _uboBlock);
 
 	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), &projectionMatrix[0][0]);
 	glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), &viewMatrix[0][0]);
 	//glBindBuffer(GL_UNIFORM_BUFFER,0);
 }
 
-void BaseRender::createContextMapPool(unsigned int cout,unsigned int model)
-{
-	for(int i = 0; i < cout; ++i) 
-	{
-		ContextMap *ctx = new ContextMap();
-		ctx->create_buffers(model);
-		 
-		_contextMapPool.push_back(ctx);
-	}
-}
-
 BaseRender::~BaseRender()
 {
-	for (unsigned int i = 0; i < _contextMapPool.size();i++)
-	{
-		ContextMap * tm = _contextMapPool[i];
-		delete tm;
-		tm = NULL;
-	}
 }

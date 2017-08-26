@@ -17,39 +17,40 @@
 #include <GLFW/glfw3.h>
 #include "Inputmanager.h"
 
+class Camera;
 
 class GLFWManager
 {
 public:
 
-	// Create an empty constructor and have the deconstructor release our memory
-	GLFWManager() { }
-	~GLFWManager() { Destroy(); }
+	GLFWManager(Camera* c);
 
+	~GLFWManager();
 
-	// This initialized the window and creates the OpenGL context
-	int Initialize(unsigned int *width, unsigned int *height, std::string strTitle, bool bFullScreen = false, bool core = true);
+	int                     Initialize(unsigned int *width, unsigned int *height, std::string strTitle,
+                                   bool bFullScreen = false, bool core = true);
 
-	// This swaps the backbuffer to the front and should be called every frame
-	void SwapTheBuffers();
+	void                    SwapTheBuffers();
 
-	// This processes any needed input for the application, like the Escape key
-	bool ProcessInput(bool continueGame);
+	bool                    ProcessInput(bool continueGame);
 
-	// This destroys the window and OpenGL context
-	virtual void Destroy();
+    Camera*                 GetCamera(void)const;
 
-	virtual InputManager *GetInputManager() { return &InputManager; }
+	virtual void            Destroy();
 
-	const GLFWwindow* getWindow();
+	virtual InputManager *  GetInputManager() { return &_inputManager; }
 
+	const GLFWwindow*       GetWindow();
 
+private:
+    
 protected:
-	// We created a variable to an InputManager to control camera movements
-	InputManager InputManager;
 
-	// This is the GLFW window object that manages the window and input
-	GLFWwindow* Window;
+	InputManager            _inputManager;
+
+	GLFWwindow*             _window;
+
+    Camera *                _camera;
 };
 
 #endif /* defined(__OpenGL__GLFWManager__) */

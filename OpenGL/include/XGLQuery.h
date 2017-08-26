@@ -3,12 +3,12 @@
 #include <gl/glew.h>
 
 
-class GLQuery
+class XGLQuery
 {
 public:
 	static GLfloat getCurrentTime();
 
-	GLQuery();
+	XGLQuery();
 
 	void genQueries();
 

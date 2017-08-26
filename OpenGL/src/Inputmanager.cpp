@@ -18,36 +18,26 @@ extern void modelInput(InputCodes code);
 
 void InputManager::KeyPressed(InputCodes code)
 {
-	// If there isn't a camera specified, just return
-	if (Camera == nullptr)
+	if (_camera == nullptr)
 		return;
 
-	// Depending on the code, move the camera back or forward fixed by a speed and time slice
-	// to make sure the movement is the same on anyone's computer regardless of the speed.
-	switch (code)
+    switch (code)
 	{
-		// If the user moves up, move the camera up along the view vector
+
 	case InputCodes::W: case InputCodes::w:
-		Camera->MoveCamera(Camera->GetSpeed() * TimeManager::Instance().DeltaTime);
+		_camera->ProcessKeyboard(Camera::FORWARD,TimeManager::Instance().DeltaTime);
 		break;
-		// If the user moved down, move the camera down along the view vector
+
 	case InputCodes::S: case InputCodes::s:
-		Camera->MoveCamera(-1 * Camera->GetSpeed() * TimeManager::Instance().DeltaTime);
+		_camera->ProcessKeyboard(Camera::BACKWARD, TimeManager::Instance().DeltaTime);
 		break;
 
-	case Left: 
-		Camera->Strafe(-1 * Camera->GetSpeed() * TimeManager::Instance().DeltaTime);
+	case Left: case InputCodes::a:
+		_camera->ProcessKeyboard(Camera::LEFT, TimeManager::Instance().DeltaTime);
 		break;
-		// If the user hits the RIGHT or D key, strafe the camera to the right
+	
 	case Right: case InputCodes::D: case InputCodes::d:
-		Camera->Strafe(Camera->GetSpeed() * TimeManager::Instance().DeltaTime);
-		break;
-
-	case Up:
-		Camera->Strafe(Camera->GetSpeed() * TimeManager::Instance().DeltaTime);
-		break;
-	case Down:
-		Camera->Strafe(Camera->GetSpeed() * TimeManager::Instance().DeltaTime);
+		_camera->ProcessKeyboard(Camera::RIGHT, TimeManager::Instance().DeltaTime);
 		break;
 	}
 	modelInput(code);

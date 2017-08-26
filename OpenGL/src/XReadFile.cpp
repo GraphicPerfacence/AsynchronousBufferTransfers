@@ -1,9 +1,7 @@
 
-#include "../include/ReadFile.h"
+#include "../include/XReadFile.h"
 #include "../include/comm.h"
 #include "../include/log.h"
-#include "../include/math3d.h"
-#include "../include/mesh.h"
 #include "SOIL2/SOIL2.h"
 #include <iostream>
 #include <istream>
@@ -16,9 +14,6 @@
 #include <assimp/postprocess.h>
 
 
-
-std::vector<TextureR> already_loadedTextures;
-unsigned int meshIndices ;
 
 bool loadOBJ(const char * path,
 	std::vector < glm::vec3 > & out_vertices,
@@ -124,196 +119,6 @@ bool loadOBJ(const char * path,
 #define FOURCC_DXT1 0x31545844 // Equivalent to "DXT1" in ASCII
 #define FOURCC_DXT3 0x33545844 // Equivalent to "DXT3" in ASCII
 #define FOURCC_DXT5 0x35545844 // Equivalent to "DXT5" in ASCII
-
-
-std::vector<TextureR> alread_loadTextures;
-
-void _stringTokenize(const std::string &source, std::vector<std::string> &tokens)
-{
-	tokens.clear();
-	std::string aux = source;
-	for (unsigned int i = 0; i < aux.size(); i++) if (aux[i] == '\t' || aux[i] == '\n') aux[i] = ' ';
-	std::stringstream ss(aux, std::ios::in);
-	while (ss.good()) {
-		std::string s;
-		ss >> s;
-		if (s.size() > 0) tokens.push_back(s);
-	}
-}
-
-void _faceTokenize(const std::string &source, std::vector<std::string> &tokens)
-{
-	std::string aux = source;
-	for (unsigned int i = 0; i < aux.size(); i++) if (aux[i] == '\\' || aux[i] == '/') aux[i] = ' ';
-	_stringTokenize(aux, tokens);
-}
-
-
-bool loadOBJ(const char*path, unsigned int &vao, unsigned int& vbo, unsigned int &ibo,
-	unsigned int &num_indices)
-{
-
-	std::vector<VertexFormat> vertices;
-	std::vector<unsigned int> indices;
-	std::ifstream file(path, std::ios::in | std::ios::binary);
-
-	if (!file.good())
-	{
-		std::cout << "load obj file : " << path << " is fail!" << std::endl;
-		std::terminate();
-	}
-
-	std::string line;
-	std::vector<std::string> tokens, facetokens;
-	std::vector<glm::vec3> positions;		positions.reserve(1000);
-	std::vector<glm::vec3> normals;			normals.reserve(1000);
-	std::vector<glm::vec2> texcoords;		texcoords.reserve(1000);
-
-	while (std::getline(file, line))
-	{
-		_stringTokenize(line, tokens);
-
-		if (tokens.size() == 0) continue;
-
-		if (tokens.size() > 0 && tokens[0].at(0) == '#') continue;
-
-		if (tokens.size() > 3 && tokens[0] == "v") positions.push_back(glm::vec3(stringToFloat(tokens[1]), stringToFloat(tokens[2]), stringToFloat(tokens[3])));
-
-		if (tokens.size() > 3 && tokens[0] == "vn") normals.push_back(glm::vec3(stringToFloat(tokens[1]), stringToFloat(tokens[2]), stringToFloat(tokens[3])));
-
-		if (tokens.size() > 2 && tokens[0] == "vt") texcoords.push_back(glm::vec2(stringToFloat(tokens[1]), stringToFloat(tokens[2])));
-
-		if (tokens.size() >= 4 && tokens[0] == "f") 
-		{
-
-			// (v v/t v//n v/t/n) = (1 2 3 4)
-			//1:only have vertex
-			//2:have vertex and uv but no normal
-			//3:vertex  normal but no uv
-			//4:vertex uv and normal
-
-			unsigned int face_format = 0;
-			if (tokens[1].find("//") != std::string::npos) face_format = 3;
-			_faceTokenize(tokens[1], facetokens);
-
-			if (facetokens.size() == 3) face_format = 4;
-			else 
-			{
-				if (facetokens.size() == 2) 
-				{
-					if (face_format != 3) face_format = 2;	
-				}
-				else 
-				{
-					face_format = 1; //only vertex
-				}
-			}
-
-			//primul index din acest poligon
-			unsigned int index_of_first_vertex_of_face = -1;
-
-			for (unsigned int num_token = 1; num_token < tokens.size(); num_token++) 
-			{
-				if (tokens[num_token].at(0) == '#') break;					//comment 
-				_faceTokenize(tokens[num_token], facetokens);
-				if (face_format == 1) 
-				{
-					int p_index = stringToInt(facetokens[0]);
-					if (p_index > 0) p_index -= 1;								//obj has 1...n indices
-					else p_index = positions.size() + p_index;				//index negativ
-
-					vertices.push_back(VertexFormat(positions[p_index].x, positions[p_index].y, positions[p_index].z));
-				}
-				else if (face_format == 2) 
-				{
-					// pozitie si texcoord
-					int p_index = stringToInt(facetokens[0]);
-					if (p_index > 0) p_index -= 1;								//obj has 1...n indices
-					else p_index = positions.size() + p_index;				//index negativ
-
-					int t_index = stringToInt(facetokens[1]);
-					if (t_index > 0) t_index -= 1;								//obj has 1...n indices
-					else t_index = texcoords.size() + t_index;				//index negativ
-
-					vertices.push_back(VertexFormat(positions[p_index].x, positions[p_index].y, positions[p_index].z,
-						texcoords[t_index].x, texcoords[t_index].y));
-				}
-				else if (face_format == 3) 
-				{
-					//pozitie si normala
-					int p_index = stringToInt(facetokens[0]);
-					if (p_index > 0) p_index -= 1;								//obj has 1...n indices
-					else p_index = positions.size() + p_index;				//index negativ
-
-					int n_index = stringToInt(facetokens[1]);
-					if (n_index > 0) n_index -= 1;								//obj has 1...n indices
-					else n_index = normals.size() + n_index;					//index negativ
-
-					vertices.push_back(VertexFormat(positions[p_index].x, positions[p_index].y, positions[p_index].z, 
-						normals[n_index].x, normals[n_index].y, normals[n_index].z));
-				}
-				else 
-				{
-					int p_index = stringToInt(facetokens[0]);
-					if (p_index > 0) p_index -= 1;								//obj has 1...n indices
-					else p_index = positions.size() + p_index;				//index negativ
-
-					int t_index = stringToInt(facetokens[1]);
-					if (t_index > 0) t_index -= 1;								//obj has 1...n indices
-					else t_index = normals.size() + t_index;					//index negativ
-
-					int n_index = stringToInt(facetokens[2]);
-					if (n_index > 0) n_index -= 1;								//obj has 1...n indices
-					else n_index = normals.size() + n_index;					//index negativ
-
-					vertices.push_back(VertexFormat(positions[p_index].x, positions[p_index].y, positions[p_index].z,
-						normals[n_index].x, normals[n_index].y, normals[n_index].z, 
-						texcoords[t_index].x, texcoords[t_index].y));
-				}
-
-				if (num_token < 4) 
-				{
-					if (num_token == 1) index_of_first_vertex_of_face = vertices.size() - 1;
-					//doar triunghiuri f 0 1 2 3 (4 indecsi, primul e ocupat de f)
-					indices.push_back(vertices.size() - 1);
-				}
-				else 
-				{
-					//polygon => triunghi cu ultimul predecesor vertexului nou adaugat si 0 relativ la vertecsi poligon(independent clockwise)
-					indices.push_back(index_of_first_vertex_of_face);
-					indices.push_back(vertices.size() - 2);
-					indices.push_back(vertices.size() - 1);
-				}
-			}//end for
-		}//end face
-
-	}//end while
-
-
-	unsigned int gl_vertex_array_object, gl_vertex_buffer_object, gl_index_buffer_object;
-
-	//vertex array object -> un obiect ce reprezinta un container pentru starea de desenare
-	glGenVertexArrays(1, &gl_vertex_array_object);
-	glBindVertexArray(gl_vertex_array_object);
-
-	//vertex buffer object -> un obiect in care tinem vertecsii
-	glGenBuffers(1, &gl_vertex_buffer_object);
-	glBindBuffer(GL_ARRAY_BUFFER, gl_vertex_buffer_object);
-	glBufferData(GL_ARRAY_BUFFER, vertices.size()*sizeof(VertexFormat), &vertices[0], GL_STATIC_DRAW);
-
-	//index buffer object -> un obiect in care tinem indecsii
-	glGenBuffers(1, &gl_index_buffer_object);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gl_index_buffer_object);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size()*sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
-
-	vao = gl_vertex_array_object;
-	vbo = gl_vertex_buffer_object;
-	ibo = gl_index_buffer_object;
-	num_indices = indices.size();
-
-	return true;
-}
-
 
 unsigned int loadDDS(const char * imagepath)
 {
@@ -528,6 +333,7 @@ unsigned int TextureFromFile(const char* path, const char* directory, bool gamma
 	return textureID;
 }
 
+
 std::vector<TextureR> loadMaterialTextures(const char*fileName, aiMaterial* mat, aiTextureType type, const char* typeName)
 {
 	std::vector<TextureR> textures;
@@ -662,7 +468,7 @@ void processNode(const char*fileName,const aiNode* node, const aiScene* scene,st
 		// The scene contains all the data, node is just to keep stuff organized (like relations between nodes).
 		const aiMesh* mesh = scene->mMeshes[node->mMeshes[i]]; 
 		//meshs.push_back(processMesh(fileName, mesh, scene));
-		Mesh& newMesh = meshs[meshIndices];
+		aiMesh& newMesh = meshs[meshIndices];
 		meshIndices++;
 
 		processMesh(fileName, mesh, scene,newMesh);			

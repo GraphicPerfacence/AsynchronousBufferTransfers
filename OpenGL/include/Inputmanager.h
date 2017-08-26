@@ -62,17 +62,13 @@ class InputManager
 {
 public:
 
-	// This takes in a code and sends it to the camera for movement
-	void KeyPressed(InputCodes code);
+	void        KeyPressed(InputCodes code);
 
-	// Set and get the current camera
-	void SetCamera(Camera *pCamera) { Camera = pCamera; }
-	Camera *GetCamera() { return Camera; }
+    void        SetCamera(Camera *pCamera) { _camera = pCamera; }
+	Camera *    GetCamera() { return _camera; }
 
 protected:
-
-	// The pointer to our camera object
-	Camera *Camera;
+	Camera *       _camera;
 };
 
 #endif /* defined(__OpenGL__Inputmanager__) */

@@ -32,6 +32,7 @@ public:
 	static bool checkFrameBuffer();
 
 	static Log* Instance();
+
 	//void Destroy();
 	static void Destroy();
 

@@ -1,10 +1,10 @@
-//
-//  camera.h
-//  OpenGL
-//
-//  Created by xt on 15/8/9.
-//  Copyright (c) 2015年 xt. All rights reserved.
-//
+    //
+    //  camera.h
+    //  OpenGL
+    //
+    //  Created by xt on 15/8/9.
+    //  Copyright (c) 2015年 xt. All rights reserved.
+    //
 
 #ifndef __OpenGL__camer__
 #define __OpenGL__camer__
@@ -12,7 +12,7 @@
 #include <stdio.h>
 
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>					 
+#include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform2.hpp>
 
 
@@ -20,76 +20,65 @@
 #define PI 3.14159265358979323846264338327950288
 #define GLM_FORCE_RADIANS
 
+    // Defines several possible options for camera movement. Used as abstraction to stay away from window-system specific input methods
+
+ 
 class Camera
 {
+
 public:
-	Camera();
+    enum Camera_Movement
+    {
+        FORWARD,
+        BACKWARD,
+        LEFT,
+        RIGHT
+    };
+    
+    Camera();
 
-	// This sets and returns a perspective matrix that is build from the field of fiew, aspect ratio and near/far planes
-	glm::mat4 SetPerspective(float fov, float aspectRatio, float nearPlane, float farPlane);
+    Camera(glm::vec3 position /*= glm::vec3(0.0f, 0.0f, 0.0f)*/,
+           glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f),
+           float yaw = -90.0, float pitch = 0.0f);
 
-	glm::mat4 GetProjectionMatrix() { return _projectionMatrix; }
+    Camera(float posX, float posY, float posZ, float upX, float upY, float upZ,
+            float yaw, float pitch);
 
-	// This returns the current view matrix according to the camera's position and rotation
-	glm::mat4 GetViewMatrix();
+    glm::mat4           GetViewMatrix();
 
-	// This calculates the current view vector from the rotation matrix (hard coded for now)
-	glm::vec3 GetView();
+    glm::mat4           SetPerspective(float fov, float aspectRatio, float nearPlane, float farPlane);
+    glm::mat4           GetProjectionMatrix()const;
 
+    void                PositionCamera(float positionX, float positionY, float positionZ,
+                                       float centerX, float centerY, float centerZ,
+                                       float upX, float upY, float upZ);
+                   
+    void                ProcessKeyboard(Camera_Movement direction, float deltaTime);
+    void                ProcessMouseMovement(float xoffset, float yoffset, bool constrainPitch = true);
+    void                ProcessMouseScroll(float yoffset);
 
-	// This sets and gets the camera's movement speed
-	void SetSpeed(double speed) { Speed = speed; }
-	double GetSpeed() { return Speed; }
-
-	// This sets the Position and the yaw and pitch rotations (in radians)
-	void PositionCamera(float positionX, float positionY, float positionZ,
-		float centerX, float centerY, float centerZ,
-		float upX, float upY, float upZ);
-
-	// This will move the camera forward or backwards depending on the speed (negative for backwards)
-	void MoveCamera(float speed);
-
-	void SetRotationSpeed(double s) { RotationSpeed = s; }
-	double GetRotationSpeed() { return  RotationSpeed; }
-
-	void updateData(void);
-
-	glm::mat4 GetRotationMatrix();
-	glm::vec3 GetPosition();
-	glm::vec3 GetUp();
-	glm::vec3 GetRight();
-
-	void Strafe(float speed);
-
-	void PressBtn(double x, double y, int width, int height, int but, double time);
-	void ReleaseBtn(int but, double time);
-	void trackMotion(int but, int x, int y, int width, int height, double time);
-
-protected:
-
-	glm::mat4 _projectionMatrix;
-
-	double _distance;									// The camera's position
-
-	glm::mat4 _rotate;
-
-	glm::vec3 _center;
-
-	float RotationSpeed;
-
-	float Speed;					// The camera's speed that is used with a time slice
-									// The vertical rotation angle (in radians, x-axis
 private:
-	void ptov(int x, int y, int width, int height, glm::vec3& v);
-	void panModel(const float dx, const float dy, const float dz);
-	void trackBall(int x, int y, int winWidth, int winHeight, double time);
-public:
-	float axis[3];
-	float angle;
-	double MouseSpeed;
+    void                updateCameraVectors();
 
-	glm::vec3 lastCurPos;
-	double    lastTime;
+private:
+    glm::vec3               Position;
+    glm::vec3               Front;
+    glm::vec3               Up;
+    glm::vec3               Right;
+    glm::vec3               WorldUp;
+        // Eular Angles
+    float                   Yaw;
+    float                   Pitch;
+        // Camera options
+    float                   MovementSpeed;
+    float                   MouseSensitivity;
+
+    float                   _aspectRatio;
+    float                   _nearP;
+    float                   _farP;
+    float                   _fov;
+
+    glm::mat4 ProjectionMatrix;
 };
 
-#endif /* defined(__OpenGL__camer__) */
+#endif

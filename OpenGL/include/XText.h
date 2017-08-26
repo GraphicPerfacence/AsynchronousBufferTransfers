@@ -6,26 +6,23 @@
     //  Copyright (c) 2016ƒÍ xt. All rights reserved.
     //
 
-
+#include "Xtype.h"
 #include <map>
-#include <glm/glm.hpp>
 
 struct Character;
 class Shader ;
 
-class rOGLText
+class XText
 {
 public:
 
-
 	bool init(void);
-
 	static bool initTextLib(void);
+	XText();
+	~XText();
 
-	rOGLText();
-	~rOGLText();
-
-	void drawText(const std::string& text, float x, float y, float scale, glm::vec3 color);
+	void drawText(const char* text, float x, float y, float scale, Vec3f color);
+    
 private:
 
 	void initShader(void);

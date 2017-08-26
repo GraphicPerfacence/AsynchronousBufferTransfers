@@ -1,4 +1,4 @@
-#include "../include/text.h"
+#include "../include/XText.h"
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -42,9 +42,9 @@ static std::string textFragString = "\
 										color = vec4(textColor, 1.0) * sampled;\
 									}";
 
-std::map<unsigned char, Character*> rOGLText::_characters;
+std::map<unsigned char, Character*> XText::_characters;
 
-bool rOGLText::initTextLib(void)
+bool XText::initTextLib(void)
 {
 	FT_Library    library;
 	if(FT_Init_FreeType(&library))
@@ -119,7 +119,7 @@ bool rOGLText::initTextLib(void)
 	return true;
 }
 
-void rOGLText::initShader(void)
+void XText::initShader(void)
 {
 	_shader = new Shader;
 
@@ -127,7 +127,7 @@ void rOGLText::initShader(void)
 }
 
 
-void rOGLText::drawText(const std::string& text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color)
+void XText::drawText(const char* t, GLfloat x, GLfloat y, GLfloat scale, Vec3f color)
 {
 	GLboolean blendEnabled;
 	glGetBooleanv(GL_BLEND, &blendEnabled);
@@ -149,6 +149,8 @@ void rOGLText::drawText(const std::string& text, GLfloat x, GLfloat y, GLfloat s
 
 	// Iterate through all characters
 	std::string::const_iterator c;
+    std::string text(t);
+    
 	for (c = text.begin(); c != text.end(); c++)
 	{
 		Character* ch = _characters[*c];

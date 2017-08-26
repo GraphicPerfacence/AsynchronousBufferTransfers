@@ -38,11 +38,13 @@ unsigned int Texture::getTexture(unsigned int index)const
 	return texture[index];
 }
 
-void Texture::init(unsigned int flag, unsigned int interalFormat, unsigned int format, 
-	const char*imageFile)
+void Texture::init(unsigned int interalFormat, unsigned int format,
+	const char*imageFile,unsigned int flag)
 {
 	int width, height, channels;
 
+    //channels the number of channels: 1-luminous, 2-luminous/alpha, 3-RGB, 4-RGBA
+    // return the original channel count of the image.
 	unsigned char* ht_map = SOIL_load_image(imageFile,&width, &height, &channels, flag);
 
 	if (ht_map == 0)

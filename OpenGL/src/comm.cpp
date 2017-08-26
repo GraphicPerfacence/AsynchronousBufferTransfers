@@ -42,7 +42,7 @@ int stringToInt(const std::string &source)
 
 void testOpenGl()
 {
-	initGlew();
+	//initGlew();
 	const GLubyte * byte = glGetString(GL_VERSION);
 
 

@@ -1,7 +1,7 @@
 
-#include "../include/GLQuery.h"
+#include "../include/XGLQuery.h"
 
-GLfloat GLQuery::getCurrentTime()
+GLfloat XGLQuery::getCurrentTime()
 {
 	GLint64 timer;
 	glGetInteger64v(GL_TIMESTAMP,&timer);
@@ -10,13 +10,13 @@ GLfloat GLQuery::getCurrentTime()
 	return timer / 1000000.0;
 }
 
-GLQuery::GLQuery()
+XGLQuery::XGLQuery()
 {
 	queryBackBuffer = 0;
 	queryFrontBuffer = 1;
 }
 
-void GLQuery::genQueries()
+void XGLQuery::genQueries()
 {
 	glGenQueries(1,queryID[queryBackBuffer]);
 	glGenQueries(1,queryID[queryFrontBuffer]);
@@ -25,7 +25,7 @@ void GLQuery::genQueries()
 	glQueryCounter(queryID[queryFrontBuffer][0], GL_TIMESTAMP);
 }
 
-void GLQuery::swapQueryBuffers()
+void XGLQuery::swapQueryBuffers()
 {
 	if (queryBackBuffer) 
 	{
@@ -39,17 +39,17 @@ void GLQuery::swapQueryBuffers()
 	}
 }
 
-void GLQuery::begin()
+void XGLQuery::begin()
 {
 	glBeginQuery(GL_TIME_ELAPSED,queryID[queryBackBuffer][0]);
 }
 
-void GLQuery::end()
+void XGLQuery::end()
 {
 	glEndQuery(GL_TIME_ELAPSED);
 }
 
-GLuint64 GLQuery::time()
+GLuint64 XGLQuery::time()
 {
 	GLuint64 timer;
 	glGetQueryObjectui64v(queryID[queryFrontBuffer][0],GL_QUERY_RESULT,&timer);
@@ -57,7 +57,7 @@ GLuint64 GLQuery::time()
 	return timer / 1000000.0;
 }
 
-void GLQuery::deleteQuery()
+void XGLQuery::deleteQuery()
 {
 	glDeleteQueries(1,queryID[queryBackBuffer]);
 	glDeleteQueries(1,queryID[queryFrontBuffer]);

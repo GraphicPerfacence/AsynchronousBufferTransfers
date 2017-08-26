@@ -9,7 +9,6 @@
 #define __OpenGL_READFILE__
 
 #include <vector>
-#include <glm/glm.hpp>
 
 //////////////////////////////////////////////////////////////////////////
 //			load obj
@@ -19,7 +18,6 @@
 /* load obj f: v1/vt1/vn1 v2/vt2/vn2 v3/vt3/vn3                          */
 /************************************************************************/
 
-extern class Mesh;
 
 bool loadOBJ(const char * path,
 	std::vector < glm::vec3 > & out_vertices,
@@ -51,5 +49,5 @@ unsigned int soil_load_DDS(const char* imagePath);
 ///////////////////////////////////////////////////////////////////
 //          Assimp
 /////////////////////////////////////////////////////////////////////////// 
-bool loadObjByAssimp(const char*fileName,std::vector<Mesh>&meshs, unsigned int steps);
+
 #endif

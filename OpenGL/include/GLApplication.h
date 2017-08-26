@@ -20,51 +20,41 @@ class GLApplication
 {
 public:
 
-	// Create a default constructor and deconstructor which cleans up
+
 	GLApplication(bool isFullScreen = false);
 
 	~GLApplication() { Destroy(); }
 
-	//set application width and hight
-	void setApplication(unsigned int w,unsigned int h);
 
-	// This is the main function for our application, which is called by the main() function
-	// in the WindowManager.cpp file.  This helps abstract out the environments entry point.
-	int GLMain();
+	void            SetApplication(unsigned int w,unsigned int h);
 
-	// This gets and sets the window manager for the application.  This should be set right
-	// after the GLApplication is created in the main() function.
-	GLFWManager *GetWindowManager() { return WindowManager; }
-	void SetWindowManager(GLFWManager *pWindowManager) { WindowManager = pWindowManager; }
+	int             GLMain();
 
-	// We now pass in a Camera object to our application
-	Camera *GetCamera() { return Camera; }
-	void SetCamera(Camera *pCamera) { Camera = pCamera; }
+	GLFWManager *   GetWindowManager()const;
+	void            SetWindowManager(GLFWManager *pWindowManager);
 
-	// This initializes the application
-	void Initialize();
+    Camera *        GetCamera()const;
 
-	// This runs the game loop and only quits when the user hits Escape or closes the window
-	void GameLoop();
+	void            Initialize();
 
-	// This cleans up the application and tells other objects to also cleanup
-	void Destroy();
+	void            GameLoop();
 
-	void initScene();
+    void            Destroy();
+
+	void            InitScene();
 
 private:
-	void openglInit(void);
+	void            OpenglInit(void);
+
 protected:
 
-	GLFWManager *WindowManager;
-	Camera *Camera;
+	GLFWManager *   _windowManager;
 
-	Scene  * _scene;
+	Scene  *        _scene;
 
-	unsigned int _width;
-	unsigned int _hight;
-
-	bool   _isFullScreen;
+	unsigned int    _width;
+	unsigned int    _hight;
+	bool            _isFullScreen;
 };
 
 

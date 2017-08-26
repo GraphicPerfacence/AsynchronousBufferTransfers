@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////
-// Timer.cpp
+// XTimer.cpp
 // =========
-// High Resolution Timer.
+// High Resolution XTimer.
 // This timer is able to measure the elapsed time with 1 micro-second accuracy
 // in both Windows, Linux and Unix system 
 //
@@ -12,13 +12,13 @@
 // Copyright (c) 2003 Song Ho Ahn
 //////////////////////////////////////////////////////////////////////////////
 
-#include "../include/Timer.h"
+#include "../include/XTimer.h"
 #include <stdlib.h>
 
 ///////////////////////////////////////////////////////////////////////////////
 // constructor
 ///////////////////////////////////////////////////////////////////////////////
-Timer::Timer()
+XTimer::XTimer()
 {
 #ifdef WIN32
     QueryPerformanceFrequency(&frequency);
@@ -39,7 +39,7 @@ Timer::Timer()
 ///////////////////////////////////////////////////////////////////////////////
 // distructor
 ///////////////////////////////////////////////////////////////////////////////
-Timer::~Timer()
+XTimer::~XTimer()
 {
 }
 
@@ -49,7 +49,7 @@ Timer::~Timer()
 // start timer.
 // startCount will be set at this point.
 ///////////////////////////////////////////////////////////////////////////////
-void Timer::start()
+void XTimer::start()
 {
     stopped = 0; // reset stop flag
 #ifdef WIN32
@@ -65,7 +65,7 @@ void Timer::start()
 // stop the timer.
 // endCount will be set at this point.
 ///////////////////////////////////////////////////////////////////////////////
-void Timer::stop()
+void XTimer::stop()
 {
     stopped = 1; // set timer stopped flag
 
@@ -82,7 +82,7 @@ void Timer::stop()
 // compute elapsed time in micro-second resolution.
 // other getElapsedTime will call this first, then convert to correspond resolution.
 ///////////////////////////////////////////////////////////////////////////////
-double Timer::getElapsedTimeInMicroSec()
+double XTimer::getElapsedTimeInMicroSec()
 {
 #ifdef WIN32
     if(!stopped)
@@ -106,7 +106,7 @@ double Timer::getElapsedTimeInMicroSec()
 ///////////////////////////////////////////////////////////////////////////////
 // divide elapsedTimeInMicroSec by 1000
 ///////////////////////////////////////////////////////////////////////////////
-double Timer::getElapsedTimeInMilliSec()
+double XTimer::getElapsedTimeInMilliSec()
 {
     return this->getElapsedTimeInMicroSec() * 0.001;
 }
@@ -116,7 +116,7 @@ double Timer::getElapsedTimeInMilliSec()
 ///////////////////////////////////////////////////////////////////////////////
 // divide elapsedTimeInMicroSec by 1000000
 ///////////////////////////////////////////////////////////////////////////////
-double Timer::getElapsedTimeInSec()
+double XTimer::getElapsedTimeInSec()
 {
     return this->getElapsedTimeInMicroSec() * 0.000001;
 }
@@ -126,7 +126,7 @@ double Timer::getElapsedTimeInSec()
 ///////////////////////////////////////////////////////////////////////////////
 // same as getElapsedTimeInSec()
 ///////////////////////////////////////////////////////////////////////////////
-double Timer::getElapsedTime()
+double XTimer::getElapsedTime()
 {
     return this->getElapsedTimeInSec();
 }

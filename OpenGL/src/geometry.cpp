@@ -7,7 +7,7 @@
 
 void initPoints(GLuint& pointVAO)
 {
-	GLfloat pointsVertices[] =
+	static GLfloat pointsVertices[] =
 	{
 		-0.5,-0.5,0.5,
 		0.5,-0.5,-0.5,
@@ -29,18 +29,16 @@ void initPoints(GLuint& pointVAO)
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 }
-void drawPoints(GLuint& pointVAO)
+void drawPoints(const GLuint& pointVAO)
 {
 	glBindVertexArray(pointVAO);
 	glDrawArrays(GL_POINTS, 0, 4);
 	glBindVertexArray(0);
 }
 
-
-
 void initQuad(GLuint &QVAO)
 {
-	GLfloat planeVertices[] = {
+	static GLfloat planeVertices[] = {
 		// Positions            // Normals           // Texture Coords
 		25.0f, -0.5f,  25.0f,  0.0f,  1.0f,  0.0f,  25.0f, 0.0f,
 		-25.0f, -0.5f, -25.0f,  0.0f,  1.0f,  0.0f,  0.0f,  25.0f,
@@ -66,7 +64,7 @@ void initQuad(GLuint &QVAO)
 	glBindVertexArray(0);
 
 }
-void drawQuad(GLuint& QVAO)
+void drawQuad(const GLuint& QVAO)
 {
 	glBindVertexArray(QVAO);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
@@ -75,7 +73,7 @@ void drawQuad(GLuint& QVAO)
 
 void initCub(GLuint&cubeVAO)
 {
-	GLfloat vertices[] = {
+	static GLfloat vertices[] = {
 		// Back face
 		-0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, // Bottom-left
 		0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 1.0f, 1.0f, // top-right
@@ -136,8 +134,7 @@ void initCub(GLuint&cubeVAO)
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 }
-
-void drawCub(GLuint&cubeVAO, bool instance, GLuint num)
+void drawCub(const GLuint&cubeVAO, bool instance, GLuint num)
 {
 	if (!instance)
 	{
@@ -156,7 +153,7 @@ void drawCub(GLuint&cubeVAO, bool instance, GLuint num)
 
 void initSkyBox(GLuint &skyboxVAO)
 {
-	GLfloat skyboxVertices[] = {
+	static GLfloat skyboxVertices[] = {
 		// Positions          
 	   -1.0f, 1.0f, -1.0f,
 	   -1.0f, -1.0f, -1.0f,
@@ -211,17 +208,53 @@ void initSkyBox(GLuint &skyboxVAO)
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
 	glBindVertexArray(0);
 }
-
-void drawSkyBox(GLuint& skyboxVAO)
+void drawSkyBox(const GLuint& skyboxVAO)
 {
 	glBindVertexArray(skyboxVAO);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 	glBindVertexArray(0);
 }
 
-Matrix * instanceGeomModeMatrix(unsigned int amount)
+void initPlane(unsigned int& planeVAO)
 {
-	Matrix *modelMatrices = new glm::mat4[amount];
+    static  GLfloat planeVertices[] =
+    {
+            // Positions            // Texture Coords (note we set these higher than 1 that together with GL_REPEAT (as texture wrapping mode) will cause the floor texture to repeat)
+        5.0f,  -0.5f,  5.0f, 0.0,0.0,0.0, 2.0f, 0.0f,
+        -5.0f, -0.5f,  5.0f, 0.0,0.0,0.0, 0.0f, 0.0f,
+        -5.0f, -0.5f, -5.0f, 0.0,0.0,0.0, 0.0f, 2.0f,
+
+        5.0f,  -0.5f,  5.0f, 0.0,0.0,0.0, 2.0f, 0.0f,
+        -5.0f, -0.5f, -5.0f, 0.0,0.0,0.0, 0.0f, 2.0f,
+        5.0f,  -0.5f, -5.0f, 0.0,0.0,0.0, 2.0f, 2.0f
+    };
+
+    GLuint planeVBO;
+
+    glGenVertexArrays(1,&planeVAO);
+    glGenBuffers(1,&planeVBO);
+    glBindVertexArray(planeVAO);
+    glBindBuffer(GL_ARRAY_BUFFER, planeVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(planeVertices), &planeVertices, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)0);
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+    glEnableVertexAttribArray(2);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(6 * sizeof(GLfloat)));
+    glBindVertexArray(0);
+
+}
+void drawPlane(const unsigned int& planeVAO)
+{
+    glBindVertexArray(planeVAO);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    glBindVertexArray(0);
+}
+
+glm::mat4 * instanceGeomModeMatrix(unsigned int amount)
+{
+	glm::mat4 *modelMatrices = new glm::mat4[amount];
 	srand(glfwGetTime()); // initialize random seed
 
 	GLfloat radius = 5.0f;
@@ -253,7 +286,6 @@ Matrix * instanceGeomModeMatrix(unsigned int amount)
 
 	return modelMatrices;
 }
-
 
 void postAddInstanceModelMatrix(GLuint index, GLuint num, const glm::mat4* modes)
 {
@@ -336,7 +368,8 @@ void initQuadWithNormal(GLuint&QVAO)
 	bitangent2 = glm::normalize(bitangent2);
 	
 	
-	GLfloat quadVertices[] = {
+	GLfloat quadVertices[] =
+    {
 		// Positions            // normal         // TexCoords  // Tangent                          // Bitangent
 		pos1.x, pos1.y, pos1.z, nm.x, nm.y, nm.z, uv1.x, uv1.y, tangent1.x, tangent1.y, tangent1.z, bitangent1.x, bitangent1.y, bitangent1.z,
 		pos2.x, pos2.y, pos2.z, nm.x, nm.y, nm.z, uv2.x, uv2.y, tangent1.x, tangent1.y, tangent1.z, bitangent1.x, bitangent1.y, bitangent1.z,
@@ -367,12 +400,13 @@ void initQuadWithNormal(GLuint&QVAO)
 	glBindVertexArray(0);
 	
 }
-void drawQuadWithNormal(GLuint&QVAO)
+void drawQuadWithNormal(const GLuint&QVAO)
 {
 	glBindVertexArray(QVAO);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 	glBindVertexArray(0);
 }
+
 void initScreenQuad(GLuint&screenQuad)
 {
 	GLfloat planeVertices[] = {
@@ -398,130 +432,15 @@ void initScreenQuad(GLuint&screenQuad)
 	
 	glBindVertexArray(0);
 }
-
-void drawScreenQuad(GLuint&screenQuad)
+void drawScreenQuad(const GLuint&screenQuad)
 {
 	glBindVertexArray(screenQuad);
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 	glBindVertexArray(0);
 }
 
-void initTorus(TriangleBatch & torusBatch, GLfloat majorRadius, GLfloat minorRadius, GLint numMajor, GLint numMinor)
-{
-	double majorStep = 2.0f*M3D_PI / numMajor;
-	double minorStep = 2.0f*M3D_PI / numMinor;
-	int i, j;
-
-	torusBatch.BeginMesh(numMajor * (numMinor + 1) * 6);
-	for (i = 0; i < numMajor; ++i)
-	{
-		double a0 = i * majorStep;
-		double a1 = a0 + majorStep;
-		GLfloat x0 = (GLfloat)cos(a0);
-		GLfloat y0 = (GLfloat)sin(a0);
-		GLfloat x1 = (GLfloat)cos(a1);
-		GLfloat y1 = (GLfloat)sin(a1);
-
-		Vec3f vVertex[4];
-		Vec3f vNormal[4];
-		Vec2f vTexture[4];
-
-		for (j = 0; j <= numMinor; ++j)
-		{
-			double b = j * minorStep;
-			GLfloat c = (GLfloat)cos(b);
-			GLfloat r = minorRadius * c + majorRadius;
-			GLfloat z = minorRadius * (GLfloat)sin(b);
-
-			// First point
-			vTexture[0][0] = (float)(i) / (float)(numMajor);
-			vTexture[0][1] = (float)(j) / (float)(numMinor);
-			vNormal[0][0] = x0*c;
-			vNormal[0][1] = y0*c;
-			vNormal[0][2] = z / minorRadius;
-			m3dNormalizeVector3(vNormal[0]);
-			vVertex[0][0] = x0 * r;
-			vVertex[0][1] = y0 * r;
-			vVertex[0][2] = z;
-
-			// Second point
-			vTexture[1][0] = (float)(i + 1) / (float)(numMajor);
-			vTexture[1][1] = (float)(j) / (float)(numMinor);
-			vNormal[1][0] = x1*c;
-			vNormal[1][1] = y1*c;
-			vNormal[1][2] = z / minorRadius;
-			m3dNormalizeVector3(vNormal[1]);
-			vVertex[1][0] = x1*r;
-			vVertex[1][1] = y1*r;
-			vVertex[1][2] = z;
-
-			// Next one over
-			b = (j + 1) * minorStep;
-			c = (GLfloat)cos(b);
-			r = minorRadius * c + majorRadius;
-			z = minorRadius * (GLfloat)sin(b);
-
-			// Third (based on first)
-			vTexture[2][0] = (float)(i) / (float)(numMajor);
-			vTexture[2][1] = (float)(j + 1) / (float)(numMinor);
-			vNormal[2][0] = x0*c;
-			vNormal[2][1] = y0*c;
-			vNormal[2][2] = z / minorRadius;
-			m3dNormalizeVector3(vNormal[2]);
-			vVertex[2][0] = x0 * r;
-			vVertex[2][1] = y0 * r;
-			vVertex[2][2] = z;
-
-			// Fourth (based on second)
-			vTexture[3][0] = (float)(i + 1) / (float)(numMajor);
-			vTexture[3][1] = (float)(j + 1) / (float)(numMinor);
-			vNormal[3][0] = x1*c;
-			vNormal[3][1] = y1*c;
-			vNormal[3][2] = z / minorRadius;
-			m3dNormalizeVector3(vNormal[3]);
-			vVertex[3][0] = x1*r;
-			vVertex[3][1] = y1*r;
-			vVertex[3][2] = z;
-
-			torusBatch.AddTriangle(vVertex, vNormal, vTexture);
-
-			// Rearrange for next triangle
-			vVertex[0].x = vVertex[1].x;
-			vVertex[0].y = vVertex[1].y;
-			vVertex[0].z = vVertex[1].z;
-
-			vNormal[0].x = vNormal[1].x;
-			vNormal[0].y = vNormal[1].y;
-			vNormal[0].z = vNormal[1].z;
-
-			vTexture[0].s = vTexture[1].s;
-			vTexture[0].t = vTexture[1].t;
-
-			vVertex[1].x = vVertex[3].x;
-			vVertex[1].y = vVertex[3].y;
-			vVertex[1].z = vVertex[3].z;
-
-			vNormal[1].x = vNormal[3].x;
-			vNormal[1].y = vNormal[3].y;
-			vNormal[0].z = vNormal[3].z;
-
-			vTexture[1].s = vTexture[3].s;
-			vTexture[1].t = vTexture[3].t;
-
-			//memcpy(vTexture[0], vTexture[1], sizeof(M3DVector2f));
-
-//memcpy(vVertex[1], vVertex[3], sizeof(M3DVector3f));
-//memcpy(vNormal[1], vNormal[3], sizeof(M3DVector3f));
-//memcpy(vTexture[1], vTexture[3], sizeof(M3DVector2f));
-
-			torusBatch.AddTriangle(vVertex, vNormal, vTexture);
-		}
-	}
-	torusBatch.End();
-}
-
 void generateOrtho2DMat(GLuint screenWidth, GLuint screenHeight,
-	Matrix &orthoMatrix, Batch &screenQuad)
+	glm::mat4 &orthoMatrix)
 {
 
 	float right = (float)screenWidth;
@@ -549,25 +468,5 @@ void generateOrtho2DMat(GLuint screenWidth, GLuint screenHeight,
 	orthoMatrix[3][1] = -1 * (top + bottom) / (top - bottom);
 	orthoMatrix[3][2] = -1.0f;
 	orthoMatrix[3][3] = 1.0;
-
-	// set screen quad vertex array
-	screenQuad.Reset();
-	screenQuad.Begin(GL_TRIANGLE_STRIP, 4, 1);
-	screenQuad.Color4f(0.0f, 1.0f, 0.0f, 1.0f);
-	screenQuad.MultiTexCoord2f(0, 0.0f, 0.0f);
-	screenQuad.Vertex3f(0.0f, 0.0f, 0.0f);
-
-	screenQuad.Color4f(0.0f, 1.0f, 0.0f, 1.0f);
-	screenQuad.MultiTexCoord2f(0, 1.0f, 0.0f);
-	screenQuad.Vertex3f((float)screenWidth, 0.0f, 0.0f);
-
-	screenQuad.Color4f(0.0f, 1.0f, 0.0f, 1.0f);
-	screenQuad.MultiTexCoord2f(0, 0.0f, 1.0f);
-	screenQuad.Vertex3f(0.0f, (float)screenHeight, 0.0f);
-
-	screenQuad.Color4f(0.0f, 1.0f, 0.0f, 1.0f);
-	screenQuad.MultiTexCoord2f(0, 1.0f, 1.0f);
-	screenQuad.Vertex3f((float)screenWidth, (float)screenHeight, 0.0f);
-	screenQuad.End();
 
 }
