@@ -10,6 +10,8 @@
 #define __OpenGL__log__
 
 #include <fstream>
+#include <gl/glew.h>
+#include "comm.h"
 
 class Log
 {
@@ -27,8 +29,6 @@ public:
 	//shader error
 	static void printShaderInfoLog(unsigned int shader);
 
-	static bool glError(void);
-
 	static bool checkFrameBuffer();
 
 	static Log* Instance();
@@ -39,5 +39,16 @@ public:
 	static std::ofstream out_stream;
 };
 
+inline std::string getErrorString(const GLenum err)
+{
+    return toString(gluErrorString(err));
+}
 
+//check
+
+bool CheckFrameBuffer();
+
+void CheckGLError(char* file,int line);
+
+#define CHECK_GL_ERROR() CheckForGLError(__FILE__, __LINE__)
 #endif

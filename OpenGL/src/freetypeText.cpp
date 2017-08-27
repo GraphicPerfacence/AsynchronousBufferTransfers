@@ -165,7 +165,7 @@ void XText::initShader(void)
 }
 
 
-void XText::drawText(const std::string& t, float x, float y, float scale, Vec3f color)
+void XText::drawText(const std::string& t, float x, float y, float scale, glm::vec3 color)
 {
 	GLboolean blendEnabled;
 	glGetBooleanv(GL_BLEND, &blendEnabled);

@@ -12,6 +12,8 @@
 
 #include <stdio.h>
 #include <vector>
+#include <string>
+#include <sstream>
 
 static bool isGlewInit = false;
 
@@ -22,6 +24,13 @@ unsigned int	stringToUint(const std::string &source);
 int				stringToInt(const std::string &source);
 float			stringToFloat(const std::string &source);
 
+
+template<class T>
+inline std::string toString(const T& input) {
+    std::ostringstream converter;
+    converter << input;
+    return converter.str();
+}
 ///////////////////////////////////////////////////////////////////	
 //test
 ///////////////////////////////////////////////////////////////////

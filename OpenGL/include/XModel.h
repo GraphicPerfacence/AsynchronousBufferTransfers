@@ -9,9 +9,14 @@
 #ifndef X_MODEL_H
 #define X_MODEL_H
 
-#include "Xtype.h"
 #include <vector>
 #include <Gl/glew.h>
+
+#include <glm/glm.hpp>
+
+typedef glm::vec3 Vec3f;
+typedef glm::vec4 Vec4f;
+typedef glm::mat4 Matrix;
 
 class XModel
 {

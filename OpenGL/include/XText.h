@@ -6,8 +6,8 @@
     //  Copyright (c) 2016ƒÍ xt. All rights reserved.
     //
 
-#include "Xtype.h"
 #include <map>
+#include <glm/glm.hpp>
 
 struct Character;
 class Shader ;
@@ -22,7 +22,7 @@ public:
 	XText();
 	~XText();
 
-	void drawText(const std::string& text, float x, float y, float scale, Vec3f color);
+	void drawText(const std::string& text, float x, float y, float scale, glm::vec3 color);
 
 private:
 

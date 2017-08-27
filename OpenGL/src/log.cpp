@@ -1,7 +1,7 @@
 
 #include "../include/sys.h"
 #include "../include/log.h"
-
+#include "../include/base/Execption.hpp"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -21,7 +21,7 @@ Log::Log()
 #if defined X_OS_WIN32 || defined X_OS_WIN64
 	out_stream.open("e:/log.txt");
 #elif __APPLE__
-	out_stream.open("/Users/glp/Documents/projects/OpenGL/log");
+	out_stream.open("/Users/glp/Documents/projects/OpenGL/log.txt");
 #endif
 }
 
@@ -102,67 +102,56 @@ void Log::Destroy()
 	
 }
 
-bool Log::glError(void)
-{
-	GLenum glErr;
-	int    retCode = 0;
-
-	char * error = "no error";
-	glErr = glGetError();
-	if(glErr != GL_NO_ERROR)
-	{
-		 switch(glErr)
-		 {
-		 case GL_INVALID_ENUM:
-			 error = "An unacceptable value is specified for an enumerated argument";
-			 break;
-		 case GL_INVALID_VALUE:
-			 error = "A numeric argument is out of range";
-			 break;
-		 case GL_INVALID_OPERATION:
-			 error = "The specified operation is not allowed in the current state.";
-			 break;
-		 case GL_INVALID_FRAMEBUFFER_OPERATION:
-			 error = "The framebuffer object is not complete";
-			 break;
-		 case GL_OUT_OF_MEMORY:
-			 error = "There is not enough memory left to execute the command";
-			 break;
-		 case GL_STACK_UNDERFLOW:
-			 error = "internal stack to underflow";
-			 break;
-		 case GL_STACK_OVERFLOW:
-			 error = " internal stack to overflow";
-			 break;
-		 }
-
-		 return false;
-	}
-	
-	return true;
-}
-
-bool Log::checkFrameBuffer()
+bool CheckFrameBuffer()
 {
 	GLenum result = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 
 	switch(result)
 	{
 	case  GL_FRAMEBUFFER_UNDEFINED :
+        throw GLException("Framebuffer incomplete, framebuffer undefinded");
 		return false;
 	case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT :
+        throw GLException("Framebuffer incomplete, framebuffer completness not satisfied");
 		return false;
+    case GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT:
+        throw GLException("Framebuffer incomplete, attached images must have same dimensions");
+        break;
 	case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT :
+        throw GLException("Framebuffer incomplete, no attachment");
 		return false;
 	case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER :
+        throw GLException("Framebuffer incomplete, readBuffer states reading buffer that is not attached to fbo");
 		return false;
 	case  GL_FRAMEBUFFER_UNSUPPORTED :
+        throw GLException("Unsupported framebuffer format (implementation dependent)");
 		return false;
 	case GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE :
+        throw GLException("framebuffer  multisisample");
 		return false;
 	case  GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS :
+        throw GLException("framebuffer  LAYER TARGETS");
 		return false;
 	}
 
 	return true;
+}
+
+
+void CheckGLError(char* file,int line)
+{
+    GLenum glErr;
+    while((glErr = glGetError()) != GL_NO_ERROR) {
+        std::string msg("GL Error:");
+        msg += (glErr);
+        msg += '(';
+        msg += getErrorString(glErr);
+        msg += ")  in File ";
+        msg += file;
+        msg += " at line: ";
+        msg += (line);
+        msg += '\n';
+        throw GLException(msg);
+    }
+
 }

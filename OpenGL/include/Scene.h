@@ -8,11 +8,12 @@
 
 #ifndef __OpenGL__Model__
 #define __OpenGL__Model__
-#include "Xtype.h"
+
 #include "BaseRender.h"
 #include "XGLQuery.h"
 
 #include <stdio.h>
+#include <glm/glm.hpp>
 
 class Scene :public BaseRender
 {
@@ -43,14 +44,14 @@ public:
 	// This draws the Model to the backbuffer
 	void Render();
 
-	Vec3f GetPosition() { return Position; }
-	void SetPosition(Vec3f position) { Position = position; }
+	glm::vec3 GetPosition() { return Position; }
+	void SetPosition(glm::vec3 position) { Position = position; }
 
-	Vec3f GetRotation() { return Rotation; }
-	void SetRotation(Vec3f rotation) { Rotation = rotation; }
+	glm::vec3 GetRotation() { return Rotation; }
+	void SetRotation(glm::vec3 rotation) { Rotation = rotation; }
 
-	Vec3f GetScale() { return Scale; }
-	void SetScale(Vec3f scale) { Scale = scale; }
+	glm::vec3 GetScale() { return Scale; }
+	void SetScale(glm::vec3 scale) { Scale = scale; }
 
 	void setScreenWH(unsigned int w,unsigned int h);
 
@@ -63,9 +64,9 @@ protected:
 	unsigned int _screenWidth;
 	unsigned int _screenHeight;
 
-	Vec3f        Position;										// The model's position
-	Vec3f        Rotation;										// The model's rotation
-	Vec3f        Scale;											// The model's scale
+	glm::vec3        Position;										// The model's position
+	glm::vec3        Rotation;										// The model's rotation
+	glm::vec3        Scale;											// The model's scale
 
 	std::vector<unsigned int> _fbos; // framebuffer object;
 
