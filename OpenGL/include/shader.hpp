@@ -1,12 +1,6 @@
 #ifndef __OpenGL__shader__
 #define __OpenGL__shader__
 
-
-#include <vector>
-
-typedef void(*funB) (unsigned int);
-typedef void(*funA)();
-
 class Shader
 {
 public:

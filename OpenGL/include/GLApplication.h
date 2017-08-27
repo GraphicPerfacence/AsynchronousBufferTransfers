@@ -15,6 +15,7 @@
 
 class Camera;
 class Scene;
+class Audo;
 
 class GLApplication
 {
@@ -52,6 +53,8 @@ protected:
 
 	Scene  *        _scene;
 
+    Audo*           _audo;
+    
 	unsigned int    _width;
 	unsigned int    _hight;
 	bool            _isFullScreen;

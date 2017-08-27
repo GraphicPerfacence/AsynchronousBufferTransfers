@@ -12,6 +12,7 @@
 #include "../include/Scene.h"
 #include "../include/log.h"
 #include "../include/XText.h"
+#include "../include/media/ad.hpp"
 
 int GLApplication::GLMain()
 {
@@ -36,6 +37,9 @@ void  GLApplication::SetWindowManager(GLFWManager *pWindowManager)
 
 void GLApplication::Initialize()
 {
+
+    InitAudo();
+
 	// Make sure the window manager is initialized prior to calling this and creates the OpenGL context
 	if (!_windowManager || _windowManager->Initialize(&_width, &_hight, "GameTutorials - Camera", _isFullScreen) != 0)
 	{
@@ -136,6 +140,7 @@ GLApplication::GLApplication(bool isFullScreen):
 	 _isFullScreen = isFullScreen;
 	 _width = 1200;
 	 _hight = 900;
+
 }
 
 void GLApplication::SetApplication(unsigned int w,unsigned int h)
