@@ -9,7 +9,9 @@
 #ifndef __OpenGL__texture__
 #define __OpenGL__texture__
 
-class Texture
+#include <GL/glew.h>
+
+class TextureObj
 {
 public:
 
@@ -22,26 +24,62 @@ public:
         TEXTURE_LOAD_RGBA = 4
     };
 
-	Texture();
+    TextureObj(const char*imgFileName);
 
-	Texture(int num);
+    TextureObj(const GLenum vTargetType = GL_TEXTURE_2D,
+               const GLint vFormatExtern = GL_RGBA, const GLint vFormatIntern = GL_RGBA,
+               const bool mipmap = false, const GLenum dataType_ = GL_UNSIGNED_BYTE);
 
-	~Texture();
+	~TextureObj();
 
-	void init(unsigned int interalFormat, unsigned int format, const char *imageFile,unsigned int flag = TEXTURE_LOAD_AUTO);
-	void init(int n, unsigned int interalFormat, unsigned int format, unsigned int w, unsigned int h, const void* data);
+    void                Data(void* data, const unsigned vWidth, const unsigned vHeight = 0, const unsigned vDepth = 0);
 
-	void initRGBFile(const char* imgFile);
+    bool                Data();
+    
+    unsigned char*      Load(void);
+    
+    GLuint              GetTexture(void)const;
+    
+    
 
-	unsigned int getTexture(unsigned int index = 0)const;
+    void                MirrorRepeat();
+    void                ClampToEdge();
 
-	void bind(void);
-	void unBind(void);
+    void                FilterLinear();
+    void                FilterNearest();
+    
+	void                Bind(void);
+	void                UnBind(void);
 
-protected:
-	unsigned int* texture;
+    GLenum              Type(void)const;
+    GLuint              Width(void)const;
+    GLuint              Heigh(void)const;
+    GLuint              Depth(void)const;
+
+    GLenum              ExternFormat(void)const;
+    GLenum              InterFormat(void)const;
+
+    void                ExternFormat(GLenum);
+    void                InterFormat(GLenum);
+    void                TargetType(GLenum);
+    void                DataType(GLenum);
+
+    bool                MapMapping(void)const;
 private:
-	unsigned int  _textureNum;
+
+    const char*         _fileName;
+
+    GLenum              _targetType;
+    GLenum              _mDataType;
+    GLenum              _externFormat;
+    GLenum              _internFormat;
+    GLuint              _width;
+    GLuint              _height;
+    GLuint              _depth;
+    bool                _minMapping;
+
+    GLuint              _texObject;
+
 };
 
 #endif /* defined(__OpenGL__texture__) */

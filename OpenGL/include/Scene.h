@@ -68,7 +68,6 @@ protected:
 	Vec3f        Scale;											// The model's scale
 
 	std::vector<unsigned int> _fbos; // framebuffer object;
-	std::vector<unsigned int> _textures; //texture objects
 
 	XGLQuery _query;
 

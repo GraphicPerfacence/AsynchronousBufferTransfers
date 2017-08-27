@@ -35,9 +35,9 @@ protected:
 
 protected:
 
-	Camera *                _camera;
-	int                     _uboBlock;
-	std::vector<Texture>    _texturesObj;
-	std::vector<Shader*>    _shaders;
+	Camera *                    _camera;
+	int                         _uboBlock;
+	std::vector<TextureObj*>    _texturesObj;
+	std::vector<Shader*>        _shaders;
 };
 #endif /* defined(____BaseRender__) */

@@ -72,4 +72,17 @@ void BaseRender::preRenderShaderData()
 
 BaseRender::~BaseRender()
 {
+    for (int i = _shaders.size() - 1; i >= 0; i--)
+    {
+        Shader * s = _shaders[i];
+        delete s;
+        s = NULL;
+    }
+
+    for(int i = _texturesObj.size() - 1; i >= 0;i--)
+    {
+        TextureObj * to = _texturesObj[i];
+        delete to;
+        to = NULL;
+    }
 }

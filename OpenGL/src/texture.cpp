@@ -7,153 +7,224 @@
 //
 
 #include "../include/texture.h"
-#include "../include/rgbTexture.h"
 #include "../include/log.h"
 #include "SOIL2/SOIL2.h"
 
 #include <stdlib.h>
 #include <stdio.h>
 
-#include <GL/glew.h>
 
-Texture::Texture() :_textureNum(1)
+TextureObj::TextureObj(const char*imgFileName):
+    _fileName(imgFileName),
+    _minMapping(true),
+    _targetType(GL_TEXTURE_2D)
 {
-	texture = new unsigned int[1];
+    glGenTextures(1,&_texObject);
 }
 
-Texture::~Texture()
-{
-	for (unsigned int i = 0; i < _textureNum; i++)
-		glDeleteTextures(1, &texture[i]);
+TextureObj::TextureObj(const GLenum vTargetType, const GLint vFormatExtern,
+                                 const GLint vFormatIntern, const bool mipmap, const GLenum dataType_):
+    _mDataType(dataType_),
+    _minMapping(mipmap),
+    _fileName(NULL)
+    {
+
+    glGenTextures(1,&_texObject);
+    _targetType = vTargetType;
+    _externFormat = vFormatExtern;
+    _internFormat = vFormatIntern;
+    _width = 0;
+    _height = 0;
+    _depth = 0;
 }
 
-Texture::Texture(int num)
+
+
+TextureObj::~TextureObj()
 {
-	_textureNum = num;
-	texture = new unsigned int[num];
+    glDeleteTextures(1, &_texObject);
 }
 
-unsigned int Texture::getTexture(unsigned int index)const
+
+GLuint TextureObj::GetTexture(void)const
 {
-	return texture[index];
+	return _texObject;
 }
 
-void Texture::init(unsigned int interalFormat, unsigned int format,
-	const char*imageFile,unsigned int flag)
+void  TextureObj::Bind(void)
 {
-	int width, height, channels;
+    glBindTexture(Type(),_texObject);
 
-    //channels the number of channels: 1-luminous, 2-luminous/alpha, 3-RGB, 4-RGBA
-    // return the original channel count of the image.
-	unsigned char* ht_map = SOIL_load_image(imageFile,&width, &height, &channels, flag);
+}
+void TextureObj::UnBind(void)
+{
+    glBindTexture(Type(),0);
+}
 
-	if (ht_map == 0)
-	{
-		printf("load texture %s fail...,and the error is %s", imageFile, SOIL_last_result());
-		return;
-	}
+GLuint  TextureObj::Width(void)const
+{
+    return  _width;
+}
+GLuint  TextureObj::Heigh(void)const
+{
+    return  _height;
+}
+GLuint  TextureObj::Depth(void)const
+{
+    return _depth;
+}
 
-	glGenTextures(1, texture);
-	glBindTexture(GL_TEXTURE_2D, texture[0]);
-	glTexImage2D(GL_TEXTURE_2D, 0, interalFormat, width, height, 0, format, GL_UNSIGNED_BYTE, ht_map);
-	//glGenerateMipmap(GL_TEXTURE_2D);
+GLenum  TextureObj::ExternFormat(void)const
+{
+    return _externFormat;
+}
+GLenum  TextureObj::InterFormat(void)const
+{
+    return  _internFormat;
+}
 
-	// Parameters
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+GLenum TextureObj::Type()const
+{
+    return  _targetType;
+}
 
-	glBindTexture(GL_TEXTURE_2D, 0);
-	SOIL_free_image_data(ht_map);
+bool   TextureObj::MapMapping(void)const
+{
+    return  _minMapping;
+}
+
+void         TextureObj::       ExternFormat(GLenum e)
+{
+    _externFormat = e;
+}
+void          TextureObj::      InterFormat(GLenum i)
+{
+    _internFormat = i;
+}
+void          TextureObj::      TargetType(GLenum t)
+{
+    _targetType = t;
+}
+
+void           TextureObj::DataType(GLenum d)
+{
+    _mDataType = d;
+}
+
+void TextureObj::ClampToEdge()
+ {
+    glTexParameteri(Type(),GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE);
+    if(Heigh() != 0)
+    {
+        glTexParameteri(Type(),GL_TEXTURE_WRAP_T,GL_CLAMP_TO_EDGE);
+        if(Depth() != 0)
+        {
+            glTexParameteri(Type(),GL_TEXTURE_WRAP_R,GL_CLAMP_TO_EDGE);
+        }
+    }
+}
+
+void TextureObj::MirrorRepeat()
+{
+    glTexParameteri(Type(),GL_TEXTURE_WRAP_S,GL_REPEAT);
+    if(Heigh() != 0)
+    {
+        glTexParameteri(Type(),GL_TEXTURE_WRAP_T,GL_REPEAT);
+        if(Depth() != 0)
+        {
+            glTexParameteri(Type(),GL_TEXTURE_WRAP_R,GL_REPEAT);
+        }
+    }
+}
+
+void TextureObj::FilterLinear()
+ {
+    if(_minMapping)
+    {
+        glTexParameteri(Type(),GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR);
+    }
+    else
+    {
+        glTexParameteri(Type(),GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+    }
+    glTexParameteri(Type(),GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+}
+
+void TextureObj::FilterNearest()
+{
+    if(_minMapping)
+    {
+        glTexParameteri(Type(),GL_TEXTURE_MIN_FILTER,GL_NEAREST_MIPMAP_NEAREST);
+    }
+    else
+    {
+        glTexParameteri(Type(),GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+    }
+    glTexParameteri(Type(),GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+}
+
+bool TextureObj::Data()
+{
+    unsigned char* load =  Load();
+    if(load != NULL)
+    {
+        Data(load,Width(),Heigh(),0);
+        return  true;
+    }
+
+    return  false;
+}
+void TextureObj::Data(void* data, const unsigned vWidth, const unsigned vHeight, const unsigned vDepth )
+{
+
+
+    if(0 == vDepth)
+     {
+        if(0 == vHeight)
+        {
+            glTexImage1D(Type(),0,InterFormat(),vWidth,0,ExternFormat(),_mDataType,data);
+        }
+        else
+        {
+            glTexImage2D(Type(),0,InterFormat(),vWidth,vHeight,0,ExternFormat(),_mDataType,data);
+        }
+    }
+    else
+     {
+        glTexImage3D(Type(),0,InterFormat(),vWidth,vHeight,vDepth,0,ExternFormat(),_mDataType,data);
+     }
+
+    if(_minMapping)
+    {
+        //glTexParameteri(Type(),GL_GENERATE_MIPMAP,GL_TRUE); for version 1.4
+       glGenerateMipmap(Type());
+    }
+    SOIL_free_image_data((unsigned char*)data);
 
 }
 
-void Texture::init(int n, unsigned int interalFormat, unsigned int format, unsigned int w, unsigned int h, 
-	const void* data)
+unsigned char* TextureObj::Load(void)
 {
-	glGenTextures(n, texture);
+    if(_fileName != NULL)
+    {
+        int width, height, channels;
+        unsigned char* ht_map = SOIL_load_image(_fileName,&width, &height, &channels,SOIL_LOAD_RGB);
 
-	for (unsigned int i = 0; i < n; i++)
-	{
-		glActiveTexture(GL_TEXTURE1 + i);
-		glBindTexture(GL_TEXTURE_2D, texture[i]);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexImage2D(GL_TEXTURE_2D, 0, interalFormat, w, h, 0, format, GL_UNSIGNED_BYTE, data);
-	}
+        if(*ht_map == 0)
+        {
+            printf("load texture %s fail...,and the error is %s", _fileName, SOIL_last_result());
+            return  NULL;
+        }
+        else
+        {
+            _width = width;
+            _height = height;
+
+            return  ht_map;
+//            Data(ht_map, _width,_height,0);
+        }
+    }
+
+    return  NULL;
 }
 
-void Texture::initRGBFile(const char* imgFile)
-{
-	static GLubyte *texData;
-	GLfloat borderColor[4] = { 1.0, 1.0, 1.0, 1.0 };
-
-	int width, height;
-	int w, h;
-	GLubyte *image, *img, *p;
-	int i, j, components;
-
-	image = (GLubyte *)read_rgb_texture(imgFile, &width, &height, &components);
-	//w = width + 2 * 2;
-	//h = height + 2 * 2;
-
-	w = width;
-	h = height;
-
-	img = (GLubyte *)calloc(w * h, 4 * sizeof(unsigned char));
-
-	p = img;
-	//    for (j = -2; j < height + 2; ++j) {
-	//        for (i = -2; i < width + 2; ++i) {
-
-	for (j = 0; j < height; ++j) {
-		for (i = 0; i < width; ++i) {
-			if (0 <= j && j <= height - 1 && 0 <= i && i <= width - 1) {
-				p[0] = image[4 * (j * width + i) + 0];
-				p[1] = image[4 * (j * width + i) + 1];
-				p[2] = image[4 * (j * width + i) + 2];
-				p[3] = 0xff;
-			}
-			else {
-				p[0] = borderColor[0] * 0xff;
-				p[1] = borderColor[1] * 0xff;
-				p[2] = borderColor[2] * 0xff;
-				p[3] = borderColor[3] * 0xff;
-			}
-			p += 4;
-		}
-	}
-	free(image);
-
-	glGenTextures(1, texture);
-	glBindTexture(GL_TEXTURE_2D, texture[0]);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
-	//gluBuild2DMipmaps(GL_TEXTURE_2D, 4, w, h,
-	  //                GL_RGBA, GL_UNSIGNED_BYTE, img);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, img);
-	glBindTexture(GL_TEXTURE_2D, 0);
-
-}
-
-void Texture::bind(void)
-{
-	if (texture[0])
-	{
-		glBindTexture(GL_TEXTURE_2D, texture[0]);
-	}
-}
-void Texture::unBind(void)
-{
-	if (texture[0])
-	{
-		glBindTexture(GL_TEXTURE_2D, 0);
-	}
-}

@@ -37,31 +37,9 @@ const unsigned int NR_LIGHTS = 32;
 GLuint cubInt;
 GLuint floorInt;
 GLuint billboard_vertex_buffer;
+std::string textureFilePath = "/Users/glp/Documents/modelsAndImgs/textures/cursor_crosshair_inverse.png";
 
-GLuint floorTexturInt;
-
-GLuint loadTextureA(const std::string& path)
-{
-        //Generate texture ID and load texture data
-    GLuint textureID;
-    glGenTextures(1, &textureID);
-    int width,height;
-    unsigned char* image = SOIL_load_image(path.c_str(), &width, &height, 0, SOIL_LOAD_RGB);
-        // Assign texture to ID
-    glBindTexture(GL_TEXTURE_2D, textureID);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
-    glGenerateMipmap(GL_TEXTURE_2D);
-
-        // Parameters
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glBindTexture(GL_TEXTURE_2D, 0);
-    SOIL_free_image_data(image);
-    return textureID;
-    
-}
+TextureObj * tmp;
 
 glm::vec4 normalize_plane(const glm::vec4 &p) {
 	//return p*(1.0f/length(p.swizzle(glm::comp::X,glm::comp::Y,glm::comp::Z)));
@@ -89,13 +67,18 @@ void Scene::initOpengl(void)
 
 void Scene::initTexture(void)
 {
-    std::string textureFilePath = "/Users/glp/Documents/modelsAndImgs/textures/cursor_crosshair_inverse.png";
-//
-    floorTexturInt =  loadTextureA(textureFilePath);
-//    cubTextureInt = loadTextureA(textureFilePath + "container.jpg");
+    TextureObj * curTexObj = new TextureObj(textureFilePath.c_str());
+    curTexObj->InterFormat(GL_RGB);
+    curTexObj->ExternFormat(GL_RGB);
+    curTexObj->DataType(GL_UNSIGNED_BYTE);
+    curTexObj->Bind();
+    curTexObj->Data();
+    curTexObj->FilterLinear();
+    curTexObj->MirrorRepeat();
+    curTexObj->UnBind();
+    
+    _texturesObj.push_back(curTexObj);
 
-
-    //floorTexturInt = ImageFile::loadDDS("/Users/glp/Downloads/ogl-master/tutorial18_billboards_and_particles/ExampleBillboard.DDS");
 }
 
 void Scene::initBOs(GLuint size)
@@ -202,7 +185,7 @@ void Scene::Render()
 
     glActiveTexture(GL_TEXTURE0);
     currentShader->SetInt(location,0);
-    glBindTexture(GL_TEXTURE_2D, floorTexturInt);
+     _texturesObj[0]->Bind();
 
     Camera * camera = GetCamera();
     glm::mat4 viewMatrix =  camera->GetViewMatrix();
@@ -220,7 +203,7 @@ void Scene::Render()
  currentShader->SetFloat3(CameraRight_worldspace_ID,viewMatrix[0][0], viewMatrix[1][0], viewMatrix[2][0]);
  currentShader->SetFloat3(CameraUp_worldspace_ID,viewMatrix[0][1], viewMatrix[1][1], viewMatrix[2][1]);
 
- currentShader->SetFloat3(BillboardPosID,0.0f, 0.5f, 0.0f);
+ currentShader->SetFloat3(BillboardPosID,0.0f, 0.5f, -10.0f);
  currentShader->SetFloat2(BillboardSizeID,1.0f, 0.125f);
 
  double curTime = glfwGetTime();
@@ -249,19 +232,7 @@ void Scene::Render()
 // This handles all the cleanup for our model, like the VBO/VAO buffers and shaders.
 void Scene::Destroy()
 {
-	for (int i = _shaders.size() - 1; i >= 0; i--)
-	{
-		Shader * s = _shaders[i];
-		s->Destroy();
-		s = NULL;
-	}
-
-	for(unsigned int i = 0;i < _textures.size();i++)
-	{
-		glDeleteBuffers(1,&_textures[i]);
-	}
-
- }
+}
 
 void Scene::initThisDemo(void)
 {
