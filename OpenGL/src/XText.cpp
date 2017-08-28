@@ -7,7 +7,7 @@
 
 XText::XText()
 {
-
+    
 }
 
 XText::~XText()

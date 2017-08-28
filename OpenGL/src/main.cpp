@@ -6,6 +6,22 @@
 #include "../include/camera.h"
 
 
+#include "../include/base/geometry/Polygon3D.h"
+
+template <class T>
+class Test :public std::vector<T>
+{
+    typedef typename std::vector<T>::iterator iterator;
+
+    void test()
+    {
+        for(iterator i = this->begin();i != this->end();i++)
+        {
+
+        }
+    }
+};
+
 int main(void)
 {
     Camera *pCamera = new Camera(glm::vec3(0.0f, 0.0f, 3.0f));
@@ -17,5 +33,6 @@ int main(void)
     pWindowManager->GetInputManager()->SetCamera(pCamera);
     
     return application.GLMain();
-    
+
+
 }

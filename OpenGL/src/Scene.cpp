@@ -83,7 +83,8 @@ void Scene::initTexture(void)
 
 void Scene::initBOs(GLuint size)
 {
-	
+
+
 }
 
 void Scene::initFBO(void)
