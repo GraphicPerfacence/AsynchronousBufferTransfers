@@ -5,22 +5,9 @@
 #include "../include/GLApplication.h"
 #include "../include/camera.h"
 
+#include "../include/base/RefPointer.hpp"
+#include "../include/base/Geometry.h"
 
-#include "../include/base/geometry/Object.h"
-
-template <class T>
-class Test :public std::vector<T>
-{
-    typedef typename std::vector<T>::iterator iterator;
-
-    void test()
-    {
-        for(iterator i = this->begin();i != this->end();i++)
-        {
-
-        }
-    }
-};
 
 int main(void)
 {
@@ -34,5 +21,6 @@ int main(void)
     
     return application.GLMain();
 
+    Geometry geometry;
 
 }
