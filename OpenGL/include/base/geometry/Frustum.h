@@ -1,152 +1,181 @@
-//Copyright and Disclaimer:
-//This code is copyright Daniel Scherzer, 2004.
-#ifndef FrustumH
-#define FrustumH
-//---------------------------------------------------------------------------
-#include <vector>
-#include <bitset>
-#include "../Vector3.h"
-#include "../Matrix4.h"
+
+#ifndef _OPENGL_FrustumH
+#define _OPENGL_FrustumH
+    //---------------------------------------------------------------------------
+
+
 #include "Plane.h"
-#include "AABox.h"
-//---------------------------------------------------------------------------
-namespace Math {
-namespace Geometry {
+#include "AABB.hpp"
+
+#include <bitset>
+#include <vector>
+
+
 
 template<class REAL = float>
-class Frustum {
+class Frustum
+{
 protected:
-	typedef Plane<REAL> Plane;
-	typedef AABox<REAL> AABox;
-	typedef Vector3<REAL> V3;
+    typedef Plane<REAL> Plane;
+    typedef AABox<REAL> AABox;
+    typedef Vector3<REAL> V3;
 public:
-	typedef std::vector<Plane> VecPlane;
-	typedef std::bitset<32> ActivePlanes;
-	typedef Matrix4<REAL> Matrix4;
+    typedef std::vector<Plane> VecPlane;
+    typedef std::bitset<32> ActivePlanes;
+    typedef Matrix4<REAL> Matrix4;
 
 protected:
-	VecPlane vecPlane;
-	ActivePlanes activePlanes;
+    VecPlane vecPlane;
+    ActivePlanes activePlanes;
 
 public:
-	Frustum() { activePlanes.reset(); }
-	
-	void clear() {
-		vecPlane.clear();
-		activePlanes.reset();
-	}
+    Frustum() { activePlanes.reset(); }
 
-	bool isActive(cuint id) const {
-		if(id > vecPlane.size()) {
-			throw GeometryException("Frustum::isActive: invalid plane");
-		}
-		return activePlanes[id];
-	}
+    void                            Clear()
+    {
+        vecPlane.clear();
+        activePlanes.reset();
+    }
 
-	unsigned activePlaneCount() const {
-		return activePlanes.count();
-	}
+    bool                            IsActive(unsigned int id) const
+    {
+        if(id > vecPlane.size())
+        {
+            throw GeometryException("Frustum::isActive: invalid plane");
+        }
+        return activePlanes[id];
+    }
 
-	void addClipPlane(const Plane& p){
-		if(vecPlane.size() < activePlanes.size()) {
-			vecPlane.push_back(p);
-			activePlanes[vecPlane.size()-1] = true;
-		}
-		else {
-			throw GeometryException("Frustum: to many ClipPlanes");
-		}
-	}
+    unsigned                        ActivePlaneCount() const
+    {
+        return activePlanes.count();
+    }
 
-	const Plane& getPlaneUnChecked(cuint id) const { return vecPlane[id]; }
+    void                            AddClipPlane(const Plane& p)
+    {
+        if(vecPlane.size() < activePlanes.size())
+        {
+            vecPlane.push_back(p);
+            activePlanes[vecPlane.size()-1] = true;
+        }
+        else
+        {
+            throw GeometryException("Frustum: to many ClipPlanes");
+        }
+    }
 
-	const Plane& getPlane(cuint id) const {
-		if(id < vecPlane.size()) {
-			return getPlaneUnChecked(id);
-		}
-		else {
-			throw GeometryException("Frustum::getPlane: invalid plane");
-		}
-	}
+    const Plane&                    GetPlaneUnChecked(unsigned int id) const { return vecPlane[id]; }
 
-	const VecPlane& getVecPlanes() const { return vecPlane; }
+    const Plane&                    GetPlane(unsigned int id) const
+    {
+        if(id < vecPlane.size())
+        {
+            return GetPlaneUnChecked(id);
+        }
+        else
+        {
+            throw GeometryException("Frustum::getPlane: invalid plane");
+        }
+    }
 
-	const ActivePlanes& getActivePlanes() const { return activePlanes; }
-	ActivePlanes& getActivePlanes() { return activePlanes; }
+    const VecPlane&                 GetVecPlanes() const { return vecPlane; }
 
-	bool contains(const V3& p) const{
-		for(uint i = 0; i < vecPlane.size(); i++) {
-			if(activePlanes[i] && vecPlane[i].inFront(p)) {
-				return false;
-			}
-		}
-		return true;
-	}
+    const ActivePlanes&             GetActivePlanes() const { return activePlanes; }
 
-	bool contains(const V3& p, const ActivePlanes& ap) const {
-		unsigned size;
-		Math::minimum(size,ap.size(),vecPlane.size());
-		for(unsigned i = 0; i < size; i++) {
-			if(vecPlane[i].inFront(p)) {
-				return false;
-			}
-		}
-		return true;
-	}
+    ActivePlanes&                   GetActivePlanes() { return activePlanes; }
 
-	bool inside(const AABox& box, const ActivePlanes& ap) const {
-		Math::Vector3x8 p;
-		box.computeVerticesRightHanded(p);
-		for(unsigned i = 0; i < 8; i++) {
-			if(!contains(p[i],ap)) {
-				return false;
-			}
-		}
-		return true;
-	}
+    bool                            Contains(const V3& p) const
+    {
+        for(uint i = 0; i < vecPlane.size(); i++)
+        {
+            if(activePlanes[i] && vecPlane[i].inFront(p))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
 
-	//bool visible(const OBox&) const;
-	bool visible(const AABox& box) const {
-		if(activePlanes.none()) {
-			return true;
-		}
-		ActivePlanes help = activePlanes;
-		for(unsigned i = 0; help.any(); i++, help >>= 1) { 
-			// i < vecPlane.size test is superflue if the active planes are valid(only contains 1s where planes are existent)
-			if(help[0]) {
-				if(BEHIND == box.getPlaneSide(vecPlane[i])) {
-					return false;
-				}
-			}
-		}
-		return true;
-	}
+    bool                            Contains(const V3& p, const ActivePlanes& ap) const
+    {
+        unsigned size = std::min(ap.size(),vecPlane.size());
 
-	//returns true if the box can be culled
-	//updates activePlanes if the AABox lies in front of a plane and therefor 
-	//child boxes don't need to check this plane
-	bool cull(const AABox& box) {
-		if(activePlanes.none()) {
-			return false;
-		}
-		ActivePlanes help = activePlanes;
-		for(uint i = 0; /*i < vecPlane.size() &&*/ help.any(); i++, help >>= 1) { 
-			// vecPlane.size test is superflue if the active planes only contains 1s where planes are existent
-			if(help[0]) {
-				const PlaneSide ps = box.getPlaneSide(vecPlane[i]);
-				if(ps == BEHIND) {
-					return true;
-				}
-				if(ps == BEFORE) {
-					activePlanes[i] = false;
-				}
-			}
-		}
-		return false;
-	}
+        for(unsigned i = 0; i < size; i++)
+        {
+            if(vecPlane[i].inFront(p)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    bool                            Inside(const AABox& box, const ActivePlanes& ap) const
+    {
+        std::vector<V3> p;
+
+        box.ComputeVerticesRightHanded(p);
+        for(unsigned i = 0; i < 8; i++)
+        {
+            if(!Contains(p[i],ap))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+        //bool visible(const OBox&) const;
+    bool                               Visible(const AABox& box) const
+    {
+        if(activePlanes.none())
+        {
+            return true;
+        }
+
+        ActivePlanes help = activePlanes;
+        for(unsigned i = 0; help.any(); i++, help >>= 1)
+        {
+                // i < vecPlane.size test is superflue if the active planes are valid(only contains 1s where planes are existent)
+            if(help[0])
+            {
+                if(BEHIND == box.GetPlaneSide(vecPlane[i]))
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+        //returns true if the box can be culled
+        //updates activePlanes if the AABox lies in front of a plane and therefor
+        //child boxes don't need to check this plane
+    bool                                    Cull(const AABox& box)
+    {
+        if(activePlanes.none())
+        {
+            return false;
+        }
+        ActivePlanes help = activePlanes;
+        for(uint i = 0; /*i < vecPlane.size() &&*/ help.any(); i++, help >>= 1)
+        {
+                // vecPlane.size test is superflue if the active planes only contains 1s where planes are existent
+            if(help[0])
+            {
+                const PlaneSide ps = box.GetPlaneSide(vecPlane[i]);
+                if(ps == BEHIND)
+                {
+                    return true;
+                }
+                if(ps == BEFORE)
+                {
+                    activePlanes[i] = false;
+                }
+            }
+        }
+        return false;
+    }
 };
 
-//namespace
-}
-//namespace
-}
+
 #endif

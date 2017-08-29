@@ -6,7 +6,7 @@
 #include "../include/camera.h"
 
 
-#include "../include/base/geometry/Polygon3D.h"
+#include "../include/base/geometry/Object.h"
 
 template <class T>
 class Test :public std::vector<T>
