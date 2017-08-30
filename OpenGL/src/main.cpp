@@ -5,9 +5,9 @@
 #include "../include/GLApplication.h"
 #include "../include/camera.h"
 
-#include "../include/base/RefPointer.hpp"
-#include "../include/base/Geometry.h"
 
+#include "../include/base/Geometry.h"
+#include "../include/base/engine/Action.h"
 
 int main(void)
 {

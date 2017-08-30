@@ -25,7 +25,7 @@ public:
         } 
     }
 
-    unsigned int getRefCount() const { return cRefs; }
+    unsigned int GetRefCount() const { return cRefs; }
 
 private:
     unsigned int cRefs;
