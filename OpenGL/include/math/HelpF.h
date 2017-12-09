@@ -9,9 +9,10 @@
 #ifndef OPENGL_M_HEAD_H
 #define OPENGL_M_HEAD_H
 
-    // Return value is 'true' if line segment intersects the current test
-    // plane.  Otherwise 'false' is returned in which case the line segment
-    // is entirely clipped.
+#include "base/defType.hpp"
+
+namespace math
+{
 template<class REAL>
 bool clipTest(const REAL& p, const REAL& q, REAL& u1, REAL& u2)
 {
@@ -56,4 +57,11 @@ bool clipTest(const REAL& p, const REAL& q, REAL& u1, REAL& u2)
     }
 }
 
+
+template <class REAL>
+inline Vector3<REAL> normal(Vector3<REAL> v)
+{
+    return glm::normalize(v);
+}
+}
 #endif /* Header_h */

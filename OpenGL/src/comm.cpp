@@ -6,8 +6,8 @@
 //  Copyright (c) 2015年 xt. All rights reserved.
 //
 
-#include "../include/log.h"
-#include "../include/comm.h"
+#include "log.h"
+#include "comm.h"
 
 #include <gl/glew.h>
 #include <GLFW/glfw3.h>

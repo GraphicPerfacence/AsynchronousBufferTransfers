@@ -1,6 +1,6 @@
 
-#include "../include/XText.h"
-#include "../include/shader.hpp"
+#include "XText.h"
+#include "shader.hpp"
 
 
 #include <gl/glew.h>

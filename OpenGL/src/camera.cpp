@@ -7,7 +7,7 @@
     //  Copyright (c) 2015ƒÍ xt. All rights reserved.
 
 
-#include "../include/camera.h"
+#include "camera.h"
 #include <GLFW/glfw3.h>
 
 

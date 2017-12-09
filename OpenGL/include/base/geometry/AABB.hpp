@@ -197,7 +197,7 @@ public:
         const V3& min = GetMin();
         const V3& max = GetMax();
         REAL t1 = 0.0;
-        REAL t2 = Const<REAL>::infinity();
+        REAL t2 = math::Const<REAL>::infinity();
         bool intersect =
         clipTest(-dir[2],p[2]-min[2],t1,t2) && clipTest(dir[2],max[2]-p[2],t1,t2) &&
         clipTest(-dir[1],p[1]-min[1],t1,t2) && clipTest(dir[1],max[1]-p[1],t1,t2) &&

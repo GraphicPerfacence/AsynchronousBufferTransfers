@@ -1,16 +1,16 @@
 #include "../include/XText.h"
 
-#include <ft2build.h>
-#include FT_FREETYPE_H
+//#include <ft2build.h>
+//#include FT_FREETYPE_H
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <gl/glew.h>
 
-#include "../include/shader.hpp"
-#include "../include/sys.h"
-#include "../include/log.h"
+#include "shader.hpp"
+#include "sys.h"
+#include "log.h"
 
 #include <string>
 
@@ -50,7 +50,7 @@ static std::string textFragString = "\
 std::map<unsigned char, Character*> XText::_characters;
 
 
-
+#if 0
 const char* getFreetypeErrorMessage(FT_Error err)
 {
 #undef __FTERRORS_H__
@@ -60,9 +60,10 @@ const char* getFreetypeErrorMessage(FT_Error err)
 #include FT_ERRORS_H
 	return "(Unknown error)";
 }
-
+#endif
 bool XText::initTextLib(void)
-{	
+{
+#if 0
 	FT_Error error;
 
 	FT_Library    library;
@@ -146,7 +147,7 @@ bool XText::initTextLib(void)
 	FT_Done_FreeType(library);
 
 	glPixelStorei(GL_UNPACK_ALIGNMENT,4);
-	
+	#endif
 	return true;
 }
 

@@ -1,4 +1,4 @@
-#include "../include/geometry.h"
+#include "geometry.h"
 #include <gl/glew.h>
 #include <GLFW/glfw3.h>			// Used for the GLM math library
 #include <glm/gtx/transform2.hpp>

@@ -1,5 +1,5 @@
 
-#include "../include/fileSytem.h"
+#include "fileSytem.h"
 
 #include <stdio.h>
 #include <stdlib.h>

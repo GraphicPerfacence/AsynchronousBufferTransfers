@@ -7,7 +7,7 @@
 
 
 #include "../include/base/Geometry.h"
-#include "../include/base/engine/Action.h"
+#include "../include/base/engine/KDTree.h"
 
 int main(void)
 {
@@ -21,6 +21,6 @@ int main(void)
     
     return application.GLMain();
 
-    Geometry geometry;
-
+    
+   
 }

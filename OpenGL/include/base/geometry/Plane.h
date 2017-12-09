@@ -103,7 +103,7 @@ public:
 		HessNorm();
 	}
 
-	inline bool                     Intersection(const Line& l, REAL& t, const REAL eps = Const<REAL>::near_epsilon()) const
+	inline bool                     Intersection(const Line& l, REAL& t, const REAL eps =  math::Const<REAL>::near_epsilon()) const
     {
 		const REAL a = GetN().dot(l.dir);
 		if(abs(a) < eps) { //edge and plane are parallel
@@ -114,7 +114,7 @@ public:
 		return true;
 	}
 
-	inline bool                     IntersectionWithEdge(const Line& l, REAL& t, const REAL eps = Const<REAL>::near_epsilon()) const
+	inline bool                     IntersectionWithEdge(const Line& l, REAL& t, const REAL eps = math::Const<REAL>::near_epsilon()) const
      {
 		if(Intersection(l,t,eps))
         {
@@ -142,8 +142,8 @@ public:
 		}
 	}
 
-	inline const bool               PlaneBehindPoint(const V3& p, const REAL eps = Const<REAL>::near_epsilon()) const {	return distance(p) > eps;	} //plane behind point
-	inline const bool               PlaneInFrontPoint(const V3& p, const REAL eps = Const<REAL>::near_epsilon()) const { return distance(p) < -eps; } //plane in front of point
+	inline const bool               PlaneBehindPoint(const V3& p, const REAL eps = math::Const<REAL>::near_epsilon()) const {	return distance(p) > eps;	} //plane behind point
+	inline const bool               PlaneInFrontPoint(const V3& p, const REAL eps = math::Const<REAL>::near_epsilon()) const { return distance(p) < -eps; } //plane in front of point
 	
 	inline const PlaneSide          GetPlaneSide(const V3& p) const
      {

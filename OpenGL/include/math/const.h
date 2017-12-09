@@ -2,6 +2,9 @@
 #ifndef _OPENGL_CONST_H
 #define _OPENGL_CONST_H
 
+namespace math
+{
+
 template<class REAL>
 struct Const
 {
@@ -20,4 +23,5 @@ struct Const
     static inline const REAL min_value() throw() { return std::numeric_limits<REAL>::min(); }
 };
 
+}
 #endif

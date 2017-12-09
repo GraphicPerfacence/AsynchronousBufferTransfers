@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>E63D0D40-B7E3-44AD-B85B-7B5C6D2FAA69</string>
+	<key>IDESourceControlProjectName</key>
+	<string>openGLTest</string>
+	<string>project</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>11111C38AF1575BE951BA7AB74B3BDF9BA3B91A4</key>
+		<string>https://github.com/xtmacbook/OpenGL.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>openGLTest/openGLTest.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>11111C38AF1575BE951BA7AB74B3BDF9BA3B91A4</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/xtmacbook/OpenGL.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>11111C38AF1575BE951BA7AB74B3BDF9BA3B91A4</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>11111C38AF1575BE951BA7AB74B3BDF9BA3B91A4</string>
+			<key>IDESourceControlWCCName</key>
+			<string>OpenGL</string>
+		</dict>
+	</array>
+</dict>
+</plist>

@@ -6,9 +6,9 @@
 //
 //
 
-#include "../include/BaseRender.h"
-#include "../include/shader.hpp"
-#include "../include/camera.h"
+#include "BaseRender.h"
+#include "shader.hpp"
+#include "camera.h"
 
 #include <gl/glew.h>
 #include <glm/gtc/type_ptr.hpp>

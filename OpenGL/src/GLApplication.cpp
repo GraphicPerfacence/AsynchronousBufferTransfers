@@ -6,13 +6,13 @@
 //  Copyright (c) 2015年 xt. All rights reserved.
 //
 
-#include "../include/GLApplication.h"
-#include "../include/TimerManager.h"
-#include "../include/camera.h"
-#include "../include/Scene.h"
-#include "../include/log.h"
-#include "../include/XText.h"
-#include "../include/media/ad.hpp"
+#include "GLApplication.h"
+#include "TimerManager.h"
+#include "camera.h"
+#include "Scene.h"
+#include "log.h"
+#include "XText.h"
+#include "media/ad.hpp"
 
 int GLApplication::GLMain()
 {

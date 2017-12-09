@@ -28,5 +28,6 @@ public:
 template <class REAL>
 using Matrix4 = MatrixX<REAL>;
 
-
+typedef Vector3<float> V3f;
+typedef Vector3<double> V3d;
 #endif

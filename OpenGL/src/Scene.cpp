@@ -6,19 +6,19 @@
 //  Copyright (c) 2015年 xt. All rights reserved.
 //
 
-#include "../include/Scene.h"
-#include "../include/GLFWManager.h"
-#include "../include/shader.hpp"
-#include "../include/TimerManager.h"
-#include "../include/glfwSet.h"
-#include "../include/sys.h"
-#include "../include/log.h"
-#include "../include/camera.h"
-#include "../include/geometry.h"
-#include "../include/texture.h"
-#include "../include/XTimer.h"
-#include "../include/fileSytem.h"
-
+#include "Scene.h"
+#include "GLFWManager.h"
+#include "shader.hpp"
+#include "TimerManager.h"
+#include "glfwSet.h"
+#include "sys.h"
+#include "log.h"
+#include "camera.h"
+#include "geometry.h"
+#include "texture.h"
+#include "XTimer.h"
+#include "fileSytem.h"
+#include "util/Subdivision.hpp"
 #include  <glm/gtc/type_ptr.hpp>
 #include "SOIL2/SOIL2.h"
 
@@ -36,8 +36,9 @@ const unsigned int NR_LIGHTS = 32;
 
 GLuint cubInt;
 GLuint floorInt;
-GLuint billboard_vertex_buffer;
-std::string textureFilePath = "/Users/glp/Documents/modelsAndImgs/textures/cursor_crosshair_inverse.png";
+GLuint earth_vertex_buffer;
+GLuint indicesNum;
+std::string textureFilePath = "/Users/glp/Documents/osgResource/OpenSceneGraph-Data-3.0.0/Images/forestRoof.png";
 
 TextureObj * tmp;
 
@@ -102,62 +103,37 @@ void Scene::initShader(void)
     shaderBasePath = "/Users/glp/Documents/projects/OpenGL/OpenGL/shader/";
 
     _shaders.push_back(new Shader); //
-    _shaders.push_back(new Shader); //
 
-        //shaderGeometryPass
-    std::string vs = shaderBasePath + "Billboard.vert";
-    std::string fs = shaderBasePath + "Billboard.frag";
+    std::string vs = shaderBasePath + "basic.vs";
+    std::string fs = shaderBasePath + "basic.frag";
     _shaders[0]->LoadShaders(vs.c_str(), fs.c_str(), nullptr);
-
-
-    vs = shaderBasePath + "basic.vs";
-    fs = shaderBasePath + "basic.frag";
-    _shaders[1]->LoadShaders(vs.c_str(), fs.c_str(), nullptr);
-
-
-    //perp
-    _shaders[0]->TurnOn();
-    GLint location =  _shaders[0]->GetVariable("myTextureSampler");
-    _shaders[0]->SetInt(location,0);
-    _shaders[0]->TurnOff();
-
-//
-//        //shaderSSAOBlur
-//    vs = shaderBasePath + "ssao.vert";
-//    fs = shaderBasePath + "ssao_blur.frag";
-//    shaders[2]->LoadShaders(vs.c_str(), fs.c_str(), nullptr);
-//    shaders[2]->TurnOn();
-//    location = shaders[2]->GetVariable("ssaoInput");
-//    shaders[2]->SetInt(location,0);
-//    shaders[2]->TurnOff();
-//
-//        //shaderLightingPass
-//    vs = shaderBasePath + "ssao.vert";
-//    fs = shaderBasePath + "ssao_lighting.frag";
-//    shaders[3]->LoadShaders(vs.c_str(), fs.c_str(), nullptr);
 
 }
 
 void Scene::initSceneObjs(void)
 {
 
-    initCub(cubInt);
+    std::vector<V3f> positions;
+    std::vector<unsigned int > indices;
+    std::vector<V3f> normals;
+    Util::Subdivision::subdivisionSphere(positions,indices,5);
 
-    static const GLfloat g_vertex_buffer_data[] =
-    {
-        -0.5f, -0.5f, 0.0f,
-        0.5f, -0.5f, 0.0f,
-        -0.5f,  0.5f, 0.0f,
-        0.5f,  0.5f, 0.0f,
-    };
+    if((positions.size() < 0) || (indices.size() < 0)) return;
+
+    indicesNum = indices.size();
 
     GLuint VBO;
-    glGenVertexArrays(1,&billboard_vertex_buffer);
+    GLuint IVBO;
+    glGenVertexArrays(1,&earth_vertex_buffer); //vao
     glGenBuffers(1,&VBO);
+    glGenBuffers(1,&IVBO);
 
-    glBindVertexArray(billboard_vertex_buffer);
+    glBindVertexArray(earth_vertex_buffer);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_DYNAMIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(V3f) * positions.size(), &positions[0], GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IVBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(
                           0,                  // attribute. No particular reason for 0, but must match the layout in the shader.
@@ -179,54 +155,15 @@ void Scene::Render()
     Shader * currentShader = _shaders[0];
     currentShader->TurnOn();
 
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    initUniformVal(currentShader);
+    
+    glBindVertexArray(earth_vertex_buffer);
 
-    GLint location =  currentShader->GetVariable("myTextureSampler");
+    //glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
-    glActiveTexture(GL_TEXTURE0);
-    currentShader->SetInt(location,0);
-     _texturesObj[0]->Bind();
+    glDrawElements(GL_TRIANGLES, indicesNum, GL_UNSIGNED_INT, (void*)0);
 
-    Camera * camera = GetCamera();
-    glm::mat4 viewMatrix =  camera->GetViewMatrix();
-    glm::mat4 projectMatrix = camera->GetProjectionMatrix();
-    glm::mat4 viewProjectionMatrix = projectMatrix * viewMatrix;
-
-
-    GLuint CameraRight_worldspace_ID  = currentShader->GetVariable("CameraRight_worldspace");
-	GLuint CameraUp_worldspace_ID  = currentShader->GetVariable( "CameraUp_worldspace");
-	GLuint ViewProjMatrixID = currentShader->GetVariable("VP");
-	GLuint BillboardPosID = currentShader->GetVariable("BillboardPos");
-	GLuint BillboardSizeID = currentShader->GetVariable( "BillboardSize");
-	GLuint LifeLevelID = currentShader->GetVariable( "LifeLevel");
-
- currentShader->SetFloat3(CameraRight_worldspace_ID,viewMatrix[0][0], viewMatrix[1][0], viewMatrix[2][0]);
- currentShader->SetFloat3(CameraUp_worldspace_ID,viewMatrix[0][1], viewMatrix[1][1], viewMatrix[2][1]);
-
- currentShader->SetFloat3(BillboardPosID,0.0f, 0.5f, -10.0f);
- currentShader->SetFloat2(BillboardSizeID,1.0f, 0.125f);
-
- double curTime = glfwGetTime();
- float LifeLevel = sin(curTime)*0.1f + 0.7f;
- currentShader->SetFloat(LifeLevelID, LifeLevel);
-
- currentShader->SetMatrix4(ViewProjMatrixID, 1, GL_FALSE,glm::value_ptr(viewProjectionMatrix));
-
- glBindVertexArray(billboard_vertex_buffer);
-
- glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-
- glBindVertexArray(0);
-
- currentShader->TurnOff();
-
- currentShader = _shaders[1];
- currentShader->TurnOn();
- initUniformVal(currentShader);
- drawCub(cubInt);
- currentShader->TurnOff();
-
+    glBindVertexArray(0);
 
 }
 
