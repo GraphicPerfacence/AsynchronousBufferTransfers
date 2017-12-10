@@ -110,13 +110,28 @@
 		5BA5602C1F544DCB0007BAAC /* HelpF.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = HelpF.h; path = ../OpenGL/include/math/HelpF.h; sourceTree = "<group>"; };
 		5BAB72451DFC1FA3001FE362 /* freetypeText.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = freetypeText.cpp; path = ../OpenGL/src/freetypeText.cpp; sourceTree = "<group>"; };
 		5BAB72471DFC20AF001FE362 /* libfreetype.6.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfreetype.6.dylib; path = /usr/local/Cellar/freetype/2.7/lib/libfreetype.6.dylib; sourceTree = "<absolute>"; };
+		5BB289631FDCBF0400B04F9D /* AABB.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = AABB.hpp; path = ../OpenGL/include/base/geometry/AABB.hpp; sourceTree = "<group>"; };
+		5BB289641FDCBF0400B04F9D /* Ellipsoid.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Ellipsoid.h; path = ../OpenGL/include/base/geometry/Ellipsoid.h; sourceTree = "<group>"; };
+		5BB289651FDCBF0400B04F9D /* Frustum.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Frustum.h; path = ../OpenGL/include/base/geometry/Frustum.h; sourceTree = "<group>"; };
+		5BB289661FDCBF0400B04F9D /* GemoetoryException.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = GemoetoryException.hpp; path = ../OpenGL/include/base/geometry/GemoetoryException.hpp; sourceTree = "<group>"; };
+		5BB289671FDCBF0400B04F9D /* GeometryIO.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GeometryIO.h; path = ../OpenGL/include/base/geometry/GeometryIO.h; sourceTree = "<group>"; };
+		5BB289681FDCBF0400B04F9D /* GeometryTools.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GeometryTools.h; path = ../OpenGL/include/base/geometry/GeometryTools.h; sourceTree = "<group>"; };
+		5BB289691FDCBF0400B04F9D /* Grid.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Grid.h; path = ../OpenGL/include/base/geometry/Grid.h; sourceTree = "<group>"; };
+		5BB2896A1FDCBF0400B04F9D /* HeightField.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = HeightField.h; path = ../OpenGL/include/base/geometry/HeightField.h; sourceTree = "<group>"; };
+		5BB2896B1FDCBF0400B04F9D /* Line.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Line.h; path = ../OpenGL/include/base/geometry/Line.h; sourceTree = "<group>"; };
+		5BB2896C1FDCBF0400B04F9D /* Line2D.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Line2D.h; path = ../OpenGL/include/base/geometry/Line2D.h; sourceTree = "<group>"; };
+		5BB2896D1FDCBF0400B04F9D /* Object.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Object.h; path = ../OpenGL/include/base/geometry/Object.h; sourceTree = "<group>"; };
+		5BB2896E1FDCBF0400B04F9D /* Plane.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Plane.h; path = ../OpenGL/include/base/geometry/Plane.h; sourceTree = "<group>"; };
+		5BB2896F1FDCBF0400B04F9D /* Polygon2D.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Polygon2D.h; path = ../OpenGL/include/base/geometry/Polygon2D.h; sourceTree = "<group>"; };
+		5BB289701FDCBF0400B04F9D /* Polygon3D.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Polygon3D.h; path = ../OpenGL/include/base/geometry/Polygon3D.h; sourceTree = "<group>"; };
+		5BB289711FDCBF0400B04F9D /* Polyhedron.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Polyhedron.h; path = ../OpenGL/include/base/geometry/Polyhedron.h; sourceTree = "<group>"; };
+		5BB289721FDCBF0400B04F9D /* Triangle2D.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Triangle2D.h; path = ../OpenGL/include/base/geometry/Triangle2D.h; sourceTree = "<group>"; };
 		5BB5EB291BB7A07E00BFA215 /* openGLTest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = openGLTest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5BB5EB331BB7A0D500BFA215 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		5BB5EB351BB7A0EF00BFA215 /* libglfw3.3.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libglfw3.3.1.dylib; path = /usr/local/Cellar/glfw3/3.1.1/lib/libglfw3.3.1.dylib; sourceTree = "<absolute>"; };
 		5BB5EB3A1BB7A11100BFA215 /* libGLEW.1.12.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libGLEW.1.12.0.dylib; path = /usr/local/Cellar/glew/1.12.0/lib/libGLEW.1.12.0.dylib; sourceTree = "<absolute>"; };
 		5BB5EB6E1BB7A4AF00BFA215 /* libsoil2-debug.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libsoil2-debug.a"; path = "../../../3Dirty/SpartanJ-soil2/lib/macosx/libsoil2-debug.a"; sourceTree = "<group>"; };
 		5BB5EB701BB7A51700BFA215 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
-		5BCD93D31FDB6AA20074A050 /* geometry */ = {isa = PBXFileReference; lastKnownFileType = folder; name = geometry; path = ../OpenGL/include/base/geometry; sourceTree = "<group>"; };
 		5BCD93D41FDB6B490074A050 /* base.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = base.hpp; path = ../OpenGL/include/base/base.hpp; sourceTree = "<group>"; };
 		5BCD93D51FDB6B490074A050 /* defType.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = defType.hpp; path = ../OpenGL/include/base/defType.hpp; sourceTree = "<group>"; };
 		5BCD93D61FDB6B490074A050 /* Execption.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Execption.hpp; path = ../OpenGL/include/base/Execption.hpp; sourceTree = "<group>"; };
@@ -254,12 +269,12 @@
 		5B7C49561F557F7E00AAC7AD /* base */ = {
 			isa = PBXGroup;
 			children = (
+				5BB2895F1FDCBB0200B04F9D /* geometry */,
 				5BCD93D41FDB6B490074A050 /* base.hpp */,
 				5BCD93D51FDB6B490074A050 /* defType.hpp */,
 				5BCD93D61FDB6B490074A050 /* Execption.hpp */,
 				5BCD93D71FDB6B490074A050 /* Geometry.h */,
 				5BCD93D81FDB6B490074A050 /* RefPointer.hpp */,
-				5BCD93D31FDB6AA20074A050 /* geometry */,
 				5B999C5D1F55A21D00FC068E /* engine */,
 				5B999C5F1F55A9F500FC068E /* Callback.h */,
 				5BDC41B41F56619800B7AF27 /* Persisten.h */,
@@ -294,6 +309,29 @@
 				5BDC41B51F56F02200B7AF27 /* KDTree.h */,
 			);
 			name = engine;
+			sourceTree = "<group>";
+		};
+		5BB2895F1FDCBB0200B04F9D /* geometry */ = {
+			isa = PBXGroup;
+			children = (
+				5BB289631FDCBF0400B04F9D /* AABB.hpp */,
+				5BB289641FDCBF0400B04F9D /* Ellipsoid.h */,
+				5BB289651FDCBF0400B04F9D /* Frustum.h */,
+				5BB289661FDCBF0400B04F9D /* GemoetoryException.hpp */,
+				5BB289671FDCBF0400B04F9D /* GeometryIO.h */,
+				5BB289681FDCBF0400B04F9D /* GeometryTools.h */,
+				5BB289691FDCBF0400B04F9D /* Grid.h */,
+				5BB2896A1FDCBF0400B04F9D /* HeightField.h */,
+				5BB2896B1FDCBF0400B04F9D /* Line.h */,
+				5BB2896C1FDCBF0400B04F9D /* Line2D.h */,
+				5BB2896D1FDCBF0400B04F9D /* Object.h */,
+				5BB2896E1FDCBF0400B04F9D /* Plane.h */,
+				5BB2896F1FDCBF0400B04F9D /* Polygon2D.h */,
+				5BB289701FDCBF0400B04F9D /* Polygon3D.h */,
+				5BB289711FDCBF0400B04F9D /* Polyhedron.h */,
+				5BB289721FDCBF0400B04F9D /* Triangle2D.h */,
+			);
+			name = geometry;
 			sourceTree = "<group>";
 		};
 		5BB5EB201BB7A07D00BFA215 = {

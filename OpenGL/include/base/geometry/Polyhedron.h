@@ -12,7 +12,7 @@
 #include "Plane.h"
 #include "Polygon2D.h"
 //---------------------------------------------------------------------------
-namespace Math {
+namespace Base {
 namespace Geometry {
 
 template<class REAL = float>

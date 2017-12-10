@@ -4,7 +4,7 @@
 #include <Types/DynamicArray.h>
 #include "../Vector3.h"
 //---------------------------------------------------------------------------
-namespace Math {
+namespace Base {
 namespace Geometry {
 
 template<class HEIGHT_TYPE>

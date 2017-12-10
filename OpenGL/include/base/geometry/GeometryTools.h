@@ -8,7 +8,7 @@
 #include "Plane.h"
 #include "Frustum.h"
 //---------------------------------------------------------------------------
-namespace Math {
+namespace Base {
 namespace Geometry {
 
 //make a scaleTranslate matrix that includes the given AABox

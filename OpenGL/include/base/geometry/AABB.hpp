@@ -7,7 +7,7 @@
 #include "Plane.h"
 #include "Line.h"
 
-#include "../../math/HelpF.h"
+#include "math/HelpF.h"
 
     //Axis-Aligned Bounding Box defined through the two extreme points
 template<class REAL = float>

@@ -7,7 +7,7 @@
 #include <Types/DynamicField.h>
 #include "../Mathematic.h"
 //---------------------------------------------------------------------------
-namespace Math {
+namespace Base {
 namespace Geometry {
 
 template<class DATA>

@@ -2,7 +2,7 @@
 #ifndef _OPENGL_LINE2_H
 #define _OPENGL_LINE2_H
 
-#include "../defType.hpp"
+#include "defType.hpp"
 
 template<class REAL>
 struct Line2D

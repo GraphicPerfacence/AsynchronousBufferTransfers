@@ -1,9 +1,15 @@
 #version 330 core
+
 //in vec3 ourColor;
 
+uniform sampler2D earthSample;
+
+in vec2 texCoords;
 out vec4 color;
 
 void main()
 {
-    color = vec4(0.5,1.0,0.3, 1.0f);
+    vec3 baseColor = texture(earthSample,texCoords).xyz;
+
+    color = vec4(baseColor, 1.0f);
 }

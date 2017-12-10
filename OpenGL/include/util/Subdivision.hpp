@@ -10,15 +10,41 @@
 #define Subdivision_hpp
 
 #include <vector>
-#include "base/defType.hpp"
+#include "geometry/Ellipsoid.h"
 
 namespace Util
 {
     class Subdivision
     {
+
         public:
-            static void subdivisionSphere(std::vector<V3f>&,std::vector<unsigned int> &,
-                                          std::vector<V3f>&,short level = 3);
+            enum    TYPE
+            {
+                TETRAHEDRON,
+                CUBMAP,
+                GEOGRAPHICGRID
+
+            };
+        public:			
+
+        static void subdivisionSphere(TYPE,
+                                          std::vector<V3f>*,
+                                          std::vector<unsigned int> &,
+                                          std::vector<V3f>*,
+                                          std::vector<V2f>*,short level = 3);
+
+        static void subdivisionElliposid(Ellipsoid<float> *,TYPE,
+                                  std::vector<V3f>*,
+                                  std::vector<unsigned int> &,
+                                  std::vector<V3f>*,
+                                  std::vector<V2f>*,short level = 3);
+
+
+        static V2f computeTextureCoordinate(const V3f&);
+
+        static short numberOfSlicePartitions;
+        static short numberOfStackPartitions;
+
     };
 }
 

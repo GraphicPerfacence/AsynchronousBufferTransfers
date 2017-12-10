@@ -2,8 +2,8 @@
 #define _OPENGL_Triangle2D_H
 
     //---------------------------------------------------------------------------
-#include "../defType.hpp"
-#include "../../math/const.h"
+#include "defType.hpp"
+#include "math/const.h"
     //---------------------------------------------------------------------------
 
 template<class REAL>

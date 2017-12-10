@@ -13,7 +13,7 @@
 #include "Frustum.h"
 #include "Polyhedron.h"
 //---------------------------------------------------------------------------
-namespace Math {
+namespace Base {
 namespace Geometry {
 
 template<class REAL> 

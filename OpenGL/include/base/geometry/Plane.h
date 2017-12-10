@@ -4,7 +4,7 @@
 #define _OPENGL_Plane_DMS_H
 
 #include "line.h"
-#include "../../math/const.h"
+#include "math/const.h"
 
 #include <glm/ext.hpp>
 
