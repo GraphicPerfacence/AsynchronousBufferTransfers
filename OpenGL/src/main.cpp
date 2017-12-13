@@ -8,16 +8,18 @@
 
 #include "../include/base/Geometry.h"
 #include "../include/base/engine/KDTree.h"
-
+#include "../include/base/CameraEx.h"
 int main(void)
 {
-    Camera *pCamera = new Camera(glm::vec3(0.0f, 0.0f, 3.0f));
+
+    CameraEx<float> *pCamera = new CameraEx<float>();
+    
     GLFWManager *pWindowManager = new GLFWManager(pCamera);
 
     GLApplication application;
     application.SetWindowManager(pWindowManager);
 
-    pWindowManager->GetInputManager()->SetCamera(pCamera);
+    InputManager::Instance().SetCamera(pWindowManager->GetCamera());
     
     return application.GLMain();
 

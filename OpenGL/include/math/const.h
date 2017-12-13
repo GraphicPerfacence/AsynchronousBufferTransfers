@@ -2,6 +2,7 @@
 #ifndef _OPENGL_CONST_H
 #define _OPENGL_CONST_H
 
+#include <limits> 
 namespace math
 {
 

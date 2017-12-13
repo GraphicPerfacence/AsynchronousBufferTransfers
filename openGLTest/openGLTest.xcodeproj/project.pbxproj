@@ -43,6 +43,7 @@
 		5BCD93ED1FDBB45B0074A050 /* Subdivision.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BCD93EC1FDBB45B0074A050 /* Subdivision.cpp */; };
 		5BCF33071F51A21600BE1314 /* ad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BCF33061F51A21600BE1314 /* ad.cpp */; };
 		5BCF33351F52797700BE1314 /* libfmodstudio.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BCF332F1F52788B00BE1314 /* libfmodstudio.dylib */; settings = {ATTRIBUTES = (Weak, ); }; };
+		5BD840051FDE5B6400F8EB71 /* CameraEx.tpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BD840041FDE5B6400F8EB71 /* CameraEx.tpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -132,6 +133,7 @@
 		5BB5EB3A1BB7A11100BFA215 /* libGLEW.1.12.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libGLEW.1.12.0.dylib; path = /usr/local/Cellar/glew/1.12.0/lib/libGLEW.1.12.0.dylib; sourceTree = "<absolute>"; };
 		5BB5EB6E1BB7A4AF00BFA215 /* libsoil2-debug.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libsoil2-debug.a"; path = "../../../3Dirty/SpartanJ-soil2/lib/macosx/libsoil2-debug.a"; sourceTree = "<group>"; };
 		5BB5EB701BB7A51700BFA215 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+		5BC6BCD51FDE59E10025B7CF /* CameraEx.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CameraEx.h; path = ../OpenGL/include/base/CameraEx.h; sourceTree = "<group>"; };
 		5BCD93D41FDB6B490074A050 /* base.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = base.hpp; path = ../OpenGL/include/base/base.hpp; sourceTree = "<group>"; };
 		5BCD93D51FDB6B490074A050 /* defType.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = defType.hpp; path = ../OpenGL/include/base/defType.hpp; sourceTree = "<group>"; };
 		5BCD93D61FDB6B490074A050 /* Execption.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Execption.hpp; path = ../OpenGL/include/base/Execption.hpp; sourceTree = "<group>"; };
@@ -142,6 +144,7 @@
 		5BCF33051F51A20100BE1314 /* ad.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ad.hpp; path = ../OpenGL/include/Media/ad.hpp; sourceTree = "<group>"; };
 		5BCF33061F51A21600BE1314 /* ad.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ad.cpp; path = ../OpenGL/src/Media/ad.cpp; sourceTree = "<group>"; };
 		5BCF332F1F52788B00BE1314 /* libfmodstudio.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfmodstudio.dylib; path = /Developer/FMODProgrammersAPI/api/studio/lib/libfmodstudio.dylib; sourceTree = "<absolute>"; };
+		5BD840041FDE5B6400F8EB71 /* CameraEx.tpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = CameraEx.tpp; path = ../OpenGL/src/base/CameraEx.tpp; sourceTree = "<group>"; };
 		5BDC41B41F56619800B7AF27 /* Persisten.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Persisten.h; path = ../OpenGL/include/base/Persisten.h; sourceTree = "<group>"; };
 		5BDC41B51F56F02200B7AF27 /* KDTree.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = KDTree.h; path = ../OpenGL/include/base/engine/KDTree.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -278,6 +281,7 @@
 				5B999C5D1F55A21D00FC068E /* engine */,
 				5B999C5F1F55A9F500FC068E /* Callback.h */,
 				5BDC41B41F56619800B7AF27 /* Persisten.h */,
+				5BC6BCD51FDE59E10025B7CF /* CameraEx.h */,
 			);
 			name = base;
 			sourceTree = "<group>";
@@ -298,6 +302,7 @@
 				5B4151851F53AEA40052FA5C /* Geometry.cpp */,
 				5B97CAD81F52AE5B000B8A8B /* Execption.cpp */,
 				5B286FC71F5570C100C5D25C /* Base.cpp */,
+				5BD840041FDE5B6400F8EB71 /* CameraEx.tpp */,
 			);
 			name = base;
 			sourceTree = "<group>";
@@ -468,6 +473,7 @@
 				5B35C1FF1F4ED1AA00083E3B /* fileSytem.cpp in Sources */,
 				5B9EAF671DF83E6700C83035 /* XGLQuery.cpp in Sources */,
 				5B9EAF691DF83E6700C83035 /* XTimer.cpp in Sources */,
+				5BD840051FDE5B6400F8EB71 /* CameraEx.tpp in Sources */,
 				5B2525DD1DE8788A005D4BA5 /* GLApplication.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

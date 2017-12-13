@@ -9,12 +9,10 @@
 #ifndef __OpenGL__Inputmanager__
 #define __OpenGL__Inputmanager__
 
-#include <stdio.h>
-
-
 #define GLM_FORCE_RADIANS								// Make sure GLM is using radians instead of degrees
 
-#include "camera.h"
+#include "CameraEx.h"
+#include "base/defType.hpp"
 
 // Used to send the input commands to the camera
 using namespace glm;									// Set the glm namespace for our vector/matrix functions
@@ -56,19 +54,34 @@ enum InputCodes
 	z = 122, Z = 90,
 };
 
+class GLFWwindow;
 // This manager takes care of any input from the user and sent to the camera.  In this tutorials
 // we just use the UP and DOWN arrow keys to show moving the camera.
 class InputManager
 {
 public:
 
-	void        KeyPressed(InputCodes code);
+    static InputManager& Instance();
 
-    void        SetCamera(Camera *pCamera) { _camera = pCamera; }
-	Camera *    GetCamera() { return _camera; }
+	void                    KeyPressed(InputCodes code);
 
+    void                    SetCamera(CameraEx<float> *pCamera) { _camera = pCamera; }
+	CameraEx<float> *       GetCamera() { return _camera; }
+
+    //mouse
+    static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
+    static void mouse_scroll_callback (GLFWwindow *window, double xoffse, double yoffse);
+    static void mouse_curse_pos_callback(GLFWwindow *window, double xpos, double ypos);
+
+    void                    UpdateCamera();
+    void                    ClearMoveVec();
 protected:
-	Camera *       _camera;
+    InputManager();
+    InputManager(const InputManager&);
+    InputManager& operator=(const InputManager&);
+
+    Vector3<float>          _cameraMoveVec;
+    CameraEx<float> *       _camera;
 };
 
 #endif /* defined(__OpenGL__Inputmanager__) */

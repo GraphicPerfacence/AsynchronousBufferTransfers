@@ -22,10 +22,10 @@ void BaseRender::initUniformVal(Shader*shader ,bool modelNeed /* = true*/)
 {
 	GLint location = shader->GetVariable("projection");
 	if(location != -1)
-		shader->SetMatrix4(location,1,GL_FALSE,glm::value_ptr(_camera->GetProjectionMatrix()));
+		shader->SetMatrix4(location,1,GL_FALSE,glm::value_ptr(_camera->getProjectionMatrix()));
 	location = shader->GetVariable("view");
 	if(location != -1)
-		shader->SetMatrix4(location,1,GL_FALSE,glm::value_ptr(_camera->GetViewMatrix()));
+		shader->SetMatrix4(location,1,GL_FALSE,glm::value_ptr(_camera->getViewMatrix()));
 
    if(modelNeed)
    {
@@ -48,20 +48,20 @@ void BaseRender::initUniformVal(Shader*shader ,bool modelNeed /* = true*/)
  //       shader->SetFloat3(location,camera->GetPosition().x,camera->GetPosition().y,camera->GetPosition().z);
 }
 
-Camera * BaseRender::GetCamera()const
+CameraEx<float> * BaseRender::GetCamera()const
 
 { return _camera; }
 
-void  BaseRender::SetCamera(Camera *pCamera)
+void  BaseRender::SetCamera(CameraEx<float> *pCamera)
 {
     _camera = pCamera;
 }
 
 void BaseRender::preRenderShaderData()
 {
-	glm::mat4 projectionMatrix = _camera->GetProjectionMatrix();
+	glm::mat4 projectionMatrix = _camera->getProjectionMatrix();
 
-	glm::mat4 viewMatrix = _camera->GetViewMatrix();
+	glm::mat4 viewMatrix = _camera->getViewMatrix();
 
 	glBindBuffer(GL_UNIFORM_BUFFER, _uboBlock);
 

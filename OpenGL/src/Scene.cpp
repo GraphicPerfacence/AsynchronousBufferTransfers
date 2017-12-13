@@ -253,11 +253,6 @@ void Scene::initThisDemo(void)
 {
 }
 
-void Scene::setScreenWH(unsigned int w,unsigned int h)
-{
-    _screenWidth = w;
-    _screenHeight = h;
-}
 
 void Scene::createSceneData(void)
 {
@@ -269,11 +264,9 @@ void modelInput(InputCodes code)
 {
     switch (code)
     {
-        case  InputCodes::b:
-
+        case InputCodes::b:
         break;
         case  InputCodes::c:
-
         break;
         case InputCodes::u:
         break;

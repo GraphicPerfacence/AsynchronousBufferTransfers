@@ -17,13 +17,13 @@
 #include <GLFW/glfw3.h>
 #include "Inputmanager.h"
 
-class Camera;
+template class CameraEx<float>;
 
 class GLFWManager
 {
 public:
 
-	GLFWManager(Camera* c);
+	GLFWManager(CameraEx<float>* c);
 
 	~GLFWManager();
 
@@ -34,11 +34,9 @@ public:
 
 	bool                    ProcessInput(bool continueGame);
 
-    Camera*                 GetCamera(void)const;
+    CameraEx<float>*        GetCamera(void)const;
 
 	virtual void            Destroy();
-
-	virtual InputManager *  GetInputManager() { return &_inputManager; }
 
 	const GLFWwindow*       GetWindow();
 
@@ -46,11 +44,9 @@ private:
     
 protected:
 
-	InputManager            _inputManager;
-
 	GLFWwindow*             _window;
 
-    Camera *                _camera;
+    CameraEx<float> *       _camera;
 };
 
 #endif /* defined(__OpenGL__GLFWManager__) */

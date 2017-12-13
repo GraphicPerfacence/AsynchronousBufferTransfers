@@ -8,43 +8,6 @@
 
 
 #include "camera.h"
-#include <GLFW/glfw3.h>
-
-
-#if 0
-void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
-{
-    if (!window || !camera) return;
-    if (action == GLFW_PRESS)
-        {
-        double xpos, ypos;
-        glfwGetCursorPos(window, &xpos, &ypos);
-
-        int width, height;
-        glfwGetWindowSize(window, &width, &height);
-
-        camera->PressBtn(xpos, ypos, width, height, button, glfwGetTime());
-
-        btnPress = true;
-        }
-    else if (action == GLFW_RELEASE)
-        {
-        camera->ReleaseBtn(button, glfwGetTime());
-        btnPress = false;
-        }
-    else if (action == GLFW_REPEAT)
-        {
-
-        }
-
-}
-
-void mouse_scroll_callback (GLFWwindow *window, double xoffse, double yoffse)
-{
-    camera->MoveCamera(yoffse);
-}
-#endif
-
 
 
 Camera::Camera(){}
@@ -118,9 +81,9 @@ void Camera::ProcessMouseMovement(float xoffset, float yoffset, bool constrainPi
         // Update Front, Right and Up Vectors using the updated Eular angles
     this->updateCameraVectors();
 }
-void Camera::ProcessKeyboard(Camera_Movement direction, GLfloat deltaTime)
+void Camera::ProcessKeyboard(Camera_Movement direction, float deltaTime)
 {
-    GLfloat velocity = this->MovementSpeed * deltaTime;
+    float velocity = this->MovementSpeed * deltaTime;
     if (direction == FORWARD)
         this->Position += this->Front * velocity;
     if (direction == BACKWARD)

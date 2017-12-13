@@ -36,6 +36,8 @@ public:
 	//void Destroy();
 	static void Destroy();
 
+    static void GLFWError(int error, const char* description);
+
 	static std::ofstream out_stream;
 };
 

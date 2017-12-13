@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <GL/glew.h>
-
+#include <iostream>
 
 #if defined X_OS_WIN32 || defined X_OS_WIN64
 #pragma comment (lib, "glu32.lib")     /* link with OpenGL Utility lib */
@@ -137,6 +137,10 @@ bool CheckFrameBuffer()
 	return true;
 }
 
+void Log::GLFWError(int error, const char* description)
+{
+    std::cout << "glfw error: " << description << std::endl;
+}
 
 void CheckGLError(char* file,int line)
 {

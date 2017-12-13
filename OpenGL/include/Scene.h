@@ -44,29 +44,11 @@ public:
 	// This draws the Model to the backbuffer
 	void Render();
 
-	glm::vec3 GetPosition() { return Position; }
-	void SetPosition(glm::vec3 position) { Position = position; }
-
-	glm::vec3 GetRotation() { return Rotation; }
-	void SetRotation(glm::vec3 rotation) { Rotation = rotation; }
-
-	glm::vec3 GetScale() { return Scale; }
-	void SetScale(glm::vec3 scale) { Scale = scale; }
-
-	void setScreenWH(unsigned int w,unsigned int h);
-
-	void Destroy();
+    void Destroy();
 
 protected:
 
 	unsigned int bufferNum;
-
-	unsigned int _screenWidth;
-	unsigned int _screenHeight;
-
-	glm::vec3        Position;										// The model's position
-	glm::vec3        Rotation;										// The model's rotation
-	glm::vec3        Scale;											// The model's scale
 
 	std::vector<unsigned int> _fbos; // framebuffer object;
 

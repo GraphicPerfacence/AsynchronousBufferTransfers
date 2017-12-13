@@ -23,7 +23,7 @@ int GLApplication::GLMain()
 
 void GLApplication::OpenglInit(void)
 {
-
+    glClearColor(0.3f, 0.2f, 0.4f, 1.0f);
 }
 
 GLFWManager *  GLApplication::GetWindowManager()const
@@ -41,20 +41,20 @@ void GLApplication::Initialize()
     InitAudo();
 
 	// Make sure the window manager is initialized prior to calling this and creates the OpenGL context
-	if (!_windowManager || _windowManager->Initialize(&_width, &_hight, "GameTutorials - Camera", _isFullScreen) != 0)
+	if (!_windowManager ||
+        _windowManager->Initialize(&_width, &_hight, "GameTutorials - Camera", _isFullScreen) != 0)
 	{
 		exit(-1);
 	}
 
 	glViewport(0, 0, _width, _hight);
-	
-	glClearColor(0.3f, 0.2f, 0.4f, 1.0f);
 
 	OpenglInit();
-    GetCamera()->SetPerspective(45.0f, _width / (float)_hight, 0.1f, 100.f);
+
+    InitCamera(_width, _hight);
 
 	_scene = new Scene();
-	_scene->setScreenWH(_width,_hight);
+
 	_scene->SetCamera(GetCamera());
 
     //XText::initTextLib();
@@ -63,6 +63,12 @@ void GLApplication::Initialize()
 
 }
 
+void GLApplication::InitCamera(int w,int h)
+{
+    GetCamera()->perspective(45.0f, w / (float)h, 0.1f, 100.f);
+    GetCamera()->setAcceleration(8.0f, 8.0f, 8.0f);
+    GetCamera()->setVelocity(2.0f, 2.0f, 2.0f);
+}
 
 // This is our game loop where all the magic happens every frame
 void GLApplication::GameLoop()
@@ -70,14 +76,13 @@ void GLApplication::GameLoop()
 	// Loop until the user hits the Escape key or closes the window
 	while (_windowManager->ProcessInput(true))
 	{
+        
 		// Use our Singleton to calculate our framerate every frame, passing true to set FPS in titlebar
 		TimeManager::Instance().CalculateFrameRate(false);
 
-		// This clears the screen every frame to black (color can be changed with glClearColor)
-		//Camera->updateData();
-
-		_scene->SetPosition(vec3(0, 0, 0));
-		_scene->Render();
+        InputManager::Instance().UpdateCamera();
+        
+        _scene->Render();
 
 		_windowManager->SwapTheBuffers();
 	}
@@ -104,8 +109,6 @@ void GLApplication::InitScene()
 	glDisable(GL_BLEND);
 	glDisable(GL_ALPHA_TEST);
 	glDisable(GL_DITHER);
-	//glActiveTexture(GL_TEXTURE0);
-
 }
 
 // This can be used to free all of our resources in the application.
@@ -124,7 +127,7 @@ void GLApplication::Destroy()
 	Log::Instance()->Destroy();
 }
 
-Camera *  GLApplication::GetCamera()const
+CameraEx<float> *  GLApplication::GetCamera()const
 {
     if(_windowManager != NULL)
     {

@@ -34,7 +34,7 @@ public:
 	GLFWManager *   GetWindowManager()const;
 	void            SetWindowManager(GLFWManager *pWindowManager);
 
-    Camera *        GetCamera()const;
+    CameraEx<float> *        GetCamera()const;
 
 	void            Initialize();
 
@@ -42,11 +42,12 @@ public:
 
     void            Destroy();
 
+  
 	void            InitScene();
 
 private:
 	void            OpenglInit(void);
-
+    void            InitCamera(int,int);
 protected:
 
 	GLFWManager *   _windowManager;
