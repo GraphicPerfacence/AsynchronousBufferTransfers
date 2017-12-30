@@ -10,7 +10,6 @@
 #include "GLFWManager.h"
 #include "shader.hpp"
 #include "TimerManager.h"
-#include "glfwSet.h"
 #include "sys.h"
 #include "log.h"
 #include "camera.h"
@@ -259,25 +258,3 @@ void Scene::createSceneData(void)
 
 }
 
-
-void modelInput(InputCodes code)
-{
-    switch (code)
-    {
-        case InputCodes::b:
-        break;
-        case  InputCodes::c:
-        break;
-        case InputCodes::u:
-        break;
-        case InputCodes::y:
-        break;
-        default:
-        break;
-    }
-}
-
-void windowSize(GLFWwindow*window, int width, int height)  
-{
-    glViewport(0, 0, width, height);
-}

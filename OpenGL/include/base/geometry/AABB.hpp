@@ -77,11 +77,11 @@ public:
             throw GeometryException("empty point list in AABox constructor");
         }
 
-        min = (max = mtxTransform.mulHomogenPoint(points[0])); //attention not with AABox::ZERO
+        min = (max = math::mulHomogenPoint(mtxTransform,points[0])); //attention not with AABox::ZERO
 
         for(unsigned i = 1; i < points.size(); i++)
         {
-            ExpandToContain(mtxTransform.mulHomogenPoint(points[i]));
+            ExpandToContain(math::mulHomogenPoint(mtxTransform,points[i]));
         }
     }
 

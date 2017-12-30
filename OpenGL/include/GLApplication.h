@@ -34,7 +34,7 @@ public:
 	GLFWManager *   GetWindowManager()const;
 	void            SetWindowManager(GLFWManager *pWindowManager);
 
-    CameraEx<float> *        GetCamera()const;
+    Camera *        GetCamera()const;
 
 	void            Initialize();
 

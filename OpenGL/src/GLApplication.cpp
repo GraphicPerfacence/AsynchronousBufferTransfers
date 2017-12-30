@@ -65,9 +65,12 @@ void GLApplication::Initialize()
 
 void GLApplication::InitCamera(int w,int h)
 {
-    GetCamera()->perspective(45.0f, w / (float)h, 0.1f, 100.f);
-    GetCamera()->setAcceleration(8.0f, 8.0f, 8.0f);
-    GetCamera()->setVelocity(2.0f, 2.0f, 2.0f);
+    GetCamera()->SetPerspective(45.0f, w / (float)h, 0.1f, 100.f);
+
+    GetCamera()->SetWindowSize(w, h);
+
+    GetCamera()->PositionCamera(1.0f, 0.0f, 3.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+
 }
 
 // This is our game loop where all the magic happens every frame
@@ -79,8 +82,6 @@ void GLApplication::GameLoop()
         
 		// Use our Singleton to calculate our framerate every frame, passing true to set FPS in titlebar
 		TimeManager::Instance().CalculateFrameRate(false);
-
-        InputManager::Instance().UpdateCamera();
         
         _scene->Render();
 
@@ -127,7 +128,7 @@ void GLApplication::Destroy()
 	Log::Instance()->Destroy();
 }
 
-CameraEx<float> *  GLApplication::GetCamera()const
+Camera*  GLApplication::GetCamera()const
 {
     if(_windowManager != NULL)
     {

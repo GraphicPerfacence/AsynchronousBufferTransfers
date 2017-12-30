@@ -11,12 +11,11 @@
 
 #define GLM_FORCE_RADIANS								// Make sure GLM is using radians instead of degrees
 
-#include "CameraEx.h"
 #include "base/defType.hpp"
 
 // Used to send the input commands to the camera
 using namespace glm;									// Set the glm namespace for our vector/matrix functions
-
+class Camera;
 
 enum InputCodes
 {
@@ -61,27 +60,21 @@ class InputManager
 {
 public:
 
-    static InputManager& Instance();
+    InputManager(GLFWwindow * w);
 
-	void                    KeyPressed(InputCodes code);
+    void                    Initialize();
+    void                    KeyPressed(InputCodes code);
 
-    void                    SetCamera(CameraEx<float> *pCamera) { _camera = pCamera; }
-	CameraEx<float> *       GetCamera() { return _camera; }
+    void                    MouseProcess();
 
-    //mouse
-    static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
-    static void mouse_scroll_callback (GLFWwindow *window, double xoffse, double yoffse);
-    static void mouse_curse_pos_callback(GLFWwindow *window, double xpos, double ypos);
+    void                    SetCamera(Camera *pCamera);
+    Camera*                 GetCamera() { return _camera; }
+   
 
-    void                    UpdateCamera();
-    void                    ClearMoveVec();
-protected:
-    InputManager();
-    InputManager(const InputManager&);
-    InputManager& operator=(const InputManager&);
+private:
 
-    Vector3<float>          _cameraMoveVec;
-    CameraEx<float> *       _camera;
+    Camera          *               _camera;
+    GLFWwindow      *               _window;
 };
 
 #endif /* defined(__OpenGL__Inputmanager__) */

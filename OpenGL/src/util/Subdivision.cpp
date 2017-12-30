@@ -33,9 +33,9 @@ static void Subdivide(Ellipsoid<float> *ellipsoid, std::vector<V3f>&positoin,std
 {
     if(level > 0)
         {
-        V3f p0 =  math::normal((positoin[triangleIndices.indic0] + positoin[triangleIndices.indic1]) * 0.5f) ;
-        V3f p1 =  math::normal((positoin[triangleIndices.indic1] + positoin[triangleIndices.indic2]) * 0.5f) ;
-        V3f p2 =  math::normal((positoin[triangleIndices.indic2] + positoin[triangleIndices.indic0]) * 0.5f) ;
+        V3f p0 =  math::normalize((positoin[triangleIndices.indic0] + positoin[triangleIndices.indic1]) * 0.5f) ;
+        V3f p1 =  math::normalize((positoin[triangleIndices.indic1] + positoin[triangleIndices.indic2]) * 0.5f) ;
+        V3f p2 =  math::normalize((positoin[triangleIndices.indic2] + positoin[triangleIndices.indic0]) * 0.5f) ;
         if(ellipsoid != NULL)
             {
             p0 = ellipsoid->radius() * p0;
@@ -49,9 +49,9 @@ static void Subdivide(Ellipsoid<float> *ellipsoid, std::vector<V3f>&positoin,std
 
         if((normalsPtr != NULL || texCoordPtr != NULL) && (ellipsoid != NULL))
             {
-            p0 = math::normal(ellipsoid->geodeticSurfaceNormal(p0));
-            p1 = math::normal(ellipsoid->geodeticSurfaceNormal(p1));
-            p2 = math::normal(ellipsoid->geodeticSurfaceNormal(p2));
+            p0 = math::normalize(ellipsoid->geodeticSurfaceNormal(p0));
+            p1 = math::normalize(ellipsoid->geodeticSurfaceNormal(p1));
+            p2 = math::normalize(ellipsoid->geodeticSurfaceNormal(p2));
             }
 
         if(normalsPtr != NULL)

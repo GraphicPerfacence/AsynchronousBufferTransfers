@@ -7,15 +7,18 @@
     //  Copyright (c) 2015ƒÍ xt. All rights reserved.
 
 
+#include "HelpF.h"
 #include "camera.h"
 
 
-Camera::Camera(){}
+Camera::Camera():
+    MovementSpeed(3.0f)
+{}
 
 Camera::Camera(glm::vec3 position,glm::vec3 up,float yaw , float pitch):
-    Front(glm::vec3(0.0f, 0.0f, -1.0f)),
-    MovementSpeed(3.0f),
-    MouseSensitivity(0.02f)
+Front(glm::vec3(0.0f, 0.0f, -1.0f)),
+MovementSpeed(3.0f),
+MouseSensitivity(0.02f)
 {
     this->Position = position;
     this->WorldUp = up;
@@ -24,19 +27,16 @@ Camera::Camera(glm::vec3 position,glm::vec3 up,float yaw , float pitch):
     this->updateCameraVectors();
 }
 
-Camera::Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch) :
-    Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(3.0f), MouseSensitivity(0.02f)
+Matrixf Camera::GetViewMatrix()const
 {
-    this->Position = glm::vec3(posX, posY, posZ);
-    this->WorldUp = glm::vec3(upX, upY, upZ);
-    this->Yaw = yaw;
-    this->Pitch = pitch;
-    this->updateCameraVectors();
-}
 
-glm::mat4 Camera::GetViewMatrix()
-{
-    return glm::lookAt(this->Position, this->Position + this->Front, this->Up);
+    Matrixf translate0;
+    Matrixf translate1;
+
+    translate0 = glm::translate(V3f(0.0,0.0,-m_distance));
+    translate1 = glm::translate(-m_center);
+
+    return translate0 * math::mfq(math::inverseQuat(m_rotaion)) * translate1;
 }
 
 void Camera::updateCameraVectors()
@@ -61,38 +61,6 @@ void Camera::ProcessMouseScroll(float yoffset)
         this->_fov = 45.0f;
 }
 
-void Camera::ProcessMouseMovement(float xoffset, float yoffset, bool constrainPitch)
-{
-    xoffset *= this->MouseSensitivity;
-    yoffset *= this->MouseSensitivity;
-
-    this->Yaw   += xoffset;
-    this->Pitch += yoffset;
-
-        // Make sure that when pitch is out of bounds, screen doesn't get flipped
-    if (constrainPitch)
-        {
-        if (this->Pitch > 89.0f)
-            this->Pitch = 89.0f;
-        if (this->Pitch < -89.0f)
-            this->Pitch = -89.0f;
-        }
-
-        // Update Front, Right and Up Vectors using the updated Eular angles
-    this->updateCameraVectors();
-}
-void Camera::ProcessKeyboard(Camera_Movement direction, float deltaTime)
-{
-    float velocity = this->MovementSpeed * deltaTime;
-    if (direction == FORWARD)
-        this->Position += this->Front * velocity;
-    if (direction == BACKWARD)
-        this->Position -= this->Front * velocity;
-    if (direction == LEFT)
-        this->Position -= this->Right * velocity;
-    if (direction == RIGHT)
-        this->Position += this->Right * velocity;
-}
 
 glm::mat4 Camera::SetPerspective(float fov, float aspectRatio, float nearPlane, float farPlane)
 {
@@ -106,16 +74,159 @@ glm::mat4 Camera::SetPerspective(float fov, float aspectRatio, float nearPlane, 
 
 glm::mat4 Camera::GetProjectionMatrix()const
 {
-     return glm::perspective(_fov, _aspectRatio, _nearP, _farP);
+    return glm::perspective(_fov, _aspectRatio, _nearP, _farP);
 }
 
 void Camera::PositionCamera(float positionX, float positionY, float positionZ,
                             float centerX, float centerY, float centerZ,
                             float upX, float upY, float upZ)
-                            {
-                                this->Position = glm::vec3(positionX,positionY,positionZ);
-                                this->WorldUp = glm::vec3(upX,upY,upZ);
-                                glm::vec3 front = glm::vec3(centerX - positionX,centerY - positionY,centerZ - positionZ);
+{
+    this->Position = glm::vec3(positionX,positionY,positionZ);
+    this->WorldUp = glm::vec3(upX,upY,upZ);
+    this->Front = glm::vec3(centerX - positionX,centerY - positionY,centerZ - positionZ);
+    this->Up = glm::vec3(upX,upY,upZ);
 
-                                
-                            }
+    V3f lv(Front);
+    V3f f(lv);
+    math::normalizeVec3(f);
+    V3f s(math::crossVec3(f,Up));
+    math::normalizeVec3(s);
+    V3f u(math::crossVec3(s , f));
+    math::normalizeVec3(u);
+
+    Matrixf rotateMat(
+        s[0],u[0],-f[0],0.0f,
+        s[1],u[1],-f[1],0.0f,
+        s[2],u[2],-f[2],0.0f,
+        0.0f,0.0f,0.0f,1.0
+    );
+
+    m_rotaion = math::inverseQuat(math::qfm(rotateMat));
+    m_center = V3f(centerX,centerY,centerZ);
+    m_distance = lv.length();
+
+}
+void Camera::SetWindowSize(float width,float heigh)
+{
+    _aspectRatio = width / heigh;
+    m_windowSize[0] = width;
+    m_windowSize[1] = heigh;
+
+}
+void Camera::ProcessMouseMovement(Camera_Mouse_Button button, Camera_Mouse_Action action,
+                                  float xoffset, float yoffset, bool constrainPitch)
+{
+    addEventAdapter(xoffset,yoffset);
+
+    if(button == LEFT_BUTTON)
+    {
+        if(action == DRAG)
+        {
+
+          if(validAdapter())
+              rotateTrackball(getXnormalize(xoffset), getYnormalize(yoffset),
+                            getXnormalize(m_adpter[1]._mouseX),
+                            getYnormalize(m_adpter[1]._mouseY),
+                             1.0);
+        }
+    }
+    
+}
+void Camera::ProcessKeyboard(Camera_Movement direction, float deltaTime)
+{
+    float velocity = this->MovementSpeed * deltaTime;
+    if (direction == FORWARD)
+        m_distance -= velocity;
+    if (direction == BACKWARD)
+         m_distance += velocity;
+
+    if (direction == LEFT || direction == RIGHT)
+    {
+        float d = 1.0;
+        if(direction == LEFT)   d = -d;
+
+        V3f dv(1.0,0.0,0.0);
+        dv *= d;
+        dv *= velocity;
+
+
+        m_center += dv * m_rotaion ;
+    }
+
+}
+
+float Camera::getXnormalize(float x)
+{
+    return  x / m_windowSize[0];
+}
+float  Camera::getYnormalize(float y)
+{
+    return  (m_windowSize[1] - y) / m_windowSize[1];
+}
+
+void   Camera::addEventAdapter(float x,float y)
+{
+    m_adpter[1] = m_adpter[0];
+    m_adpter[0]._mouseX = x;
+    m_adpter[0]._mouseY = y;
+
+}
+
+bool Camera::validAdapter()const
+{
+    if((m_adpter[0]._mouseX == m_adpter[1]._mouseX) &&
+       (m_adpter[0]._mouseY == m_adpter[1]._mouseY)) return false;
+
+       return  true;
+}
+
+void   Camera::rotateTrackball(const float px0,const float py0,const float px1,const float py1,float scale)
+{
+    V3f axis;
+    float angle;
+
+    trackball(axis, angle, px0 + (px1 - px0)*scale, py1 +  (py1 - py0)*scale, px0, py0);
+
+    Quatf new_rotate = glm::angleAxis(angle,axis);
+
+    m_rotaion = new_rotate * m_rotaion;
+
+
+}
+void  Camera::trackball(V3f&axis,float&angle,float p1x,float p1y,float p2x,float p2y)
+{
+        V3f uv = m_rotaion * V3f(0.0f,1.0f,0.0f);
+        V3f sv = m_rotaion * V3f(1.0f,0.0f,0.0f);
+        V3f lv = m_rotaion * V3f(0.0f,1.0f,-1.0f);
+
+        V3f p1 = p1x * sv + p1y * uv - projectToSphere(0.7, p1x, p1y) * lv;
+        V3f p2 = p2x * sv + p2y * uv - projectToSphere(0.7, p2x, p2y) * lv;
+
+        axis = glm::cross(p2, p1);
+        math::normalizeVec3(axis);
+
+        float t = glm::length((p2 - p1)) / (2.0 * 0.7);
+
+
+        if (t > 1.0) t = 1.0;
+        if (t < -1.0) t = -1.0;
+        angle = (asin(t));
+}
+
+float    Camera::projectToSphere(float r,float x,float y)
+{
+    float d,t,z;
+
+    d = sqrt( x * x + y * y);
+
+    if(d < r * 0.70710678118654752440)
+    {
+        z = sqrt(r * r - d * d);
+    }
+    else{
+        t = r / 1.41421356237309504880;
+        z = t * t / d;
+    }
+
+    return  z;
+}

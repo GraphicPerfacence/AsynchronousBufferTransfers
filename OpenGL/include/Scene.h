@@ -67,8 +67,6 @@ protected:
 	static GLint _prg_start_index;
 	static GLint _prg_mvp;
 
-
-
 };
 
 

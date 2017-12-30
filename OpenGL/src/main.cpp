@@ -3,26 +3,24 @@
 
 #include "../include/GLFWManager.h"
 #include "../include/GLApplication.h"
-#include "../include/camera.h"
 
 
 #include "../include/base/Geometry.h"
 #include "../include/base/engine/KDTree.h"
-#include "../include/base/CameraEx.h"
+#include "camera.h"
+
+#include <stdlib.h>
+
 int main(void)
 {
 
-    CameraEx<float> *pCamera = new CameraEx<float>();
+    Camera *pCamera = new Camera();
     
     GLFWManager *pWindowManager = new GLFWManager(pCamera);
 
     GLApplication application;
     application.SetWindowManager(pWindowManager);
 
-    InputManager::Instance().SetCamera(pWindowManager->GetCamera());
-    
     return application.GLMain();
-
-    
    
 }

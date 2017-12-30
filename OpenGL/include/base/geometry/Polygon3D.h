@@ -19,7 +19,7 @@ class VecVector3 : public std::vector<Vector3<REAL> >
     {
         polyOut.resize(polyIn.size());
         for(unsigned i = 0; i < polyIn.size(); i++) {
-            polyOut[i] = xForm.mulHomogenPoint(polyIn[i]);
+             polyOut[i] = math::mulHomogenPoint(xForm,polyIn[i]);
         }
     }
     typedef typename std::vector<Vector3<REAL>>::iterator iterator;
@@ -36,7 +36,7 @@ public:
     VecVector3& operator*=(const M4& xForm)
     {
         for(iterator i = this->begin(); i != this->end(); i++) {
-            *i = xForm.mulHomogenPoint(*i);
+             *i = math::mulHomogenPoint(xForm,*i);
         }
         return *this;
     }

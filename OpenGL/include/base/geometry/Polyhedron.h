@@ -147,7 +147,7 @@ public:
 
 	Polyhedron& operator*=(const M4& frame) const {
 		for(LstSmpPoint::iterator i = lstSmpPoint.begin(); i != lstSmpPoint.end(); i++) {
-			(*i)->object = frame.mulHomogenPoint((*i)->object);
+			(*i)->object = math::mulHomogenPoint(frame,(*i)->object);
 		}
 		return *this;
 	}

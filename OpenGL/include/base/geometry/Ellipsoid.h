@@ -26,7 +26,7 @@
 
         Vector3<REAL> geodeticSurfaceNormal(const Vector3<REAL>&v)
         {
-            return math::normal(v * _oneOverRadiiSquared);
+            return math::normalize(v * _oneOverRadiiSquared);
         }
         
     private:

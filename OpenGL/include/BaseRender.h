@@ -12,10 +12,10 @@
 #include <stdio.h>
 #include <vector>
 #include "texture.h"
-#include "CameraEx.h"
+
 
 class Shader;
-
+class Camera;
 
 class BaseRender
 {
@@ -25,8 +25,8 @@ public:
 	~BaseRender();
 
 
-	CameraEx<float> *            GetCamera()const;
-	void                SetCamera(CameraEx<float> *pCamera);
+	Camera *            GetCamera()const;
+	void                SetCamera(Camera*pCamera);
 
 protected:
 
@@ -36,7 +36,7 @@ protected:
 
 protected:
 
-	CameraEx<float> *                    _camera;
+	Camera *                    _camera;
 	int                         _uboBlock;
 	std::vector<TextureObj*>    _texturesObj;
 	std::vector<Shader*>        _shaders;

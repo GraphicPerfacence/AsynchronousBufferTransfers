@@ -34,7 +34,6 @@
 		5B9EAF671DF83E6700C83035 /* XGLQuery.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B9EAF631DF83E6700C83035 /* XGLQuery.cpp */; };
 		5B9EAF691DF83E6700C83035 /* XTimer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B9EAF651DF83E6700C83035 /* XTimer.cpp */; };
 		5BAB72461DFC1FA3001FE362 /* freetypeText.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BAB72451DFC1FA3001FE362 /* freetypeText.cpp */; };
-		5BAB72481DFC20AF001FE362 /* libfreetype.6.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BAB72471DFC20AF001FE362 /* libfreetype.6.dylib */; };
 		5BB5EB341BB7A0D500BFA215 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BB5EB331BB7A0D500BFA215 /* OpenGL.framework */; };
 		5BB5EB361BB7A0EF00BFA215 /* libglfw3.3.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BB5EB351BB7A0EF00BFA215 /* libglfw3.3.1.dylib */; };
 		5BB5EB3B1BB7A11100BFA215 /* libGLEW.1.12.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BB5EB3A1BB7A11100BFA215 /* libGLEW.1.12.0.dylib */; };
@@ -65,7 +64,6 @@
 		5B2525A91DE8787F005D4BA5 /* geometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = geometry.h; path = ../OpenGL/include/geometry.h; sourceTree = "<group>"; };
 		5B2525AA1DE8787F005D4BA5 /* GLApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLApplication.h; path = ../OpenGL/include/GLApplication.h; sourceTree = "<group>"; };
 		5B2525AB1DE8787F005D4BA5 /* GLFWManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLFWManager.h; path = ../OpenGL/include/GLFWManager.h; sourceTree = "<group>"; };
-		5B2525AC1DE8787F005D4BA5 /* glfwSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = glfwSet.h; path = ../OpenGL/include/glfwSet.h; sourceTree = "<group>"; };
 		5B2525AD1DE8787F005D4BA5 /* Inputmanager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Inputmanager.h; path = ../OpenGL/include/Inputmanager.h; sourceTree = "<group>"; };
 		5B2525AF1DE8787F005D4BA5 /* log.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = log.h; path = ../OpenGL/include/log.h; sourceTree = "<group>"; };
 		5B2525B61DE8787F005D4BA5 /* resource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = resource.h; path = ../OpenGL/include/resource.h; sourceTree = "<group>"; };
@@ -110,7 +108,6 @@
 		5B9EAF651DF83E6700C83035 /* XTimer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = XTimer.cpp; path = ../OpenGL/src/XTimer.cpp; sourceTree = "<group>"; };
 		5BA5602C1F544DCB0007BAAC /* HelpF.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = HelpF.h; path = ../OpenGL/include/math/HelpF.h; sourceTree = "<group>"; };
 		5BAB72451DFC1FA3001FE362 /* freetypeText.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = freetypeText.cpp; path = ../OpenGL/src/freetypeText.cpp; sourceTree = "<group>"; };
-		5BAB72471DFC20AF001FE362 /* libfreetype.6.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfreetype.6.dylib; path = /usr/local/Cellar/freetype/2.7/lib/libfreetype.6.dylib; sourceTree = "<absolute>"; };
 		5BB289631FDCBF0400B04F9D /* AABB.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = AABB.hpp; path = ../OpenGL/include/base/geometry/AABB.hpp; sourceTree = "<group>"; };
 		5BB289641FDCBF0400B04F9D /* Ellipsoid.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Ellipsoid.h; path = ../OpenGL/include/base/geometry/Ellipsoid.h; sourceTree = "<group>"; };
 		5BB289651FDCBF0400B04F9D /* Frustum.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Frustum.h; path = ../OpenGL/include/base/geometry/Frustum.h; sourceTree = "<group>"; };
@@ -133,7 +130,6 @@
 		5BB5EB3A1BB7A11100BFA215 /* libGLEW.1.12.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libGLEW.1.12.0.dylib; path = /usr/local/Cellar/glew/1.12.0/lib/libGLEW.1.12.0.dylib; sourceTree = "<absolute>"; };
 		5BB5EB6E1BB7A4AF00BFA215 /* libsoil2-debug.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libsoil2-debug.a"; path = "../../../3Dirty/SpartanJ-soil2/lib/macosx/libsoil2-debug.a"; sourceTree = "<group>"; };
 		5BB5EB701BB7A51700BFA215 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
-		5BC6BCD51FDE59E10025B7CF /* CameraEx.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CameraEx.h; path = ../OpenGL/include/base/CameraEx.h; sourceTree = "<group>"; };
 		5BCD93D41FDB6B490074A050 /* base.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = base.hpp; path = ../OpenGL/include/base/base.hpp; sourceTree = "<group>"; };
 		5BCD93D51FDB6B490074A050 /* defType.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = defType.hpp; path = ../OpenGL/include/base/defType.hpp; sourceTree = "<group>"; };
 		5BCD93D61FDB6B490074A050 /* Execption.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Execption.hpp; path = ../OpenGL/include/base/Execption.hpp; sourceTree = "<group>"; };
@@ -155,7 +151,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				5BCF33351F52797700BE1314 /* libfmodstudio.dylib in Frameworks */,
-				5BAB72481DFC20AF001FE362 /* libfreetype.6.dylib in Frameworks */,
 				5B6EE9A41DC2468800C8389B /* libassimp.3.2.0.dylib in Frameworks */,
 				5BB5EB711BB7A51700BFA215 /* CoreFoundation.framework in Frameworks */,
 				5BB5EB6F1BB7A4AF00BFA215 /* libsoil2-debug.a in Frameworks */,
@@ -195,7 +190,6 @@
 				5B2525A91DE8787F005D4BA5 /* geometry.h */,
 				5B2525AA1DE8787F005D4BA5 /* GLApplication.h */,
 				5B2525AB1DE8787F005D4BA5 /* GLFWManager.h */,
-				5B2525AC1DE8787F005D4BA5 /* glfwSet.h */,
 				5B2525AD1DE8787F005D4BA5 /* Inputmanager.h */,
 				5B2525AF1DE8787F005D4BA5 /* log.h */,
 				5B2525B61DE8787F005D4BA5 /* resource.h */,
@@ -260,7 +254,6 @@
 			isa = PBXGroup;
 			children = (
 				5BCF332F1F52788B00BE1314 /* libfmodstudio.dylib */,
-				5BAB72471DFC20AF001FE362 /* libfreetype.6.dylib */,
 				5B6EE9A31DC2468800C8389B /* libassimp.3.2.0.dylib */,
 				5BB5EB6E1BB7A4AF00BFA215 /* libsoil2-debug.a */,
 				5BB5EB3A1BB7A11100BFA215 /* libGLEW.1.12.0.dylib */,
@@ -281,7 +274,6 @@
 				5B999C5D1F55A21D00FC068E /* engine */,
 				5B999C5F1F55A9F500FC068E /* Callback.h */,
 				5BDC41B41F56619800B7AF27 /* Persisten.h */,
-				5BC6BCD51FDE59E10025B7CF /* CameraEx.h */,
 			);
 			name = base;
 			sourceTree = "<group>";
