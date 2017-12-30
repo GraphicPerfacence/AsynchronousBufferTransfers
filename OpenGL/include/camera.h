@@ -48,7 +48,9 @@ public:
     {
         PRESS,
         RELEASE,
-        DRAG
+        DRAG,
+        SCROLLUP,
+        SCROLLDOWN
     };
 
     enum Camera_Key_Action
@@ -80,7 +82,6 @@ public:
                                                 float xoffset, float yoffset,
                                                 bool constrainPitch = true);
 
-    void                ProcessMouseScroll(float yoffset);
 
     void                SetWindowSize(float width,float heigh);
 private:

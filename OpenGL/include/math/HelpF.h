@@ -68,7 +68,7 @@ namespace math
     template <class REAL>
     void                            normalizeVec3(Vector3<REAL>&V)
     {
-    REAL len = V.length();
+    REAL len = glm::length(V);
     V /= len;
     }
 

@@ -30,8 +30,10 @@ void  mouse_button_callback(GLFWwindow* window, int button, int action, int mods
         if(button == GLFW_MOUSE_BUTTON_LEFT)
             {
             g_mouseLeftDown = true;
-            g_mouseLeftDown_first = true;
             g_mouseLeftRelease = false;
+            double xpos, ypos;
+            glfwGetCursorPos(window, &xpos, &ypos);
+            InputManager::Instance()->MouseProcess(Camera::LEFT_BUTTON, Camera::PRESS, xpos,ypos);
             }
         else if(button == GLFW_MOUSE_BUTTON_RIGHT)
             {
@@ -49,7 +51,10 @@ void  mouse_button_callback(GLFWwindow* window, int button, int action, int mods
             {
             g_mouseLeftDown = false;
             g_mouseLeftRelease = true;
-            g_mouseLeftDown_first = false;
+            double xpos, ypos;
+            glfwGetCursorPos(window, &xpos, &ypos);
+            InputManager::Instance()->MouseProcess(Camera::LEFT_BUTTON, Camera::RELEASE, xpos,ypos);
+
             }
         else if(button == GLFW_MOUSE_BUTTON_RIGHT)
             {
@@ -72,11 +77,7 @@ void mouse_curse_pos_callback(GLFWwindow *window, double xpos, double ypos)
 {
     if(g_mouseLeftDown)
         {
-        if(_innerCamera)
-            {
-            }
-
-
+            InputManager::Instance()->MouseProcess(Camera::LEFT_BUTTON, Camera::DRAG, xpos,ypos);
         }
     else if (g_mouseMiddleDown)
         {
@@ -90,7 +91,10 @@ void mouse_curse_pos_callback(GLFWwindow *window, double xpos, double ypos)
 
 void  mouse_scroll_callback (GLFWwindow *window, double xoffse, double yoffse)
 {
-
+     if(yoffse > 0.0)
+         InputManager::Instance()->MouseProcess(Camera::MIDDLE_BUTTON, Camera::SCROLLUP, xoffse, yoffse);
+     else
+        InputManager::Instance()->MouseProcess(Camera::MIDDLE_BUTTON, Camera::SCROLLDOWN, xoffse, yoffse);
 }
 
 //st GL_PRESS GL_RELEASE GL_REPEAT
@@ -101,34 +105,19 @@ void  key_callback(GLFWwindow*window,int key,int code,int st,int mods)
 
 void windowSize(GLFWwindow*window, int width, int height)
 {
-    glViewport(0, 0, width, height);
-
-    _innerCamera->SetWindowSize(width, height);
+    InputManager::Instance()->SetWindow(width, height);
 }
 
-void InputManager::MouseProcess()
+void InputManager::SetWindow(int w,int h)
 {
-    if(g_mouseLeftDown)
-    {
-        double xpos, ypos;
-        glfwGetCursorPos(_window, &xpos, &ypos);
-        if(g_mouseLeftDown_first)
-        {
-            g_mouseLeftDown_first = false;
-            _camera->ProcessMouseMovement(Camera::LEFT_BUTTON, Camera::PRESS, xpos,ypos );
-        }
-        else
-        {
-            _camera->ProcessMouseMovement(Camera::LEFT_BUTTON, Camera::DRAG, xpos,ypos );
-        }
-    }
-    if(g_mouseLeftRelease)
-    {
-        g_mouseLeftRelease = false;
-        double xpos, ypos;
-        glfwGetCursorPos(_window, &xpos, &ypos);
-        _camera->ProcessMouseMovement(Camera::LEFT_BUTTON, Camera::RELEASE, xpos,ypos );
-    }
+    glViewport(0, 0, w, h);
+
+    _camera->SetWindowSize(w, h);
+}
+void InputManager::MouseProcess(Camera::Camera_Mouse_Button button, Camera::Camera_Mouse_Action action,
+                                float xoffset, float yoffset)
+{
+    _camera->ProcessMouseMovement(button, action, xoffset, yoffset);
 }
 
 void InputManager::KeyPressed( int key,int st,int mods)
@@ -143,6 +132,7 @@ void InputManager::KeyPressed( int key,int st,int mods)
     if(key == GLFW_KEY_D) ic = InputCodes::d;
     if(key == GLFW_KEY_S) ic = InputCodes::s;
     if(key == GLFW_KEY_P) ic = InputCodes::p;
+    if(key == GLFW_KEY_ESCAPE) ic = InputCodes::kEscape;
     
     Camera::Camera_Key_Action ka;
 
@@ -156,11 +146,11 @@ void InputManager::KeyPressed( int key,int st,int mods)
     {
 
         case InputCodes::W: case InputCodes::w:
-        _camera->ProcessKeyboard(Camera::FORWARD,ka,TimeManager::Instance().DeltaTime);
+        _camera->ProcessKeyboard(Camera::UP,ka,TimeManager::Instance().DeltaTime);
         break;
 
         case InputCodes::S: case InputCodes::s:
-        _camera->ProcessKeyboard(Camera::BACKWARD, ka,TimeManager::Instance().DeltaTime);
+        _camera->ProcessKeyboard(Camera::DOWN, ka,TimeManager::Instance().DeltaTime);
         break;
 
         case Left: case InputCodes::a:
@@ -181,19 +171,29 @@ void InputManager::KeyPressed( int key,int st,int mods)
 
         case InputCodes::p: case InputCodes::P:
         {
+            if(ka == Camera::KEY_PRESS)
+            {
             GLint polygonMode;
             glGetIntegerv(GL_POLYGON_MODE, &polygonMode);
             if(GL_LINE != polygonMode)
-            {
+                {
                 glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
-            }
+                }
 
             else
-            {
+                {
                 glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+                }
+
             }
+            break;
         }
 
+        case InputCodes::kEscape:
+        {
+
+            break;
+        }
         break;
     }
     

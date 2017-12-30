@@ -12,10 +12,10 @@
 #define GLM_FORCE_RADIANS								// Make sure GLM is using radians instead of degrees
 
 #include "base/defType.hpp"
-
+#include "camera.h"
 // Used to send the input commands to the camera
 using namespace glm;									// Set the glm namespace for our vector/matrix functions
-class Camera;
+
 
 enum InputCodes
 {
@@ -67,7 +67,10 @@ public:
 
     void                    KeyPressed(int key,int st,int mods);
 
-    void                    MouseProcess();
+    void                    SetWindow(int w,int h);
+
+    void                    MouseProcess(Camera::Camera_Mouse_Button button, Camera::Camera_Mouse_Action action,
+                                         float xoffset, float yoffset);
 
     static void             SetCamera(Camera *pCamera);
     static Camera*          GetCamera() { return _camera; }

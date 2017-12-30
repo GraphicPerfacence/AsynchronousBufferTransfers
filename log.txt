@@ -1,0 +1,1 @@
+glError in file /Users/glp/Documents/projects/OpenGL/OpenGL/src/shader.cpp @ line 97: invalid enumerant

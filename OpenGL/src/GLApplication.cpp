@@ -139,7 +139,6 @@ void GLApplication::InitScene()
     _scene->SetCamera(GetCamera());
 
         //XText::initTextLib();
-
     _scene->Initialize();
 }
 

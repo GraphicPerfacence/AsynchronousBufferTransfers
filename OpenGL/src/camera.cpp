@@ -51,16 +51,6 @@ void Camera::updateCameraVectors()
     this->Up    = glm::normalize(glm::cross(this->Right, this->Front));
 }
 
-void Camera::ProcessMouseScroll(float yoffset)
-{
-    if (this->_fov >= 1.0f && this->_fov <= 45.0f)
-        this->_fov -= yoffset;
-    if (this->_fov <= 1.0f)
-        this->_fov = 1.0f;
-    if (this->_fov >= 45.0f)
-        this->_fov = 45.0f;
-}
-
 
 glm::mat4 Camera::SetPerspective(float fov, float aspectRatio, float nearPlane, float farPlane)
 {
@@ -130,7 +120,19 @@ void Camera::ProcessMouseMovement(Camera_Mouse_Button button, Camera_Mouse_Actio
                              1.0);
         }
     }
-    
+
+    else if ( button == MIDDLE_BUTTON)
+    {
+        float ud = (action == SCROLLUP) ? 0.1:-0.1;
+
+        float scale = 1.0f + ud;
+
+        if(m_distance * scale > 0.2)
+        {
+            m_distance *= scale;
+        }
+
+    }
 }
 void Camera::ProcessKeyboard(Camera_Movement direction, Camera_Key_Action action,float deltaTime)
 {
@@ -153,7 +155,19 @@ void Camera::ProcessKeyboard(Camera_Movement direction, Camera_Key_Action action
         dv *= d;
         dv *= velocity;
 
-        m_center += dv * m_rotaion;
+        m_center +=  m_rotaion * dv;
+        }
+    if (direction == UP || direction == DOWN)
+        {
+        float d = 1.0;
+        if(direction == UP)   d = -d;
+
+        V3f dv(0.0,1.0,0.0);
+
+        dv *= d;
+        dv *= velocity;
+
+        m_center +=  m_rotaion * dv;
         }
 
     }
@@ -193,7 +207,7 @@ void   Camera::rotateTrackball(const float px0,const float py0,const float px1,c
 
     Quatf new_rotate = glm::angleAxis(angle,axis);
 
-    m_rotaion = new_rotate * m_rotaion;
+    m_rotaion =  new_rotate * m_rotaion ;
 
 
 }

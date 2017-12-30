@@ -13,8 +13,8 @@
 #include <math.h>
 using namespace Util;
 
-short Subdivision::numberOfSlicePartitions = 32;
-short Subdivision::numberOfStackPartitions = 24;
+short Subdivision::numberOfSlicePartitions = 5;
+short Subdivision::numberOfStackPartitions = 4;
 
 struct TriangleIndicesUnsignedInt
 {

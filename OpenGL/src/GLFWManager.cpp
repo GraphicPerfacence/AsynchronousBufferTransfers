@@ -136,6 +136,10 @@ Camera* GLFWManager::GetCamera(void)const
 
 bool GLFWManager::ShouldeClose()const
 {
+    if(glfwGetKey(_window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+    {
+        return  true;
+    }
     return  glfwWindowShouldClose(_window);
 }
 
@@ -148,7 +152,7 @@ bool GLFWManager::ProcessInput(bool continueGame = true)
 {
 	   
 	glfwPollEvents();
-
+        
 	return continueGame;
 }
 
