@@ -132,27 +132,31 @@ void Camera::ProcessMouseMovement(Camera_Mouse_Button button, Camera_Mouse_Actio
     }
     
 }
-void Camera::ProcessKeyboard(Camera_Movement direction, float deltaTime)
+void Camera::ProcessKeyboard(Camera_Movement direction, Camera_Key_Action action,float deltaTime)
 {
+
+    if(action == KEY_RELEASE)
+    {
     float velocity = this->MovementSpeed * deltaTime;
     if (direction == FORWARD)
         m_distance -= velocity;
     if (direction == BACKWARD)
-         m_distance += velocity;
+        m_distance += velocity;
 
     if (direction == LEFT || direction == RIGHT)
-    {
+        {
         float d = 1.0;
         if(direction == LEFT)   d = -d;
 
         V3f dv(1.0,0.0,0.0);
+
         dv *= d;
         dv *= velocity;
 
+        m_center += dv * m_rotaion;
+        }
 
-        m_center += dv * m_rotaion ;
     }
-
 }
 
 float Camera::getXnormalize(float x)

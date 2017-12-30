@@ -26,6 +26,8 @@ using Quat = glm::tquat<REAL, glm::highp>;
 template <class REAL>
 using Matrix3 = glm::tmat3x3<REAL,glm::highp>;
 
+typedef Vector4<float>   V4f;
+typedef Vector4<double>   V4d;
 typedef Vector3<float>   V3f;
 typedef Vector3<double>  V3d;
 typedef Vector2<float>   V2f;

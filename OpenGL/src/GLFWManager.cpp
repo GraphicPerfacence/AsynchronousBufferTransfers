@@ -14,9 +14,9 @@
 
 extern void  mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 extern void  mouse_scroll_callback (GLFWwindow *window, double xoffse, double yoffse);
-extern void mouse_curse_pos_callback(GLFWwindow *window, double xpos, double ypos);
-extern void windowSize(GLFWwindow*window, int width, int height);
-
+extern void  mouse_curse_pos_callback(GLFWwindow *window, double xpos, double ypos);
+extern void  windowSize(GLFWwindow*window, int width, int height);
+extern void  key_callback(GLFWwindow*window,int,int,int,int);
 
 GLFWManager::GLFWManager(Camera* c)
 {
@@ -81,7 +81,7 @@ int GLFWManager::Initialize(unsigned int* width, unsigned int* height, std::stri
 	glfwSetMouseButtonCallback(_window, mouse_button_callback);
 	glfwSetCursorPosCallback(_window, mouse_curse_pos_callback);
     glfwSetScrollCallback(_window,mouse_scroll_callback);
-
+    glfwSetKeyCallback(_window, key_callback);
 
 	glfwSetCursorPos(_window, 0, 0);
 
@@ -103,7 +103,7 @@ int GLFWManager::Initialize(unsigned int* width, unsigned int* height, std::stri
 
 	//testOpenGl();
 
-    _inputManager = new InputManager(_window);
+    _inputManager = InputManager::Instance();
     _inputManager->SetCamera(_camera);
     return 0;
 }
@@ -134,77 +134,19 @@ Camera* GLFWManager::GetCamera(void)const
     return  _camera;
 }
 
+bool GLFWManager::ShouldeClose()const
+{
+    return  glfwWindowShouldClose(_window);
+}
+
+void GLFWManager::CloseWindow()
+{
+    glfwDestroyWindow(_window);
+}
+
 bool GLFWManager::ProcessInput(bool continueGame = true)
 {
-	if (glfwGetKey(_window, GLFW_KEY_ESCAPE) == GLFW_PRESS ||
-        glfwWindowShouldClose(_window) != 0)
-		return false;
-
-    _inputManager->MouseProcess();
-    
-	if (glfwGetKey(_window, GLFW_KEY_LEFT) )
-		_inputManager->KeyPressed(Left);
-	else if (glfwGetKey(_window, GLFW_KEY_RIGHT))
-		_inputManager->KeyPressed(Right);
-	else if (glfwGetKey(_window, GLFW_KEY_UP))
-		_inputManager->KeyPressed(Up);
-	else if (glfwGetKey(_window, GLFW_KEY_DOWN))
-		_inputManager->KeyPressed(Down);
-	// down key for shader uniform test
-	else if (glfwGetKey(_window, GLFW_KEY_A))
-		_inputManager->KeyPressed(InputCodes::a);
-	else if (glfwGetKey(_window, GLFW_KEY_B))
-		_inputManager->KeyPressed(InputCodes::b);
-	else if (glfwGetKey(_window, GLFW_KEY_C))
-		_inputManager->KeyPressed(InputCodes::c);
-	else if (glfwGetKey(_window, GLFW_KEY_D))
-		_inputManager->KeyPressed(InputCodes::d);
-	else if (glfwGetKey(_window, GLFW_KEY_E))
-		_inputManager->KeyPressed(InputCodes::e);
-	else if (glfwGetKey(_window, GLFW_KEY_F))
-		_inputManager->KeyPressed(InputCodes::f);
-	else if (glfwGetKey(_window, GLFW_KEY_G))
-		_inputManager->KeyPressed(InputCodes::g);
-	else if (glfwGetKey(_window, GLFW_KEY_H))
-		_inputManager->KeyPressed(InputCodes::h);
-	else if (glfwGetKey(_window, GLFW_KEY_I))
-		_inputManager->KeyPressed(InputCodes::i);
-	else if (glfwGetKey(_window, GLFW_KEY_J))
-		_inputManager->KeyPressed(InputCodes::j);
-	else if (glfwGetKey(_window, GLFW_KEY_K))
-		_inputManager->KeyPressed(InputCodes::k);
-	else if (glfwGetKey(_window, GLFW_KEY_L))
-		_inputManager->KeyPressed(InputCodes::l);
-	else if (glfwGetKey(_window, GLFW_KEY_M))
-		_inputManager->KeyPressed(InputCodes::m);
-	else if (glfwGetKey(_window, GLFW_KEY_N))
-		_inputManager->KeyPressed(InputCodes::n);
-	else if (glfwGetKey(_window, GLFW_KEY_O))
-		_inputManager->KeyPressed(InputCodes::o);
-	else if (glfwGetKey(_window, GLFW_KEY_P))
-		_inputManager->KeyPressed(InputCodes::p);
-	else if (glfwGetKey(_window, GLFW_KEY_Q))
-		_inputManager->KeyPressed(InputCodes::q);
-	else if (glfwGetKey(_window, GLFW_KEY_R))
-		_inputManager->KeyPressed(InputCodes::R);
-	else if (glfwGetKey(_window, GLFW_KEY_S))
-		_inputManager->KeyPressed(InputCodes::s);
-	else if (glfwGetKey(_window, GLFW_KEY_T))
-		_inputManager->KeyPressed(InputCodes::t);
-	else if (glfwGetKey(_window, GLFW_KEY_U))
-		_inputManager->KeyPressed(InputCodes::u);
-	else if (glfwGetKey(_window, GLFW_KEY_V))
-		_inputManager->KeyPressed(InputCodes::v);
-	else if (glfwGetKey(_window, GLFW_KEY_W))
-		_inputManager->KeyPressed(InputCodes::w);
-	else if (glfwGetKey(_window, GLFW_KEY_X))
-		_inputManager->KeyPressed(InputCodes::x);
-	else if (glfwGetKey(_window, GLFW_KEY_Y))
-		_inputManager->KeyPressed(InputCodes::y);
-	else if (glfwGetKey(_window, GLFW_KEY_Z))
-		_inputManager->KeyPressed(InputCodes::z);
-
-   
+	   
 	glfwPollEvents();
 
 	return continueGame;

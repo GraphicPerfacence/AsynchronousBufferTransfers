@@ -236,7 +236,9 @@ void Scene::Render()
         //glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
     glDrawElements(GL_TRIANGLE_FAN, Util::Subdivision::numberOfSlicePartitions * 3 , GL_UNSIGNED_INT, (void*)0);
+
     glDrawElements(GL_TRIANGLE_STRIP, indicesNum - 6 * Util::Subdivision::numberOfSlicePartitions , GL_UNSIGNED_INT, (void*)(Util::Subdivision::numberOfSlicePartitions * 3));
+
     glDrawElements(GL_TRIANGLE_FAN, Util::Subdivision::numberOfSlicePartitions * 3, GL_UNSIGNED_INT, (void*)(indicesNum -  Util::Subdivision::numberOfSlicePartitions * 3));
 
     glBindVertexArray(0);

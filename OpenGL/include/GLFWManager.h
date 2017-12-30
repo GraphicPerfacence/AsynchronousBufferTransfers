@@ -43,6 +43,10 @@ public:
 
     InputManager*           GetInputManager();
 
+    bool                    ShouldeClose()const;
+
+    void                    CloseWindow();
+
 private:
     
      InputManager*            _inputManager;

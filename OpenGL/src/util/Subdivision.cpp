@@ -309,9 +309,9 @@ void Subdivision::subdivisionElliposid(Ellipsoid<float>* ellipsoid,TYPE type,std
             indices.push_back(lastPosition); indices.push_back(j); indices.push_back(j - 1);
             }
         indices.push_back(lastPosition); indices.push_back(lastPosition - numberOfSlicePartitions); indices.push_back(lastPosition - 1);
-
+        
         }
-
+    
 }
 
 V2f Subdivision::computeTextureCoordinate(const V3f&position)
@@ -319,6 +319,6 @@ V2f Subdivision::computeTextureCoordinate(const V3f&position)
     V2f texCoord;
     texCoord.x = (atan2(position.y, position.x) / math::Const<float>::pi()) + 0.5;
     texCoord.y = asin(position.z) / math::Const<float>::pi() + 0.5;
-
+    
     return  texCoord;
 }

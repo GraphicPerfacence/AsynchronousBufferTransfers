@@ -50,6 +50,13 @@ public:
         RELEASE,
         DRAG
     };
+
+    enum Camera_Key_Action
+    {
+        KEY_PRESS,
+        KEY_RELEASE,
+        KEY_REPEAT
+    };
     Camera();
 
     Camera(glm::vec3 position,
@@ -67,7 +74,8 @@ public:
                                        float centerX, float centerY, float centerZ,
                                        float upX, float upY, float upZ);
                    
-    void                ProcessKeyboard(Camera_Movement direction, float deltaTime);
+    void                ProcessKeyboard(Camera_Movement direction, Camera_Key_Action action, float deltaTime);
+    
     void                ProcessMouseMovement(Camera_Mouse_Button button, Camera_Mouse_Action action,
                                                 float xoffset, float yoffset,
                                                 bool constrainPitch = true);

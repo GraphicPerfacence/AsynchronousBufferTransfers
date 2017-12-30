@@ -19,6 +19,7 @@ class Camera;
 
 enum InputCodes
 {
+    Invalid = 0,
 	kEscape = 27,
 	Space = 32,
 	Left = 37,
@@ -60,21 +61,29 @@ class InputManager
 {
 public:
 
-    InputManager(GLFWwindow * w);
 
-    void                    Initialize();
-    void                    KeyPressed(InputCodes code);
+    static InputManager *   Instance();
+
+
+    void                    KeyPressed(int key,int st,int mods);
 
     void                    MouseProcess();
 
-    void                    SetCamera(Camera *pCamera);
-    Camera*                 GetCamera() { return _camera; }
+    static void             SetCamera(Camera *pCamera);
+    static Camera*          GetCamera() { return _camera; }
+
+private:
+
+    InputManager();
+
+
    
 
 private:
 
-    Camera          *               _camera;
-    GLFWwindow      *               _window;
+    static Camera          *        _camera;
+    static InputManager    *        _inputManager;
+    static GLFWwindow      *        _window;
 };
 
 #endif /* defined(__OpenGL__Inputmanager__) */

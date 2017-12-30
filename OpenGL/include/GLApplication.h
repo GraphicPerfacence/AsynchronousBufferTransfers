@@ -40,6 +40,14 @@ public:
 
 	void            GameLoop();
 
+    bool            ShouldClose()const;
+
+    void            PressEvents();
+
+    void            Update();
+
+    void            CloseWindow();
+
     void            Destroy();
 
   
@@ -47,6 +55,7 @@ public:
 
 private:
 	void            OpenglInit(void);
+    
     void            InitCamera(int,int);
 protected:
 
