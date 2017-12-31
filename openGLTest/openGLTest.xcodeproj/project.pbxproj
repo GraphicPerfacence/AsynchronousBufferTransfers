@@ -10,7 +10,6 @@
 		5B2525D81DE8788A005D4BA5 /* BaseRender.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B2525BF1DE8788A005D4BA5 /* BaseRender.cpp */; };
 		5B2525DA1DE8788A005D4BA5 /* camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B2525C11DE8788A005D4BA5 /* camera.cpp */; };
 		5B2525DB1DE8788A005D4BA5 /* comm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B2525C21DE8788A005D4BA5 /* comm.cpp */; };
-		5B2525DC1DE8788A005D4BA5 /* geometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B2525C31DE8788A005D4BA5 /* geometry.cpp */; };
 		5B2525DD1DE8788A005D4BA5 /* GLApplication.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B2525C41DE8788A005D4BA5 /* GLApplication.cpp */; };
 		5B2525DE1DE8788A005D4BA5 /* GLFWManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B2525C51DE8788A005D4BA5 /* GLFWManager.cpp */; };
 		5B2525DF1DE8788A005D4BA5 /* glfwSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B2525C61DE8788A005D4BA5 /* glfwSet.cpp */; };
@@ -43,6 +42,7 @@
 		5BCF33071F51A21600BE1314 /* ad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BCF33061F51A21600BE1314 /* ad.cpp */; };
 		5BCF33351F52797700BE1314 /* libfmodstudio.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BCF332F1F52788B00BE1314 /* libfmodstudio.dylib */; settings = {ATTRIBUTES = (Weak, ); }; };
 		5BD840051FDE5B6400F8EB71 /* CameraEx.tpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BD840041FDE5B6400F8EB71 /* CameraEx.tpp */; };
+		5BDFCDF61FF7CEE40059D694 /* ElliposidGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BDFCDF51FF7CEE40059D694 /* ElliposidGeometry.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -61,7 +61,6 @@
 		5B2525A41DE8787F005D4BA5 /* BaseRender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BaseRender.h; path = ../OpenGL/include/BaseRender.h; sourceTree = "<group>"; };
 		5B2525A71DE8787F005D4BA5 /* camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = camera.h; path = ../OpenGL/include/camera.h; sourceTree = "<group>"; };
 		5B2525A81DE8787F005D4BA5 /* comm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = comm.h; path = ../OpenGL/include/comm.h; sourceTree = "<group>"; };
-		5B2525A91DE8787F005D4BA5 /* geometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = geometry.h; path = ../OpenGL/include/geometry.h; sourceTree = "<group>"; };
 		5B2525AA1DE8787F005D4BA5 /* GLApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLApplication.h; path = ../OpenGL/include/GLApplication.h; sourceTree = "<group>"; };
 		5B2525AB1DE8787F005D4BA5 /* GLFWManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLFWManager.h; path = ../OpenGL/include/GLFWManager.h; sourceTree = "<group>"; };
 		5B2525AD1DE8787F005D4BA5 /* Inputmanager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Inputmanager.h; path = ../OpenGL/include/Inputmanager.h; sourceTree = "<group>"; };
@@ -75,7 +74,6 @@
 		5B2525BF1DE8788A005D4BA5 /* BaseRender.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BaseRender.cpp; path = ../OpenGL/src/BaseRender.cpp; sourceTree = "<group>"; };
 		5B2525C11DE8788A005D4BA5 /* camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = camera.cpp; path = ../OpenGL/src/camera.cpp; sourceTree = "<group>"; };
 		5B2525C21DE8788A005D4BA5 /* comm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = comm.cpp; path = ../OpenGL/src/comm.cpp; sourceTree = "<group>"; };
-		5B2525C31DE8788A005D4BA5 /* geometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = geometry.cpp; path = ../OpenGL/src/geometry.cpp; sourceTree = "<group>"; };
 		5B2525C41DE8788A005D4BA5 /* GLApplication.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GLApplication.cpp; path = ../OpenGL/src/GLApplication.cpp; sourceTree = "<group>"; };
 		5B2525C51DE8788A005D4BA5 /* GLFWManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GLFWManager.cpp; path = ../OpenGL/src/GLFWManager.cpp; sourceTree = "<group>"; };
 		5B2525C61DE8788A005D4BA5 /* glfwSet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = glfwSet.cpp; path = ../OpenGL/src/glfwSet.cpp; sourceTree = "<group>"; };
@@ -143,6 +141,8 @@
 		5BD840041FDE5B6400F8EB71 /* CameraEx.tpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = CameraEx.tpp; path = ../OpenGL/src/base/CameraEx.tpp; sourceTree = "<group>"; };
 		5BDC41B41F56619800B7AF27 /* Persisten.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Persisten.h; path = ../OpenGL/include/base/Persisten.h; sourceTree = "<group>"; };
 		5BDC41B51F56F02200B7AF27 /* KDTree.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = KDTree.h; path = ../OpenGL/include/base/engine/KDTree.h; sourceTree = "<group>"; };
+		5BDFCDF41FF7CEC00059D694 /* ElliposidGeometry.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ElliposidGeometry.h; path = ../OpenGL/include/ElliposidGeometry.h; sourceTree = "<group>"; };
+		5BDFCDF51FF7CEE40059D694 /* ElliposidGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ElliposidGeometry.cpp; path = ../OpenGL/src/util/ElliposidGeometry.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -187,7 +187,6 @@
 				5B2525A41DE8787F005D4BA5 /* BaseRender.h */,
 				5B2525A71DE8787F005D4BA5 /* camera.h */,
 				5B2525A81DE8787F005D4BA5 /* comm.h */,
-				5B2525A91DE8787F005D4BA5 /* geometry.h */,
 				5B2525AA1DE8787F005D4BA5 /* GLApplication.h */,
 				5B2525AB1DE8787F005D4BA5 /* GLFWManager.h */,
 				5B2525AD1DE8787F005D4BA5 /* Inputmanager.h */,
@@ -217,7 +216,6 @@
 				5B2525BF1DE8788A005D4BA5 /* BaseRender.cpp */,
 				5B2525C11DE8788A005D4BA5 /* camera.cpp */,
 				5B2525C21DE8788A005D4BA5 /* comm.cpp */,
-				5B2525C31DE8788A005D4BA5 /* geometry.cpp */,
 				5B2525C41DE8788A005D4BA5 /* GLApplication.cpp */,
 				5B2525C51DE8788A005D4BA5 /* GLFWManager.cpp */,
 				5B2525C61DE8788A005D4BA5 /* glfwSet.cpp */,
@@ -354,6 +352,7 @@
 			isa = PBXGroup;
 			children = (
 				5BCD93EC1FDBB45B0074A050 /* Subdivision.cpp */,
+				5BDFCDF51FF7CEE40059D694 /* ElliposidGeometry.cpp */,
 			);
 			name = util;
 			sourceTree = "<group>";
@@ -362,6 +361,7 @@
 			isa = PBXGroup;
 			children = (
 				5BCD93E81FDBB3840074A050 /* Subdivision.hpp */,
+				5BDFCDF41FF7CEC00059D694 /* ElliposidGeometry.h */,
 			);
 			name = util;
 			sourceTree = "<group>";
@@ -455,7 +455,6 @@
 				5B39C7DA1DF9A42100F1D0CC /* XText.cpp in Sources */,
 				5B2525DA1DE8788A005D4BA5 /* camera.cpp in Sources */,
 				5B41518C1F53B05B0052FA5C /* AABB.cpp in Sources */,
-				5B2525DC1DE8788A005D4BA5 /* geometry.cpp in Sources */,
 				5B2525D81DE8788A005D4BA5 /* BaseRender.cpp in Sources */,
 				5B2525EC1DE8788B005D4BA5 /* texture.cpp in Sources */,
 				5B2525ED1DE8788B005D4BA5 /* TimerManager.cpp in Sources */,
@@ -464,6 +463,7 @@
 				5B589BBC1EB4B29500647D5A /* XModel.cpp in Sources */,
 				5B35C1FF1F4ED1AA00083E3B /* fileSytem.cpp in Sources */,
 				5B9EAF671DF83E6700C83035 /* XGLQuery.cpp in Sources */,
+				5BDFCDF61FF7CEE40059D694 /* ElliposidGeometry.cpp in Sources */,
 				5B9EAF691DF83E6700C83035 /* XTimer.cpp in Sources */,
 				5BD840051FDE5B6400F8EB71 /* CameraEx.tpp in Sources */,
 				5B2525DD1DE8788A005D4BA5 /* GLApplication.cpp in Sources */,

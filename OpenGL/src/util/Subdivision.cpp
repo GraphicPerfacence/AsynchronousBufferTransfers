@@ -13,8 +13,8 @@
 #include <math.h>
 using namespace Util;
 
-short Subdivision::numberOfSlicePartitions = 5;
-short Subdivision::numberOfStackPartitions = 4;
+short Subdivision::numberOfSlicePartitions = 32;
+short Subdivision::numberOfStackPartitions = 24;
 
 struct TriangleIndicesUnsignedInt
 {
@@ -276,39 +276,54 @@ void Subdivision::subdivisionElliposid(Ellipsoid<float>* ellipsoid,TYPE type,std
                 }
             }
 
-            //Triangle fan top row
-        for(unsigned int i = 1;i < numberOfSlicePartitions;i++)
+            //top triangles
+        int lastPosition = 0;
+        for (int j = 1; j < numberOfSlicePartitions; j++)
             {
-            indices.push_back(0); indices.push_back(i); indices.push_back(i + 1);
+            indices.push_back(lastPosition); indices.push_back(j); indices.push_back(j + 1);
             }
-        indices.push_back(0); indices.push_back(numberOfSlicePartitions); indices.push_back(1);
-            //
-            // Middle rows are triangle strips
-            //
-        for (unsigned int i = 0; i < numberOfStackPartitions - 2; ++i)
+        indices.push_back(lastPosition); indices.push_back(numberOfSlicePartitions); indices.push_back(1);
+
+            //middle triangles
+        for (unsigned int i = 0; i <  numberOfStackPartitions - 2; ++i)
             {
             int topRowOffset = (i * numberOfSlicePartitions) + 1;
             int bottomRowOffset = ((i + 1) * numberOfSlicePartitions) + 1;
 
+
             for (int j = 0; j < numberOfSlicePartitions - 1; ++j)
                 {
-                indices.push_back(bottomRowOffset + j); indices.push_back(bottomRowOffset + j + 1); indices.push_back(topRowOffset + j + 1);
-                indices.push_back(bottomRowOffset + j); indices.push_back(topRowOffset); indices.push_back(topRowOffset + numberOfSlicePartitions - 1);
+                indices.push_back(bottomRowOffset + j);
+                indices.push_back(bottomRowOffset + j + 1);
+                indices.push_back(topRowOffset + j + 1);
+
+                indices.push_back(bottomRowOffset + j);
+                indices.push_back(topRowOffset + j + 1);
+                indices.push_back(topRowOffset + j);
                 }
-            indices.push_back(bottomRowOffset + numberOfSlicePartitions - 1); indices.push_back(bottomRowOffset); indices.push_back(topRowOffset);
-            indices.push_back(bottomRowOffset + numberOfSlicePartitions - 1); indices.push_back(topRowOffset + i + 1); indices.push_back(topRowOffset + i);
+
+            int  topRowOffsetN    = topRowOffset + numberOfSlicePartitions - 1;
+            int  bottomRowOffsetN = bottomRowOffset +  numberOfSlicePartitions - 1;
+
+            indices.push_back(bottomRowOffsetN);
+            indices.push_back(bottomRowOffset);
+            indices.push_back(topRowOffset);
+
+            indices.push_back(bottomRowOffsetN);
+            indices.push_back(topRowOffset);
+            indices.push_back(topRowOffsetN);
 
             }
 
-            //
-            // Triangle fan bottom row
-            //
-        int lastPosition = positions.size() - 1;
-        for (int j = lastPosition - 1; j > lastPosition - numberOfSlicePartitions; --j)
+            //buttom triangles
+        lastPosition = positions.size() - 1;
+        for (int j = lastPosition - 1; j > lastPosition - numberOfSlicePartitions; j--)
             {
             indices.push_back(lastPosition); indices.push_back(j); indices.push_back(j - 1);
             }
-        indices.push_back(lastPosition); indices.push_back(lastPosition - numberOfSlicePartitions); indices.push_back(lastPosition - 1);
+
+        indices.push_back(lastPosition); indices.push_back(lastPosition - numberOfSlicePartitions);
+        indices.push_back(lastPosition -  1);
         
         }
     
